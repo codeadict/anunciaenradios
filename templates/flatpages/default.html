@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static from staticfiles %}
+
+{% block title %}{{ flatpage.title }}{% endblock %}
+
+
+{% block content %}
+<section id="estacionesContent" class="flatpage">
+<div class="content">
+<div class="row">
+<div class="twelve columns">
+<h3 class="twelve columns">{{ flatpage.title }}</h3>
+
+<div class="twelve columns">
+{{ flatpage.content }}
+</div>
+
+</div>
+</div>
+</section>
+
+{% endblock %}

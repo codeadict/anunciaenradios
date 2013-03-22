@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static from staticfiles %}
+
+{% block title %}Contáctenos{% endblock %}
+
+
+{% block head-scripts %}
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.css" />
+<!--[if lte IE 8]>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.ie.css" />
+<![endif]-->
+
+<script src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script>
+{% endblock %}
+
+
+{% block content %}
+<section id="estacionesContent" class="buscar">
+<div class="content">
+<div class="row">
+<div class="twelve columns">
+<h3 class="twelve columns">Contáctenos</h3>
+<div class="seven columns">
+
+{% with ff_template='_form_field.html' %}
+<form method="post" action="{% url contacto %}">
+	{% csrf_token %}
+	<p>Por favor, llene este formulario indicándonos en qué necesita que le ayudemos.
+	Nos comunicaremos con usted lo más antes posible.
+	Gracias.
+	</p>
+	
+	{% if form.non_field_errors %}
+    	{{ form.non_field_errors }}
+  	{% endif %}
+  	
+  	{% with field=form.name %}
+          {% include ff_template %}
+    {% endwith %}
+    
+    {% with field=form.company %}
+          {% include ff_template %}
+    {% endwith %}
+    
+    {% with field=form.email %}
+          {% include ff_template %}
+    {% endwith %}
+    
+    {% with field=form.phone %}
+          {% include ff_template %}
+    {% endwith %}
+    
+    {% with field=form.message %}
+          {% include ff_template %}
+    {% endwith %}
+    
+    
+    <button type="submit" class="right">Enviar</button>
+</form>
+{% endwith %}
+
+</div>
+<div class="four columns offse-by-one">
+	<div id="mapa" class="mapa">
+		
+	</div>
+	<div id="direccion">
+		<h5>Servidinámica S.A.</h5>
+		<p>De las Avellanas E5-107 y Eloy Alfaro</p>
+		<p>Quito - Ecuador</p>
+		<p><strong>Teléfono:</strong> (+593) 02 2482858</p>
+	</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+{% endblock %}
+
+{% block foot-scripts %}
+<script>
+var map = L.map('mapa').setView([-0.115659,-78.473207], 13);
+
+//add an OpenStreetMap tile layer
+L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+}).addTo(map);
+
+//add a marker in the given location, attach some popup content to it and open the popup
+L.marker([-0.115659,-78.473207]).addTo(map)
+ .bindPopup('<h5>Servidinámica S.A</h5>')
+ .openPopup();
+
+</script>
+
+{% endblock %}

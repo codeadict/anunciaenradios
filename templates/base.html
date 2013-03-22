@@ -1,0 +1,116 @@
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	{% load static from staticfiles %}
+	{% load url from future %}
+	{% block meta %}
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="description" content="Plataforma de anuncios en radios del Ecuador">
+		<meta name="viewport" content="width=device-width">
+	{% endblock meta %}
+
+	<title>Anuncia en Radios - {% block title %}{% endblock title %}</title>
+	
+	{% block styles %}
+		<link rel="stylesheet" type="text/css" href="{% static 'css/foundation.css' %}" media="screen" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/screen.css' %}" media="screen" />
+	{% endblock %}
+
+	{% block head-scripts %}
+		<script src="{% static 'website/js/modernizr-2.5.3.min.js' %}"></script>
+	{% endblock %}
+
+	{% block head %}
+	{% endblock %}	
+</head>
+<body class="{% block body_classes %}{% endblock %}">
+  {# Preguntar a usuarios de IE6 que ionstalen Chrome frame. #}
+  <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+	<header>
+		<div class="container">
+			{% block header %}
+				<div class="row">
+					<div class="six columns">
+						<h1>Anuncia en Radios</h1>
+					</div>
+					<div class="six columns">
+						<h5>Llámenos</h5>
+						<h3>(+593) 02 2482858 <span>(Opción 2)</span></h3>
+						<p>Estaremos gustosos de ayudarle con su promoción radial!</p>
+					</div>
+					</div>
+					<div class="row">
+				    <ul class="nav-bar">
+				    	{% url 'website_index' as url %}{% with text="Inicio" %}{% include "_nav.html" %}{% endwith %}
+				    	
+				    	{% with url="/radios/" text="Busque su Radio" %}{% include "_nav.html" %}{% endwith %}
+				        <li class="item">
+				            <a href="#">Información General</a>
+				        </li>
+						{% with url="/contacto/" text="Contáctenos" %}{% include "_nav.html" %}{% endwith %}
+				    </ul>
+				 </div>
+			{% endblock %}
+		</div>
+	</header>
+
+	<section id="mainContent1" class="example">
+		{% block pre-content %}
+		{% endblock %}
+		<div class="row">
+			{% block content %}
+			
+			{% endblock %}
+		</div>
+	</section>
+
+	{% block footer %}
+		<footer class="row">
+		  <div class="six columns">
+	        <p>&copy; 2013  ServiDinamica S.A. Todos los derechos reservados.</p>
+	      </div>
+	      <div class="six columns">
+	        <ul class="inline-list right">
+	          <li><a href="/condiciones/">Condiciones y Términos de Uso</a></li>
+	          <li><a href="">Sobre Nosotros</a></li>
+	          <li><a href="{% url 'contacto' %}">Contáctenos</a></li>
+	        </ul>
+      	  </div>
+		</footer>
+	{% endblock %}
+	
+	{% block foot-scripts %}
+
+	{# Agregar Google Analytics #}
+	{% if settings.GOOGLE_ANALYTICS_UA %}
+		<script type="text/javascript">
+		var gaJsHost = (("https:" == document.location.protocol) ?
+		"https://ssl." : "http://www.");
+		document.write(unescape("%3Cscript src='" + gaJsHost +
+		"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+		<script type="text/javascript">
+		try {
+		  var pageTracker = _gat._getTracker("{{ settings.GOOGLE_ANALYTICS_UA }}");
+		  {% if settings.GOOGLE_ANALYTICS_DOMAIN %}
+		  pageTracker._setDomainName(".{{ settings.GOOGLE_ANALYTICS_DOMAIN }}");
+		  {% endif %}
+		  pageTracker._trackPageview();
+		} catch(err) {}
+		</script>
+	{% endif %}
+	
+	{% if "MSIE 6" in request.META.HTTP_USER_AGENT or "MSIE 7" in request.META.HTTP_USER_AGENT %}
+		{% if not "chromeframe" in request.META.HTTP_USER_AGENT %}
+			<script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
+			<script>window.attachEvent("onload",function(){CFInstall.check({mode:"overlay"})})</script>
+		{% endif %}
+	{% endif %}
+	{% endblock %}
+	
+</body>
+</html>

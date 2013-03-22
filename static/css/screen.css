@@ -1,0 +1,134 @@
+body{
+	background-attachment: fixed;
+    background-clip: border-box;
+    background-color: #201303;
+	background-image: url(../img/bg_radio.jpg);
+	background-origin: padding-box;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 0;
+    margin: 0;
+}
+
+header{
+	background: #FFFFFF;
+	margin: 0;
+	padding: 0;
+}
+
+.nav-bar > li.active {
+    background: none repeat scroll 0 0 #FD0035;
+    border-color: #2284A1;
+}
+
+header h1 {
+    background: url("../img/logo.png") no-repeat transparent;
+    height: 75px;
+    overflow: hidden;
+    padding: 30px;
+    position: relative;
+    text-indent: -1000px;
+    width: 298px;
+}
+
+#mainContent { 
+	margin-top: 44px;
+	margin-bottom: 22px;
+	padding-bottom: 22px;
+	overflow: hidden; }
+
+#estacionesContent{
+	padding-top: 44px;
+	overflow: hidden;
+	padding-bottom: 22px;
+	background: #FFFFFF;
+}
+.initial-steps {
+        background: #FFF url(../img/landing-steps.png) no-repeat -6px 38%;
+        margin-bottom: 40px;
+        padding-top: 0;
+        z-index: 900;
+}
+
+.icons {
+        list-style-type: none;
+        padding: 10px 0 0;
+        display: inline;
+}
+
+.icons li {
+            background-repeat: no-repeat;
+            font-size: 15px;
+            line-height: 37px;
+            min-height: 55px;
+            margin-bottom: 5px;
+            padding: 10px 0 0 68px;
+            display: inline-block;
+            text-transform: uppercase;
+            color: #B3322B;
+            text-shadow: 0 0 2px #FFF;
+            font-weight: bold;
+            
+}
+
+.icons li.testing {
+                background-image: url(../img/landing-icon-testing.png);
+            }
+
+.icons li.early {
+                background-image: url(../img/landing-icon-early.png);
+            }
+
+.icons li.target {
+                background-image: url(../img/landing-icon-target.png);
+            }
+
+#anuncia{
+	color: #FFF;
+	line-height: 90%;
+    width: 600px;
+}
+#anuncia h2{
+	color: #FFFFFF;
+	text-shadow: 0 0 2px #000000;
+	text-transform: uppercase;
+}
+
+#anuncia p{
+	text-shadow: 0 0 2px #000000;
+	font-family: "Helvetica Neue","Helvetica",cursive;
+    font-size: 1.475em;
+    font-weight: 100;
+    margin: 0.5em 0 0.75em;
+}
+
+#mapa{
+	height: 250px;
+	width: 100%;
+	background: green;
+}
+
+button {
+    padding: 1em 2em;
+}
+button {
+    background-color: #EE4B44;
+    border: medium none;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 2px 2px rgba(255, 255, 255, 0.25) inset, 0 -7px 10px rgba(0, 0, 0, 0.25) inset, 0 2px 2px rgba(0, 0, 0, 0.5);
+    color: #FFFFFF;
+    cursor: pointer;
+    font-family: "HelveticaNeue","Helvetica Neue","Helvetica","Arial",sans-serif;
+    font-size: 1.25em;
+    font-weight: 600;
+    letter-spacing: 1px;
+    padding: 1em;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+}
+
+footer { background: transparent; color: #fff; padding: 11px 0; bottom: -2px;}
+
+footer p, footer ul.inline-list { margin-bottom: 0; }
+
+footer a { color: #fff;}

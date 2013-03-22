@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static from staticfiles %}
+
+{% block title %}Buscar Radios{% endblock %}
+
+{% block content %}
+<section id="estacionesContent" class="buscar">
+<div class="container">
+<div class="row">
+	<div class="initial-steps twelve columns">
+		<ul class="icons">
+			<li class="testing">Escoja sus Paquetes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      </li>
+			<li class="target">Seleccione su Público&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+			<li class="early">Anuncie ya!</li>
+		</ul>
+	</div>
+</div>
+</div>
+
+<div class="container">
+	<div class="row">
+	 <div class="twelve columns">
+	 	<h3 class="twelve columns">Buscar estaciones de Radio</h3>
+		<div class="four columns">
+			Sidebar con filtros para busqueda
+		</div>
+		
+		<div class="seven columns offset-by-one">
+			Listado de estaciones encontradas
+		</div>
+	</div>
+	</div>
+</div>
+</section>
+
+{% endblock %}
