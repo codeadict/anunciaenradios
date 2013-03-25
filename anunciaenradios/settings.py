@@ -6,7 +6,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 # Hacer paths relativos a settings.py
-ROOT = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(os.path.abspath(os.path.join(__file__)))
 path = lambda *a: os.path.join(ROOT, *a)
 
 ROOT_PACKAGE = os.path.basename(ROOT)
@@ -75,7 +75,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-                    path('static'),
+    path('static'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -116,7 +116,7 @@ ROOT_URLCONF = 'anunciaenradios.urls'
 WSGI_APPLICATION = 'anunciaenradios.wsgi.application'
 
 TEMPLATE_DIRS = (
-                  path('templates'),
+    path('templates'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -130,11 +130,13 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.flatpages',
+    'grappelli',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    
+    'haystack',
+
     'estaciones',
     'orders',
 )
@@ -173,3 +175,19 @@ LOGGING = {
         },
     }
 }
+
+# Elasticsearch configs
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': 'http://127.0.0.1:9200/',
+        'INDEX_NAME': 'anunciaenradios',
+    },
+}
+
+if not os.environ.get('DJANGO_ENV', None):
+    from development_settings import *
+elif os.environ.get('DJANGO_ENV') == "production":
+    from production_settings import *
+elif os.environ.get('DJANGO_ENV') == "testing":
+    from testing_settings import *

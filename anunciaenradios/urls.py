@@ -23,8 +23,9 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^administrar/', include(admin.site.urls)),
+    url(r'^grappelli/', include('grappelli.urls')),
 )
 
-urlpatterns += patterns('django.contrib.flatpages.views',
-    (r'^(?P<url>.*)$', 'flatpage'),
-)
+#urlpatterns += patterns('django.contrib.flatpages.views',
+#    (r'^(?P<url>.*)$', 'flatpage'),
+#)

@@ -23,7 +23,7 @@
 <div class="seven columns">
 
 {% with ff_template='_form_field.html' %}
-<form method="post" action="{% url contacto %}">
+<form method="post" action="{% url 'contacto' %}">
 	{% csrf_token %}
 	<p>Por favor, llene este formulario indicándonos en qué necesita que le ayudemos.
 	Nos comunicaremos con usted lo más antes posible.
