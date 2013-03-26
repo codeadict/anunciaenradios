@@ -130,12 +130,14 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.flatpages',
+    'grappelli.dashboard',
     'grappelli',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'haystack',
+    'taggit',
 
     'estaciones',
     'orders',
@@ -144,7 +146,10 @@ INSTALLED_APPS = (
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.media",
     "django.core.context_processors.request",
-    'django.contrib.auth.context_processors.auth'
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.request",
+    "django.core.context_processors.i18n",
+    "django.contrib.messages.context_processors.messages",
 )
 
 # A sample logging configuration. The only tangible logging
@@ -176,6 +181,11 @@ LOGGING = {
     }
 }
 
+#Session related:
+SESSION_SAVE_EVERY_REQUEST = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = 1800
+
 # Elasticsearch configs
 HAYSTACK_CONNECTIONS = {
     'default': {
@@ -184,6 +194,13 @@ HAYSTACK_CONNECTIONS = {
         'INDEX_NAME': 'anunciaenradios',
     },
 }
+
+#Grappelli Dashboard:
+GRAPPELLI_INDEX_DASHBOARD = 'anunciaenradios.dashboard.CustomDashboard'
+
+#Extra configs:
+UPLOAD_DIRECTORY = path('uploads')
+
 
 if not os.environ.get('DJANGO_ENV', None):
     from development_settings import *

@@ -4,7 +4,7 @@ anunciaenradios
 Sistema E-Commerce de Anuncios en Radio
 
 ## Desarrollo
-Recomendado usar virtualevnwrapper
+Recomendado usar virtualenvwrapper
 
 - Instalación de dependencias:
  $ pip install -r requirements.txt
