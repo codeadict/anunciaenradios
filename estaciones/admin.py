@@ -9,7 +9,7 @@ from django.contrib.flatpages.admin import FlatPageAdmin as FlatPageAdminOld
 
 from django.db import models
 from estaciones.models import Estacion, NivelSocioEconomico, NivelEdadTarget, \
-	FrecuenciaCobertura, Provincia #,User
+	FrecuenciaCobertura, Provincia, PaquetePublicidad
 
 
 class FlatPageAdmin(FlatPageAdminOld):
@@ -17,6 +17,10 @@ class FlatPageAdmin(FlatPageAdminOld):
         models.TextField: {'widget': ElrteWidget()},
     }
 
+class ParrillaInline(admin.TabularInline):
+    model = PaquetePublicidad
+    verbose_name_plural = 'Parrilla de Programación'
+    
 class EstacionAdmin(admin.ModelAdmin):
 	formfield_overrides = {
         models.TextField: {'widget': ElrteWidget()},
@@ -35,12 +39,23 @@ class EstacionAdmin(admin.ModelAdmin):
 					)
 	save_as = True
 	list_per_page = 10
-	list_display = ('nombre', 'slug', )#Falta logo
+	list_display = ('nombre', 'slug', 'logotipo' )#Falta logo
 	list_display_links = ('nombre', 'slug',)
 	raw_id_fields = ['nivel_socioeconomico']
 	related_lookup_fields = {'m2m':['nivel_socioeconomico']}
 	#filter_horizontal = ('nivel_socioeconomico',)
 	#form = EstacionForm
+	inlines = [
+        ParrillaInline,
+    ]
+
+	
+class ParrillaAdmin(admin.ModelAdmin):
+	list_display = ('estacion', 'programa', 'horario', 'emision', 'precio' )
+	fields = (('estacion', 'programa'), ('emision', 'horario'), 'precio')
+	list_display_links = ('programa',)
+	list_filter = ('emision',)
+	list_per_page = 10
 
 class NivelSocioEconomicoAdmin(admin.ModelAdmin):
 	list_display = ('tipo',)
@@ -65,6 +80,7 @@ class ProvinciaAdmin(admin.ModelAdmin):
 	list_per_page = 10
 
 admin.site.register(Estacion, EstacionAdmin)
+admin.site.register(PaquetePublicidad, ParrillaAdmin)
 admin.site.register(NivelSocioEconomico, NivelSocioEconomicoAdmin)
 admin.site.register(NivelEdadTarget, NivelEdadTargetAdmin)
 admin.site.register(FrecuenciaCobertura, FrecuenciaCoberturaAdmin)

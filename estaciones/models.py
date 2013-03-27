@@ -29,6 +29,14 @@ class Estacion(models.Model):
     def __unicode__(self):
         return u'%s' % (self.slug)
     
+    def logotipo(self):
+        if self.logo:
+            return u'<img src="/media/%s" width="80" heigth="80" />' % self.logo
+        else:
+            return u'(Sin imagen)'
+        
+    logotipo.allow_tags = True
+    
     def save(self, *args, **kwargs):
         #poner el logo por defecto
         if not self.logo:
@@ -120,3 +128,23 @@ class Provincia(models.Model):
         #super(Estacion, self).save(*args, **kwargs) 
 
 # TODO: Inherit User model
+
+class PaquetePublicidad(models.Model):
+    '''
+    Modelo de Datos para Cunas de Anuncios
+    '''
+    estacion = models.ForeignKey(Estacion, verbose_name=u'Estación')
+    programa = models.CharField(u"Programa", max_length=255, blank=False,
+        help_text=u"Programa donde Promocionar, Ej. Barrio Latino")
+    horario = models.CharField(u'Horario', max_length=255, blank=False)
+    emision = models.CharField(u'Emisión', max_length=255, blank=False, 
+                               help_text="Periodo de Emisión. Ej. Sábados y Domingos")
+    precio = models.DecimalField(u'Precio', max_digits=14, decimal_places=6)
+    
+    class Meta:
+        ordering = ('estacion', 'programa')
+        verbose_name = 'Parrilla de Programación'
+        
+    def __unicode__(self):
+        return u'%s - %s' % (self.programa, self.horario)
+    
