@@ -148,3 +148,20 @@ class PaquetePublicidad(models.Model):
     def __unicode__(self):
         return u'%s - %s' % (self.programa, self.horario)
     
+class HorarioRotativo(models.Model):
+    '''
+    Modelos para cunas en horario rotativo
+    '''
+    estacion = models.ForeignKey(Estacion, verbose_name=u'Estación')
+    tiempo = models.IntegerField(u'Tiempo de cuña o mención', help_text=u'Tiempo de cuña o mención en segundos')
+    precio_nacional = models.DecimalField(u'Precio Nacional', max_digits=14, decimal_places=6)
+    precio_regional = models.DecimalField(u'Precio Regional', max_digits=14, decimal_places=6)
+    
+    class Meta:
+        verbose_name = 'Cuña en horario rotativo'
+        verbose_name_plural = 'Cuñas en horario rotativo'
+        
+    def __unicode__(self):
+        return u'%s' % (self.estacion.nombre)
+    
+    

@@ -9,7 +9,7 @@ from django.contrib.flatpages.admin import FlatPageAdmin as FlatPageAdminOld
 
 from django.db import models
 from estaciones.models import Estacion, NivelSocioEconomico, NivelEdadTarget, \
-	FrecuenciaCobertura, Provincia, PaquetePublicidad
+	FrecuenciaCobertura, Provincia, PaquetePublicidad, HorarioRotativo
 
 
 class FlatPageAdmin(FlatPageAdminOld):
@@ -20,6 +20,9 @@ class FlatPageAdmin(FlatPageAdminOld):
 class ParrillaInline(admin.TabularInline):
     model = PaquetePublicidad
     verbose_name_plural = 'Parrilla de Programación'
+    
+class HorarioRotativoInline(admin.TabularInline):
+	model = HorarioRotativo
     
 class EstacionAdmin(admin.ModelAdmin):
 	formfield_overrides = {
@@ -47,6 +50,7 @@ class EstacionAdmin(admin.ModelAdmin):
 	#form = EstacionForm
 	inlines = [
         ParrillaInline,
+        HorarioRotativoInline,
     ]
 
 	
