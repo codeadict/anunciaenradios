@@ -142,6 +142,7 @@ class PaquetePublicidad(models.Model):
     class Meta:
         ordering = ('estacion', 'programa')
         verbose_name = 'Parrilla de Programación'
+        verbose_name_plural = 'Parrillas de Programación'
         
     def __unicode__(self):
         return u'%s - %s' % (self.programa, self.horario)
