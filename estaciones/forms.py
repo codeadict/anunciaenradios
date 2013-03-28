@@ -22,14 +22,6 @@ class ContactForm(forms.Form):
     phone = forms.CharField(label='Teléfono')
     message = forms.CharField(label='Mensaje', widget=forms.Textarea)
     
-# class EstacionForm(forms.ModelForm):
-# 	class Meta:
-#         model = Estacion
-
-#     def clean_en_promocion_desde(self):
-#     	en_promocion_desde = self.cleaned_data['en_promocion_desde']
-    	
-
 class BuscarEstacionForm(FacetedSearchForm):
 	regiones = forms.MultipleChoiceField(required=False, 
                                     widget=CheckboxSelectMultiple(), 

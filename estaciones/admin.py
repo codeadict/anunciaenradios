@@ -3,7 +3,6 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.forms import ModelForm
-from wysiwyg import ElrteWidget
 
 from django.contrib.flatpages.models import FlatPage
 from django.contrib.flatpages.admin import FlatPageAdmin as FlatPageAdminOld
@@ -13,9 +12,11 @@ from estaciones.models import Estacion, FrecuenciaCobertura, Provincia, Cliente,
 
 
 class FlatPageAdmin(FlatPageAdminOld):
-    formfield_overrides = {
-        models.TextField: {'widget': ElrteWidget()},
-    }
+    class Media:
+	    js = [
+	        '/static/grappelli/tinymce/jscripts/tiny_mce/tiny_mce.js',
+	        '/static/js/tinymce_setup.js',
+	    ]
 
 class ParrillaInline(admin.TabularInline):
     model = PaquetePublicidad
@@ -40,8 +41,9 @@ class EstacionAdmin(admin.ModelAdmin):
 	list_per_page = 10
 	list_display = ('nombre', 'slug', 'sumario_descripcion','logotipo' )#Falta logo
 	list_display_links = ('nombre', 'slug',)
-	raw_id_fields = ['cobertura_frecuencias']
-	related_lookup_fields = {'m2m':['cobertura_frecuencias']}
+	#raw_id_fields = ['cobertura_frecuencias']
+	#related_lookup_fields = {'m2m':['cobertura_frecuencias']}
+	filter_horizontal = ('cobertura_frecuencias',)
 
 	inlines = [
         ParrillaInline,

@@ -39,7 +39,6 @@ class Estacion(models.Model):
     categorias = TaggableManager()
     en_promocion_desde = models.DateTimeField(null=True, blank=True, verbose_name='en promoción desde')
     nivel_socioeconomico = models.CharField(max_length=10, choices=NSE, blank=False, null=False, verbose_name='nivel socioeconómico')
-    # TODO: Definir si Nivel target edad pudiera ser otro choices
     niveles_edad_target = models.CharField(max_length=10, choices=NET, blank=False, null=False, verbose_name='rangos de edades')
     cobertura_frecuencias = models.ManyToManyField('FrecuenciaCobertura', blank=False, null=False, verbose_name='cobertura y frecuencias')
     
@@ -59,11 +58,11 @@ class Estacion(models.Model):
     
     def sumario_descripcion(self):
         if self.descripcion:
-            return self.descripcion[:40]
+            return self.descripcion[:60] + "..."
         return u"Sin descripción"
     sumario_descripcion.short_description = 'Descripción'
     sumario_descripcion.admin_order_field = 'descripcion'
-
+    sumario_descripcion.allow_tags = True
         
     logotipo.allow_tags = True
     
@@ -175,8 +174,11 @@ class HorarioRotativo(models.Model):
 class Cliente(models.Model):
     usuario = models.OneToOneField(User)
     ruc = models.CharField(max_length=10, null=False, blank=False, verbose_name='RUC o Cédula de identidad')
-    nombre = models.CharField(max_length=255, null=False, blank=False, verbose_name='nombre de la empresa o del cliente')
+    nombre_compannia = models.CharField(max_length=255, null=False, blank=False, verbose_name='nombre de la compañia del cliente')
 
     class Meta:
         verbose_name = 'Cliente'
         verbose_name_plural = 'Clientes'
+
+    def __unicode__(self):
+        return u'%s' % (self.usuario.username)
