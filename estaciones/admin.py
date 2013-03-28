@@ -9,7 +9,7 @@ from django.contrib.flatpages.models import FlatPage
 from django.contrib.flatpages.admin import FlatPageAdmin as FlatPageAdminOld
 
 from django.db import models
-from estaciones.models import Estacion, NivelSocioEconomico, NivelEdadTarget, \
+from estaciones.models import Estacion, NivelEdadTarget, \
 	FrecuenciaCobertura, Provincia, Cliente, PaquetePublicidad, HorarioRotativo
 
 
@@ -41,8 +41,6 @@ class EstacionAdmin(admin.ModelAdmin):
 	list_per_page = 10
 	list_display = ('nombre', 'slug', 'logotipo' )#Falta logo
 	list_display_links = ('nombre', 'slug',)
-	raw_id_fields = ['nivel_socioeconomico']
-	related_lookup_fields = {'m2m':['nivel_socioeconomico']}
 	#filter_horizontal = ('nivel_socioeconomico',)
 	#form = EstacionForm
 	inlines = [
@@ -61,11 +59,6 @@ class ParrillaAdmin(admin.ModelAdmin):
 	fields = (('estacion', 'programa'), ('emision', 'horario'), 'precio')
 	list_display_links = ('programa',)
 	list_filter = ('emision',)
-	list_per_page = 10
-
-class NivelSocioEconomicoAdmin(admin.ModelAdmin):
-	list_display = ('tipo',)
-	search_fields = ('tipo',)
 	list_per_page = 10
 
 #TODO: Candidato a desaparecer
@@ -96,7 +89,6 @@ class UserAdmin(UserAdmin):
 
 admin.site.register(Estacion, EstacionAdmin)
 admin.site.register(PaquetePublicidad, ParrillaAdmin)
-admin.site.register(NivelSocioEconomico, NivelSocioEconomicoAdmin)
 admin.site.register(NivelEdadTarget, NivelEdadTargetAdmin)
 admin.site.register(FrecuenciaCobertura, FrecuenciaCoberturaAdmin)
 admin.site.register(Provincia, ProvinciaAdmin)
