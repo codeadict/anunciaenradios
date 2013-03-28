@@ -17,7 +17,7 @@ class Estacion(models.Model):
     slug = models.SlugField(max_length=130, unique=True, null=True)
     descripcion = models.TextField(verbose_name = "descripción", help_text='Breve descripción de la estación de Radio')
     logo = models.FileField(upload_to=settings.UPLOAD_DIRECTORY, max_length=1024 * 2, blank=True, null=True, verbose_name="logo de la estación", help_text="Máximo 2MB")
-    categorias = TaggableManager()
+    categorias = TaggableManager(verbose_name="Categorías", help_text='Categorías de la Radio. Ej. Juvenil, Informativa.')
     en_promocion_desde = models.DateTimeField(null=True, blank=True, verbose_name='en promoción desde')
     nivel_socioeconomico = models.ManyToManyField('NivelSocioEconomico', blank=False, null=False, verbose_name="nivel socioeconómico")
     

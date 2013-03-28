@@ -25,12 +25,8 @@ class HorarioRotativoInline(admin.TabularInline):
 	model = HorarioRotativo
     
 class EstacionAdmin(admin.ModelAdmin):
-	formfield_overrides = {
-        models.TextField: {'widget': ElrteWidget()},
-    }
-
-	fieldsets = (("Datos de las estaciones de radio", {
-		'fields' : ('nombre', 'descripcion', 'categorias','logo', 'nivel_socioeconomico')
+	fieldsets = (("Datos de la Estación de Radio", {
+		'fields' : ('nombre', 'descripcion', ('categorias','logo'), 'nivel_socioeconomico')
 		}), 
 	)
 	list_filter = ('nivel_socioeconomico__tipo','categorias__name')
@@ -52,6 +48,11 @@ class EstacionAdmin(admin.ModelAdmin):
         ParrillaInline,
         HorarioRotativoInline,
     ]
+	class Media:
+	    js = [
+	        '/static/grappelli/tinymce/jscripts/tiny_mce/tiny_mce.js',
+	        '/static/js/tinymce_setup.js',
+	    ]
 
 	
 class ParrillaAdmin(admin.ModelAdmin):
