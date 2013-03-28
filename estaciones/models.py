@@ -56,6 +56,14 @@ class Estacion(models.Model):
             return u'<img src="/media/%s" width="80" heigth="80" />' % self.logo
         else:
             return u'(Sin imagen)'
+    
+    def sumario_descripcion(self):
+        if self.descripcion:
+            return self.descripcion[:40]
+        return u"Sin descripción"
+    sumario_descripcion.short_description = 'Descripción'
+    sumario_descripcion.admin_order_field = 'descripcion'
+
         
     logotipo.allow_tags = True
     

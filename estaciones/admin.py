@@ -38,7 +38,7 @@ class EstacionAdmin(admin.ModelAdmin):
 					)
 	save_as = True
 	list_per_page = 10
-	list_display = ('nombre', 'slug', 'logotipo' )#Falta logo
+	list_display = ('nombre', 'slug', 'sumario_descripcion','logotipo' )#Falta logo
 	list_display_links = ('nombre', 'slug',)
 	raw_id_fields = ['cobertura_frecuencias']
 	related_lookup_fields = {'m2m':['cobertura_frecuencias']}
