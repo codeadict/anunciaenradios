@@ -28,8 +28,8 @@ class Estacion(models.Model):
     en_promocion_desde = models.DateTimeField(null=True, blank=True, verbose_name='en promoción desde')
     nivel_socioeconomico = models.CharField(max_length=10, choices=NSE, verbose_name='nivel socioeconómico')
     # TODO: Definir si Nivel target edad pudiera ser otro choices
-    niveles_edad_target = models.ManyToManyField('NivelEdadTarget', blank=True, null=True, verbose_name='rangos de edades')
-    cobertura_frecuencias = models.ManyToManyField('FrecuenciaCobertura', blank=True, null=True, verbose_name='cobertura y frecuencias')
+    niveles_edad_target = models.ManyToManyField('NivelEdadTarget', blank=False, null=False, verbose_name='rangos de edades')
+    cobertura_frecuencias = models.ManyToManyField('FrecuenciaCobertura', blank=False, null=False, verbose_name='cobertura y frecuencias')
     
     class Meta:
         db_table = 'estaciones_radio'
