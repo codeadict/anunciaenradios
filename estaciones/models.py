@@ -31,6 +31,9 @@ class Estacion(models.Model):
 
     nombre = models.CharField(max_length=255, blank=False, null=False)
     slug = models.SlugField(max_length=130, unique=True, null=True)
+    descripcion = models.TextField(verbose_name = "descripción", help_text='Breve descripción de la estación de Radio')
+    logo = models.FileField(upload_to=settings.UPLOAD_DIRECTORY, max_length=1024 * 2, blank=True, null=True, verbose_name="logo de la estación", help_text="Máximo 2MB")
+    categorias = TaggableManager(verbose_name="Categorías", help_text='Categorías de la Radio. Ej. Juvenil, Informativa.')
     logo = models.FileField(upload_to=settings.UPLOAD_DIRECTORY, max_length=1024 * 2, blank=True, null=True, verbose_name='logo de la estación', help_text='Máximo 2MB')
     descripcion = models.TextField(verbose_name = 'descripción', help_text='breve descripción de la estación de radio')    
     categorias = TaggableManager()
@@ -47,6 +50,14 @@ class Estacion(models.Model):
         
     def __unicode__(self):
         return u'%s' % (self.slug)
+    
+    def logotipo(self):
+        if self.logo:
+            return u'<img src="/media/%s" width="80" heigth="80" />' % self.logo
+        else:
+            return u'(Sin imagen)'
+        
+    logotipo.allow_tags = True
     
     def save(self, *args, **kwargs):
         #poner el logo por defecto
@@ -116,6 +127,41 @@ class Provincia(models.Model):
         #p = ECProvinceSelect()
         #super(Estacion, self).save(*args, **kwargs) 
 
+class PaquetePublicidad(models.Model):
+    '''
+    Modelo de Datos para Cunas de Anuncios
+    '''
+    estacion = models.ForeignKey(Estacion, verbose_name=u'Estación')
+    programa = models.CharField(u"Programa", max_length=255, blank=False,
+        help_text=u"Programa donde Promocionar, Ej. Barrio Latino")
+    horario = models.CharField(u'Horario', max_length=255, blank=False)
+    emision = models.CharField(u'Emisión', max_length=255, blank=False, 
+                               help_text="Período de Emisión. Ej. Sábados y Domingos")
+    precio = models.DecimalField(u'Precio', max_digits=14, decimal_places=6)
+    
+    class Meta:
+        ordering = ('estacion', 'programa')
+        verbose_name = 'Parrilla de Programación'
+        
+    def __unicode__(self):
+        return u'%s - %s' % (self.programa, self.horario)
+    
+class HorarioRotativo(models.Model):
+    '''
+    Modelos para cunas en horario rotativo
+    '''
+    estacion = models.ForeignKey(Estacion, verbose_name=u'Estación')
+    tiempo = models.IntegerField(u'Tiempo de cuña o mención', help_text=u'Tiempo de cuña o mención en segundos')
+    precio_nacional = models.DecimalField(u'Precio Nacional', max_digits=14, decimal_places=6)
+    precio_regional = models.DecimalField(u'Precio Regional', max_digits=14, decimal_places=6)
+    
+    class Meta:
+        verbose_name = 'Cuña en horario rotativo'
+        verbose_name_plural = 'Cuñas en horario rotativo'
+        
+    def __unicode__(self):
+        return u'%s' % (self.estacion.nombre)
+    
 # TODO: Esto es version 1, mejorar usando la nueva manera que define django 1.5
 class Cliente(models.Model):
     usuario = models.OneToOneField(User)

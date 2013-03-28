@@ -199,7 +199,7 @@ HAYSTACK_CONNECTIONS = {
 GRAPPELLI_INDEX_DASHBOARD = 'anunciaenradios.dashboard.CustomDashboard'
 
 #Extra configs:
-UPLOAD_DIRECTORY = path('uploads')
+UPLOAD_DIRECTORY = path('media')
 
 
 if not os.environ.get('DJANGO_ENV', None):

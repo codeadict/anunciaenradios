@@ -9,7 +9,7 @@ from django.contrib.flatpages.models import FlatPage
 from django.contrib.flatpages.admin import FlatPageAdmin as FlatPageAdminOld
 
 from django.db import models
-from estaciones.models import Estacion, FrecuenciaCobertura, Provincia, Cliente
+from estaciones.models import Estacion, FrecuenciaCobertura, Provincia, Cliente, PaquetePublicidad, HorarioRotativo
 
 
 class FlatPageAdmin(FlatPageAdminOld):
@@ -17,13 +17,16 @@ class FlatPageAdmin(FlatPageAdminOld):
         models.TextField: {'widget': ElrteWidget()},
     }
 
+class ParrillaInline(admin.TabularInline):
+    model = PaquetePublicidad
+    verbose_name_plural = 'Parrilla de Programación'
+    
+class HorarioRotativoInline(admin.TabularInline):
+	model = HorarioRotativo
+    
 class EstacionAdmin(admin.ModelAdmin):
-	formfield_overrides = {
-        models.TextField: {'widget': ElrteWidget()},
-    }
-
-	fieldsets = (("Datos de las estaciones de radio", {
-		'fields' : ('nombre', 'descripcion', 'logo', 'categorias', 'en_promocion_desde', 'nivel_socioeconomico', 'niveles_edad_target', 'cobertura_frecuencias')
+	fieldsets = (("Datos de la Estación de Radio", {
+		'fields' : ('nombre', 'descripcion', ('categorias','logo'), 'en_promocion_desde', 'nivel_socioeconomico', 'niveles_edad_target', 'cobertura_frecuencias')
 		}), 
 	)
 	list_filter = ('nivel_socioeconomico','categorias__name', 'en_promocion_desde', 'niveles_edad_target', 'cobertura_frecuencias__provincia__provincia', 'cobertura_frecuencias__provincia__region')
@@ -35,11 +38,27 @@ class EstacionAdmin(admin.ModelAdmin):
 					)
 	save_as = True
 	list_per_page = 10
-	list_display = ('nombre', 'slug', 'en_promocion_desde')#Falta logo
+	list_display = ('nombre', 'slug', 'logotipo' )#Falta logo
 	list_display_links = ('nombre', 'slug',)
 	raw_id_fields = ['cobertura_frecuencias']
 	related_lookup_fields = {'m2m':['cobertura_frecuencias']}
+
+	inlines = [
+        ParrillaInline,
+        HorarioRotativoInline,
+    ]
+	class Media:
+	    js = [
+	        '/static/grappelli/tinymce/jscripts/tiny_mce/tiny_mce.js',
+	        '/static/js/tinymce_setup.js',
+	    ]
 	
+class ParrillaAdmin(admin.ModelAdmin):
+	list_display = ('estacion', 'programa', 'horario', 'emision', 'precio' )
+	fields = (('estacion', 'programa'), ('emision', 'horario'), 'precio')
+	list_display_links = ('programa',)
+	list_filter = ('emision',)
+	list_per_page = 10
 
 class FrecuenciaCoberturaAdmin(admin.ModelAdmin):
 	list_display = ('frecuencia', 'modulacion', 'provincia')
@@ -62,6 +81,7 @@ class UserAdmin(UserAdmin):
     inlines = (ClienteEmbebido, )
 
 admin.site.register(Estacion, EstacionAdmin)
+admin.site.register(PaquetePublicidad, ParrillaAdmin)
 admin.site.register(FrecuenciaCobertura, FrecuenciaCoberturaAdmin)
 admin.site.register(Provincia, ProvinciaAdmin)
 
