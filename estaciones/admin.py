@@ -9,8 +9,7 @@ from django.contrib.flatpages.models import FlatPage
 from django.contrib.flatpages.admin import FlatPageAdmin as FlatPageAdminOld
 
 from django.db import models
-from estaciones.models import Estacion, NivelEdadTarget, \
-	FrecuenciaCobertura, Provincia, Cliente
+from estaciones.models import Estacion, FrecuenciaCobertura, Provincia, Cliente
 
 
 class FlatPageAdmin(FlatPageAdminOld):
@@ -27,7 +26,7 @@ class EstacionAdmin(admin.ModelAdmin):
 		'fields' : ('nombre', 'descripcion', 'logo', 'categorias', 'en_promocion_desde', 'nivel_socioeconomico', 'niveles_edad_target', 'cobertura_frecuencias')
 		}), 
 	)
-	list_filter = ('nivel_socioeconomico','categorias__name', 'en_promocion_desde', 'niveles_edad_target__rango_edad', 'cobertura_frecuencias__provincia__provincia', 'cobertura_frecuencias__provincia__region')
+	list_filter = ('nivel_socioeconomico','categorias__name', 'en_promocion_desde', 'niveles_edad_target', 'cobertura_frecuencias__provincia__provincia', 'cobertura_frecuencias__provincia__region')
 	search_fields = ('nombre',
 					'slug',
 					'descripcion',
@@ -38,15 +37,9 @@ class EstacionAdmin(admin.ModelAdmin):
 	list_per_page = 10
 	list_display = ('nombre', 'slug', 'en_promocion_desde')#Falta logo
 	list_display_links = ('nombre', 'slug',)
-	raw_id_fields = ['niveles_edad_target', 'cobertura_frecuencias']
-	related_lookup_fields = {'m2m':['niveles_edad_target', 'cobertura_frecuencias']}
+	raw_id_fields = ['cobertura_frecuencias']
+	related_lookup_fields = {'m2m':['cobertura_frecuencias']}
 	
-
-#TODO: Candidato a desaparecer
-class NivelEdadTargetAdmin(admin.ModelAdmin):
-	list_display = ('rango_edad',)
-	search_fields = ('rango_edad',)
-	list_per_page = 10
 
 class FrecuenciaCoberturaAdmin(admin.ModelAdmin):
 	list_display = ('frecuencia', 'modulacion', 'provincia')
@@ -69,7 +62,6 @@ class UserAdmin(UserAdmin):
     inlines = (ClienteEmbebido, )
 
 admin.site.register(Estacion, EstacionAdmin)
-admin.site.register(NivelEdadTarget, NivelEdadTargetAdmin)
 admin.site.register(FrecuenciaCobertura, FrecuenciaCoberturaAdmin)
 admin.site.register(Provincia, ProvinciaAdmin)
 

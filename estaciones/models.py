@@ -5,7 +5,7 @@ from settings import *
 from django.db import models
 from taggit.managers import TaggableManager
 from django.contrib.auth.models import User
-from django.contrib.localflavor.ec.forms import ECProvinceSelect
+from django_localflavor_ec.forms import ECProvinceSelect
 
 log = logging.getLogger('ar.estaciones')
 
@@ -20,15 +20,24 @@ class Estacion(models.Model):
             (u'Alto', u'Alto')
             )
 
+    NET = (
+        (u'10-20', u'10-20'),
+        (u'21-30', u'21-30'),
+        (u'31-40', u'31-40'),
+        (u'41-50', u'41-50'),
+        (u'51-60', u'51-60'),
+        (u'>60', u'>60')
+        )
+
     nombre = models.CharField(max_length=255, blank=False, null=False)
     slug = models.SlugField(max_length=130, unique=True, null=True)
     logo = models.FileField(upload_to=settings.UPLOAD_DIRECTORY, max_length=1024 * 2, blank=True, null=True, verbose_name='logo de la estación', help_text='Máximo 2MB')
     descripcion = models.TextField(verbose_name = 'descripción', help_text='breve descripción de la estación de radio')    
     categorias = TaggableManager()
     en_promocion_desde = models.DateTimeField(null=True, blank=True, verbose_name='en promoción desde')
-    nivel_socioeconomico = models.CharField(max_length=10, choices=NSE, verbose_name='nivel socioeconómico')
+    nivel_socioeconomico = models.CharField(max_length=10, choices=NSE, blank=False, null=False, verbose_name='nivel socioeconómico')
     # TODO: Definir si Nivel target edad pudiera ser otro choices
-    niveles_edad_target = models.ManyToManyField('NivelEdadTarget', blank=False, null=False, verbose_name='rangos de edades')
+    niveles_edad_target = models.CharField(max_length=10, choices=NET, blank=False, null=False, verbose_name='rangos de edades')
     cobertura_frecuencias = models.ManyToManyField('FrecuenciaCobertura', blank=False, null=False, verbose_name='cobertura y frecuencias')
     
     class Meta:

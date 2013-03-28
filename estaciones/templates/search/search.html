@@ -35,7 +35,20 @@
                 </td>
             </tr>
         </table>
-        </div>      
+        </div>
+        <div>
+        <dl>
+            {% if facets.fields.categorias %}
+                <dt>Categorías</dt>
+                {% for categoria in facets.fields.categorias %}
+                    <dd><a href="{{ request.get_full_path }}&amp;selected_facets=categorias_exact:{{ categoria.0|urlencode }}">{{ categoria.0 }}</a> ({{ categoria.1 }})</dd>
+                {% endfor %}
+            {% else %}
+                <p>No se encontraron categorías.</p>
+            {% endif %}
+        </dl>
+    </div>
+    <!-- End faceting -->      
         <div class="seven columns offset-by-one">           
             {% if query %}
             <h3>Listado de estaciones encontradas</h3>
