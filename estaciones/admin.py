@@ -9,13 +9,8 @@ from django.contrib.flatpages.models import FlatPage
 from django.contrib.flatpages.admin import FlatPageAdmin as FlatPageAdminOld
 
 from django.db import models
-<<<<<<< HEAD
 from estaciones.models import Estacion, NivelSocioEconomico, NivelEdadTarget, \
-	FrecuenciaCobertura, Provincia, PaquetePublicidad, HorarioRotativo
-=======
-from estaciones.models import Estacion, NivelEdadTarget, \
-	FrecuenciaCobertura, Provincia, Cliente
->>>>>>> develop
+	FrecuenciaCobertura, Provincia, Cliente, PaquetePublicidad, HorarioRotativo
 
 
 class FlatPageAdmin(FlatPageAdminOld):
@@ -31,17 +26,8 @@ class HorarioRotativoInline(admin.TabularInline):
 	model = HorarioRotativo
     
 class EstacionAdmin(admin.ModelAdmin):
-<<<<<<< HEAD
 	fieldsets = (("Datos de la Estación de Radio", {
-		'fields' : ('nombre', 'descripcion', ('categorias','logo'), 'nivel_socioeconomico')
-=======
-	formfield_overrides = {
-        models.TextField: {'widget': ElrteWidget()},
-    }
-
-	fieldsets = (("Datos de las estaciones de radio", {
-		'fields' : ('nombre', 'descripcion', 'logo', 'categorias', 'en_promocion_desde', 'nivel_socioeconomico', 'niveles_edad_target', 'cobertura_frecuencias')
->>>>>>> develop
+		'fields' : ('nombre', 'descripcion', ('categorias','logo'), 'en_promocion_desde', 'nivel_socioeconomico', 'niveles_edad_target', 'cobertura_frecuencias')
 		}), 
 	)
 	list_filter = ('nivel_socioeconomico','categorias__name', 'en_promocion_desde', 'niveles_edad_target__rango_edad', 'cobertura_frecuencias__provincia__provincia', 'cobertura_frecuencias__provincia__region')
@@ -53,7 +39,6 @@ class EstacionAdmin(admin.ModelAdmin):
 					)
 	save_as = True
 	list_per_page = 10
-<<<<<<< HEAD
 	list_display = ('nombre', 'slug', 'logotipo' )#Falta logo
 	list_display_links = ('nombre', 'slug',)
 	raw_id_fields = ['nivel_socioeconomico']
@@ -82,13 +67,6 @@ class NivelSocioEconomicoAdmin(admin.ModelAdmin):
 	list_display = ('tipo',)
 	search_fields = ('tipo',)
 	list_per_page = 10
-=======
-	list_display = ('nombre', 'slug', 'en_promocion_desde')#Falta logo
-	list_display_links = ('nombre', 'slug',)
-	raw_id_fields = ['niveles_edad_target', 'cobertura_frecuencias']
-	related_lookup_fields = {'m2m':['niveles_edad_target', 'cobertura_frecuencias']}
-	
->>>>>>> develop
 
 #TODO: Candidato a desaparecer
 class NivelEdadTargetAdmin(admin.ModelAdmin):
@@ -117,11 +95,8 @@ class UserAdmin(UserAdmin):
     inlines = (ClienteEmbebido, )
 
 admin.site.register(Estacion, EstacionAdmin)
-<<<<<<< HEAD
 admin.site.register(PaquetePublicidad, ParrillaAdmin)
 admin.site.register(NivelSocioEconomico, NivelSocioEconomicoAdmin)
-=======
->>>>>>> develop
 admin.site.register(NivelEdadTarget, NivelEdadTargetAdmin)
 admin.site.register(FrecuenciaCobertura, FrecuenciaCoberturaAdmin)
 admin.site.register(Provincia, ProvinciaAdmin)

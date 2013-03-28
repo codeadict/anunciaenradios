@@ -22,15 +22,12 @@ class Estacion(models.Model):
 
     nombre = models.CharField(max_length=255, blank=False, null=False)
     slug = models.SlugField(max_length=130, unique=True, null=True)
-<<<<<<< HEAD
     descripcion = models.TextField(verbose_name = "descripción", help_text='Breve descripción de la estación de Radio')
     logo = models.FileField(upload_to=settings.UPLOAD_DIRECTORY, max_length=1024 * 2, blank=True, null=True, verbose_name="logo de la estación", help_text="Máximo 2MB")
     categorias = TaggableManager(verbose_name="Categorías", help_text='Categorías de la Radio. Ej. Juvenil, Informativa.')
-=======
     logo = models.FileField(upload_to=settings.UPLOAD_DIRECTORY, max_length=1024 * 2, blank=True, null=True, verbose_name='logo de la estación', help_text='Máximo 2MB')
     descripcion = models.TextField(verbose_name = 'descripción', help_text='breve descripción de la estación de radio')    
     categorias = TaggableManager()
->>>>>>> develop
     en_promocion_desde = models.DateTimeField(null=True, blank=True, verbose_name='en promoción desde')
     nivel_socioeconomico = models.CharField(max_length=10, choices=NSE, verbose_name='nivel socioeconómico')
     # TODO: Definir si Nivel target edad pudiera ser otro choices
@@ -121,7 +118,6 @@ class Provincia(models.Model):
         #p = ECProvinceSelect()
         #super(Estacion, self).save(*args, **kwargs) 
 
-<<<<<<< HEAD
 # TODO: Inherit User model
 
 class PaquetePublicidad(models.Model):
@@ -159,8 +155,6 @@ class HorarioRotativo(models.Model):
     def __unicode__(self):
         return u'%s' % (self.estacion.nombre)
     
-    
-=======
 # TODO: Esto es version 1, mejorar usando la nueva manera que define django 1.5
 class Cliente(models.Model):
     usuario = models.OneToOneField(User)
@@ -170,4 +164,3 @@ class Cliente(models.Model):
     class Meta:
         verbose_name = 'Cliente'
         verbose_name_plural = 'Clientes'
->>>>>>> develop
