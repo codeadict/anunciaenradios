@@ -6,7 +6,7 @@ class EstacionIndex (indexes.SearchIndex, indexes.Indexable):
 	#facet search fields
 	categorias = indexes.MultiValueField(faceted=True)
 	regiones = indexes.MultiValueField()
-	edades_target = indexes.MultiValueField()
+	edad_target = indexes.CharField(model_attr='niveles_edad_target')
 
 	def get_model(self):
 		return Estacion
@@ -16,6 +16,3 @@ class EstacionIndex (indexes.SearchIndex, indexes.Indexable):
 
 	def prepare_regiones(self, obj):
 		return [str(cobertura_frecuencia.provincia.region) for cobertura_frecuencia in obj.cobertura_frecuencias.all()]
-
-	def prepare_edades_target(self, obj):
-		return [str(edad_target[1]) for edad_target in Estacion.NET]		

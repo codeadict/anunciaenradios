@@ -176,6 +176,7 @@ class Cliente(models.Model):
     ruc = models.CharField(max_length=10, null=False, blank=False, verbose_name='RUC o Cédula de identidad')
     nombre_compannia = models.CharField(max_length=255, null=False, blank=False, verbose_name='nombre de la compañia del cliente')
 
+      
     class Meta:
         verbose_name = 'Cliente'
         verbose_name_plural = 'Clientes'

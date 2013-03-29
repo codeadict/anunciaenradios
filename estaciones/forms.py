@@ -38,11 +38,12 @@ class BuscarEstacionForm(FacetedSearchForm):
 		filter_regiones, filter_edad_target  = None, None
 		sqs = super(BuscarEstacionForm, self).search()
 		if self.is_valid() and self.cleaned_data['regiones']:
-			filter_regiones = [SQ(regiones=str(region)) for region in self.cleaned_data['regiones']]
+			filter_regiones = [SQ(regiones__exact=str(region)) for region in self.cleaned_data['regiones']]
 		if self.is_valid() and self.cleaned_data['edades_target']:
-			filter_edad_target = [SQ(edades_target=str(edad_target)) for edad_target in self.cleaned_data['edades_target']]
+			filter_edad_target = [SQ(edad_target__exact=str(edad_target)) for edad_target in self.cleaned_data['edades_target']]
+		
 		if filter_regiones:
-			sqs = sqs.filter(reduce(operator.or_, filter_regiones))
+			sqs = sqs.filter_and(reduce(operator.or_, filter_regiones))
 		if filter_edad_target:
-			sqs = sqs.filter(reduce(operator.or_, filter_edad_target))
+			sqs = sqs.filter_and((reduce(operator.or_, filter_edad_target)))
 		return sqs
