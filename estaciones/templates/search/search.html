@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static from staticfiles %}
-
+{% load highlight %}
 {% block title %}Buscar Radios{% endblock %}
 
 {% block content %}
@@ -52,11 +52,14 @@
         <div class="seven columns offset-by-one">           
             {% if query %}
             <h3>Listado de estaciones encontradas</h3>
-
             {% for result in page.object_list %}
                 <p>
                     <a href="{{ result.object.get_absolute_url }}">{{ result.object.slug }}</a>
                 </p>
+                {{ result.highlighted.text }}
+                {% for text in result.highlighted %}
+                   <blockquote>{% highlight text with query %}</blockquote>
+                {% endfor %}
             {% empty %}
                 <p>No se encotraron resultados para la búsqueda realizada.</p>
             {% endfor %}

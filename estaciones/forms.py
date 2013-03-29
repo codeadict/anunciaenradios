@@ -46,4 +46,4 @@ class BuscarEstacionForm(FacetedSearchForm):
 			sqs = sqs.filter_and(reduce(operator.or_, filter_regiones))
 		if filter_edad_target:
 			sqs = sqs.filter_and((reduce(operator.or_, filter_edad_target)))
-		return sqs
+		return sqs.highlight()

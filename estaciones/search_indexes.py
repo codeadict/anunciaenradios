@@ -1,8 +1,9 @@
 from estaciones.models import Estacion
 from haystack import indexes
+from elasticstack.fields import CharField 
 
 class EstacionIndex (indexes.SearchIndex, indexes.Indexable):
-	text = indexes.CharField(document=True, use_template=True) #SearchIndex requires there be only one field with document=True.
+	text = CharField(document=True, use_template=True, analyzer='edgengram_analyzer') #SearchIndex requires there be only one field with document=True.
 	#facet search fields
 	categorias = indexes.MultiValueField(faceted=True)
 	regiones = indexes.MultiValueField()
