@@ -31,12 +31,9 @@ class Estacion(models.Model):
 
     nombre = models.CharField(max_length=255, blank=False, null=False)
     slug = models.SlugField(max_length=130, unique=True, null=True)
-    descripcion = models.TextField(verbose_name = "descripción", help_text='Breve descripción de la estación de Radio')
+    descripcion = models.TextField(verbose_name = "descripción", help_text='breve descripción de la estación de radio')
     logo = models.FileField(upload_to=settings.UPLOAD_DIRECTORY, max_length=1024 * 2, blank=True, null=True, verbose_name="logo de la estación", help_text="Máximo 2MB")
     categorias = TaggableManager(verbose_name="Categorías", help_text='Categorías de la Radio. Ej. Juvenil, Informativa.')
-    logo = models.FileField(upload_to=settings.UPLOAD_DIRECTORY, max_length=1024 * 2, blank=True, null=True, verbose_name='logo de la estación', help_text='Máximo 2MB')
-    descripcion = models.TextField(verbose_name = 'descripción', help_text='breve descripción de la estación de radio')    
-    categorias = TaggableManager()
     en_promocion_desde = models.DateTimeField(null=True, blank=True, verbose_name='en promoción desde')
     nivel_socioeconomico = models.CharField(max_length=10, choices=NSE, blank=False, null=False, verbose_name='nivel socioeconómico')
     niveles_edad_target = models.CharField(max_length=10, choices=NET, blank=False, null=False, verbose_name='rangos de edades')
