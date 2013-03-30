@@ -5,7 +5,7 @@ from settings import *
 from django.db import models
 from taggit.managers import TaggableManager
 from django.contrib.auth.models import User
-from django_localflavor_ec.forms import ECProvinceSelect
+from django_localflavor_ec.ec_provinces import PROVINCE_CHOICES
 
 log = logging.getLogger('ar.estaciones')
 
@@ -55,7 +55,7 @@ class Estacion(models.Model):
     
     def sumario_descripcion(self):
         if self.descripcion:
-            return self.descripcion[:60] + "..."
+            return self.descripcion[:240] + "..."
         return u"Sin descripción"
     sumario_descripcion.short_description = 'Descripción'
     sumario_descripcion.admin_order_field = 'descripcion'
@@ -115,21 +115,31 @@ class Provincia(models.Model):
               (u'Oriente', u'Oriente'),
               (u'Galapagos', u'Galápagos'))
 
-    codigo = models.CharField(max_length=50, null=False, verbose_name='código')
+    codigo = models.CharField(max_length=50, choices=PROVINCE_CHOICES, null=False, verbose_name='provincia')
     provincia = models.CharField(max_length=100, null=False, verbose_name='nombre de la provincia')
     region = models.CharField(max_length=10, choices=REGION, verbose_name='región')
+
+    def codigo_ec(self):
+        return "EC-%s" % self.codigo
+        
+    codigo_ec.short_description = 'Código de la provincia'
+    codigo_ec.admin_order_field = 'codigo'
+    codigo_ec.allow_tags = True
 
     class Meta:
         verbose_name = 'Provincia'
         verbose_name_plural = 'Provincias'
+        unique_together = ['codigo', 'region']
         
     def __unicode__(self):
         return u'%s' % (self.provincia)
 
-    #TODO:
-    #def save(self, *args, **kwargs):
-        #p = ECProvinceSelect()
-        #super(Estacion, self).save(*args, **kwargs) 
+    
+    def save(self, *args, **kwargs):
+        for provincia in PROVINCE_CHOICES:
+            if provincia[0] == self.codigo:
+                self.provincia = provincia[1]
+        super(Provincia, self).save(*args, **kwargs)
 
 class PaquetePublicidad(models.Model):
     '''
@@ -170,7 +180,7 @@ class HorarioRotativo(models.Model):
 # TODO: Esto es version 1, mejorar usando la nueva manera que define django 1.5
 class Cliente(models.Model):
     usuario = models.OneToOneField(User)
-    ruc = models.CharField(max_length=10, null=False, blank=False, verbose_name='RUC o Cédula de identidad')
+    ruc = models.CharField(max_length=10, null=False, unique=True, blank=False, verbose_name='RUC o Cédula de identidad')
     nombre_compannia = models.CharField(max_length=255, null=False, blank=False, verbose_name='nombre de la compañia del cliente')
 
       

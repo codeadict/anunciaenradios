@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static from staticfiles %}
-
+{% load comments %}
 {% block title %}Inicio{% endblock %}
 
 {% block content %}
@@ -9,9 +9,9 @@
         <div class="row">
             <div class="eight columns">
             	<div>
-            		{{ object.logotipo }}
+            		{{ object.logotipo|safe }}
 					<p>Nombre: {{ object.nombre }}</p>
-					<p>Descripción: {{ object.descripcion }}</p>
+					<p>Descripción: {{ object.descripcion|safe }}</p>
 					<p>Nivel socioeconómico: {{ object.nivel_socioeconomico }}</p>
 					<p>En promoción desde: {{ object.en_promocion_desde }}</p>					
 					<p>Rango de edades: {{ object.nivel_edad_target }}</p>
@@ -28,6 +28,17 @@
           		       {% endfor %}
                     </ul>
 				</div>
+                <div>
+                    {% get_comment_count for object as comment_count %}.
+                    <p>Esta estacion tiene {{ comment_count }} comentarios.</p>
+                    {% render_comment_list for object %}
+                    Haz tu comentario:
+                    {% if user.is_authenticated %}
+                        {% render_comment_form for object %}
+                    {% else %}
+                        <p>Por favor <a href="{% url 'auth_login' %}">autetíquese</a> para dejar un comentario.</p>
+                    {% endif %}
+                </div>
 			</div>
 		</div>
 	</div>

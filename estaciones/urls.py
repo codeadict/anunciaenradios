@@ -6,12 +6,16 @@ from estaciones.forms import BuscarEstacionForm
 from haystack.query import SearchQuerySet
 from haystack.views import SearchView, FacetedSearchView
 from estaciones.views import EstacionDetailView
+from django.contrib.auth.decorators import login_required
 
 urlpatterns = patterns("",
     url(r'^$',
         TemplateView.as_view(template_name='index.html'),
         name='website_index'),
-    url(r'^detalles/(?P<slug>[-_\w]+)/$', EstacionDetailView.as_view(template_name='detalles.html'), name='detalles')
+    url(r'^detalles/(?P<slug>[-_\w]+)/$', login_required(EstacionDetailView.as_view(template_name='detalles.html'),
+    													login_url='/administrar'),
+    													name='detalles'),
+    (r'^comentarios/', include('django.contrib.comments.urls')),
 )
 
 urlpatterns += patterns('haystack.views',

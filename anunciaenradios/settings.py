@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-#
 import logging
 import os
+import djcelery
+djcelery.setup_loader()
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -130,6 +132,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.flatpages',
+    'django.contrib.comments',
     'grappelli.dashboard',
     'grappelli',
     # Uncomment the next line to enable the admin:
@@ -139,6 +142,7 @@ INSTALLED_APPS = (
     'haystack',
     'taggit',
     'elasticstack',
+    'djcelery',
 
     'estaciones',
     'orders',
@@ -239,11 +243,15 @@ ELASTICSEARCH_INDEX_SETTINGS = {
         }
     }
 }
+HAYSTACK_SIGNAL_PROCESSOR = 'estaciones.observers.QueuedSignalProcessor'
 
 ELASTICSEARCH_DEFAULT_ANALYZER = 'edgengram_analyzer'
 
 #Grappelli Dashboard:
 GRAPPELLI_INDEX_DASHBOARD = 'anunciaenradios.dashboard.CustomDashboard'
+
+#Celery
+BROKER_URL = 'amqp://guest:guest@localhost:5672/'
 
 #Extra configs:
 UPLOAD_DIRECTORY = path('media')

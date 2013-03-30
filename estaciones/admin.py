@@ -69,8 +69,9 @@ class FrecuenciaCoberturaAdmin(admin.ModelAdmin):
 	list_per_page = 10
 
 class ProvinciaAdmin(admin.ModelAdmin):
-	list_display = ('codigo', 'provincia', 'region')
-	search_fields = ('codigo', 'provincia', 'region')
+	exclude = ('provincia',)
+	list_display = ('codigo_ec', 'provincia', 'region')
+	search_fields = ('codigo_ec', 'provincia', 'region')
 	list_per_page = 10
 
 class ClienteEmbebido(admin.StackedInline):

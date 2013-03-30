@@ -1,2 +1,2 @@
 {{ object.nombre }}
-{{ object.descripcion }}
+{{ object.descripcion|striptags }}

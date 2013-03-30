@@ -38,7 +38,7 @@ class CustomDashboard(Dashboard):
                     'Applicaciones',
                     column=1,
                     css_classes=('collapse closed',),
-                    exclude=('django.contrib.*',),
+                    exclude=('django.contrib.*', 'djcelery.*'),
                 )
             ]
         ))

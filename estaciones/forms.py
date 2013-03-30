@@ -3,7 +3,7 @@ from __future__ import with_statement
 
 from django import forms
 from django.conf import settings
-from estaciones.models import Estacion, Provincia
+from estaciones.models import Estacion, Provincia, Cliente
 import datetime
 from django.utils.datetime_safe import date
 from haystack.forms import FacetedSearchForm
@@ -47,3 +47,12 @@ class BuscarEstacionForm(FacetedSearchForm):
 		if filter_edad_target:
 			sqs = sqs.filter_and((reduce(operator.or_, filter_edad_target)))
 		return sqs.highlight()
+
+class ClienteForm(forms.ModelForm):
+	class Meta:
+		model = Cliente
+
+	def clean_ruc(self):
+		ruc = self.cleaned_data['ruc']
+        #if len(ruc) != 10:
+        #	raise forms.ValidationError("Debe introducir un número de RUC válido")
