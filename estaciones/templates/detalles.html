@@ -34,7 +34,18 @@
                     {% render_comment_list for object %}
                     Haz tu comentario:
                     {% if user.is_authenticated %}
-                        {% render_comment_form for object %}
+                        {% get_comment_form for object as form %}
+                        <form action="{% comment_form_target %}" method="POST">
+                            {% csrf_token %}
+                            {{ form.comment }}
+                            <!-- {{ form.honeypot }} -->
+                            {{ form.content_type }}
+                            {{ form.object_pk }}
+                            {{ form.timestamp }}
+                            {{ form.security_hash }}
+                            <input type="hidden" name="next" value="{% url 'detalles' object.id %}" />
+                            <input type="submit" value="Add comment" id="id_submit" />
+                        </form>
                     {% else %}
                         <p>Por favor <a href="{% url 'auth_login' %}">autetíquese</a> para dejar un comentario.</p>
                     {% endif %}

@@ -79,9 +79,9 @@ class CustomDashboard(Dashboard):
             column=2,
             children=[
                 {
-                    'title': _('Django Documentation'),
-                    'url': 'http://docs.djangoproject.com/',
-                    'external': True,
+                    'title': _('Visitar el sitio'),
+                    'url': 'http://localhost:8080/',
+                    'external': False,
                 },
                 {
                     'title': _('Grappelli Documentation'),
