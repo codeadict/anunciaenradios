@@ -2,7 +2,7 @@
 from __future__ import with_statement
 
 from django.http import HttpResponseRedirect, Http404
-from django.views.generic import FormView, TemplateView, DetailView
+from django.views.generic import FormView, TemplateView, DetailView, ListView
 
 from estaciones.forms import ContactForm
 from estaciones.models import Estacion
@@ -20,3 +20,11 @@ class ContactView(FormView):
 
 class EstacionDetailView(DetailView):
 	model = Estacion
+
+class EstacionList(ListView):
+	model = Estacion
+	paginate_by = 2
+
+class DetallesCarruselEstacionList(ListView):
+	model = Estacion
+	paginate_by = 1

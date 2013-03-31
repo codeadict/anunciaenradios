@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static from staticfiles %}
+{% load comments %}
+{% load estaciones_tags %}
+
+{% block title %}Listado de estaciones de radio{% endblock %}
+
+{% block content %}
+<section id="estacionesContent" class="buscar">
+    <div class="container">
+        <div class="row">
+            <div class="eight columns">
+            	{% if object_list %}
+				<h2>Listado de estaciones de radio</h2>
+				<ul>
+					{% for estacion in object_list %}
+						<a href="/radios/por_pagina?page={% get_page_in_details_paginator forloop.counter request.GET.page %}">
+							<li>
+								<!-- No se utilizo el partia de detalles de estacion pq aqui pueden haber otros requisitos -->
+								{{ estacion.logotipo|safe }}
+								<p>Nombre: {{ estacion.nombre }}</p>
+								<p>Descripción: {{ estacion.descripcion|safe }}</p>
+								<p>Nivel socioeconómico: {{ estacion.nivel_socioeconomico }}</p>
+								<p>En promoción desde: {{ estacion.en_promocion_desde }}</p>					
+								<p>Rango de edades: {{ estacion.nivel_edad_target }}</p>
+								<p>Categorías:</p>
+								<ul>
+				                    {% for categoria in estacion.categorias.all %}
+				                        <li>{{ categoria }}</li>
+				                    {% endfor %}
+				                </ul>
+				                <p>Regiones:</p>
+				                <ul>
+				                   {% for cob_frec in estacion.cobertura_frecuencias.all %}
+				                        <li>{{ cob_frec.provincia.region }}</li>
+				          		   {% endfor %}
+				                </ul>
+							</li>
+						</a>
+					{% endfor %}
+				</ul>
+				{% if is_paginated %}
+			        <div class="pagination">
+			            <span class="page-links">
+			                {% if page_obj.has_previous %}
+			                    <a href="/radios?page={{ page_obj.previous_page_number }}">Anterior</a>
+			                {% endif %}
+			                <span class="page-current">
+			                    Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+			                </span>
+			                {% if page_obj.has_next %}
+			                    <a href="/radios?page={{ page_obj.next_page_number }}">Siguiente</a>
+			                {% endif %}
+			            </span>
+			        </div>
+			    {% endif %}
+				{% else %}
+					<p> No se han registrado estaciones.</p>
+				{% endif %}
+		</div>
+	</div>
+</section>
+{% endblock %}

@@ -1,0 +1,23 @@
+
+<div>
+	{{ object.logotipo|safe }}
+	<p>Nombre: {{ object.nombre }}</p>
+	<p>Descripción: {{ object.descripcion|safe }}</p>
+	<p>Nivel socioeconómico: {{ object.nivel_socioeconomico }}</p>
+	<p>En promoción desde: {{ object.en_promocion_desde }}</p>					
+	<p>Rango de edades: {{ object.nivel_edad_target }}</p>
+	<p>Categorías:</p>
+	<ul>
+        {% for categoria in object.categorias.all %}
+            <li>{{ categoria }}</li>
+        {% endfor %}
+    </ul>
+    <p>Regiones:</p>
+    <ul>
+       {% for cob_frec in object.cobertura_frecuencias.all %}
+            <li>{{ cob_frec.provincia.region }}</li>
+	       {% endfor %}
+    </ul>
+</div>                
+
+

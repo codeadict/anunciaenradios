@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static from staticfiles %}
+{% load comments %}
+{% block title %}Detalles de {{ object.nombre }}{% endblock %}
+
+{% block content %}
+<section id="estacionesContent" class="buscar">
+    <div class="container">
+        <div class="row">
+            <div class="eight columns">
+                {% if is_paginated %}
+                    <div class="pagination">
+                        <span class="page-links">
+                            {% if page_obj.has_previous %}
+                                <a href="/radios/por_pagina?page={{ page_obj.previous_page_number }}">Anterior</a>
+                            {% endif %}
+                            
+                            {% if page_obj.has_next %}
+                                <a href="/radios/por_pagina?page={{ page_obj.next_page_number }}">Siguiente</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                {% endif %}
+                {% include "estaciones/_details.html" with object=object_list.0%}
+                <div>
+                    {% get_comment_count for object_list.0 as comment_count %}.
+                    <p>Esta estacion tiene {{ comment_count }} comentarios.</p>
+                    {% render_comment_list for object_list.0 %}
+                    Haz tu comentario:
+                    {% if user.is_authenticated %}
+                        {% get_comment_form for object_list.0 as form %}
+                        <form action="{% comment_form_target %}" method="POST">
+                            {% csrf_token %}
+                            {{ form.comment }}
+                            <!-- {{ form.honeypot }} -->
+                            {{ form.content_type }}
+                            {{ form.object_pk }}
+                            {{ form.timestamp }}
+                            {{ form.security_hash }}
+                            <input type="hidden" name="next" value="{% url 'detalles' object_list.0.id %}" />
+                            <input type="submit" value="Add comment" id="id_submit" />
+                        </form>
+                    {% else %}
+                        <p>Por favor <a href="{% url 'auth_login' %}">autetíquese</a> para dejar un comentario.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
