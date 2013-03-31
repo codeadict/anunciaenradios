@@ -8,11 +8,21 @@ from haystack.views import SearchView, FacetedSearchView
 from estaciones.views import EstacionDetailView
 from django.contrib.auth.decorators import login_required
 
+from tastypie.api import Api
+from estaciones.api import EstacionResource, HorarioRotativoResource, PaquetePublicidadResource
+
+#Registering the API
+v1_api = Api(api_name='v1')
+v1_api.register(EstacionResource())
+v1_api.register(PaquetePublicidadResource())
+v1_api.register(HorarioRotativoResource())
+
 urlpatterns = patterns("",
     url(r'^detalles/(?P<slug>[-_\w]+)/$', login_required(EstacionDetailView.as_view(template_name='detalles.html'),
     													login_url='/administrar'),
     													name='detalles'),
     (r'^comentarios/', include('django.contrib.comments.urls')),
+    (r'^api/', include(v1_api.urls)),
 )
 
 urlpatterns += patterns('haystack.views',

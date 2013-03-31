@@ -143,6 +143,7 @@ INSTALLED_APPS = (
     'taggit',
     'elasticstack',
     'djcelery',
+    'tastypie',
 
     'estaciones',
     'orders',
