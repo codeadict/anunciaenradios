@@ -30,9 +30,7 @@ class Orden(models.Model):
     Modelo de una Orden de compra en el sistema
     """
     numero = models.CharField(u'Número de Orden', max_length=128, db_index=True)
-    
-    cliente = models.ForeignKey(User, related_name='ordenes', null=True, blank=True, verbose_name="Cliente")
-    
+    cliente = models.ForeignKey(User, related_name='ordenes', null=True, blank=True, verbose_name="Cliente")    
     total_incl_iva = models.DecimalField("Total orden (inc. IVA)", decimal_places=2, max_digits=12)
     #indica el estado de la Orden
     estado = models.CharField("Estado", max_length=100, null=True, blank=True)
@@ -42,10 +40,10 @@ class Orden(models.Model):
     class Meta:
         ordering = ['-fecha_creada',]
         permissions = (
-            ("can_view", "Puede ver Ordenes"),
+            ("can_view", "Puede ver Órdenes"),
         )
         verbose_name = "Orden"
-        verbose_name_plural = "Ordenes"
+        verbose_name_plural = "Órdenes"
         
     def __unicode__(self):
         return u"#%s" % (self.numero,)

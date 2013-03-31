@@ -3,6 +3,15 @@
 {% load comments %}
 {% block title %}Detalles de {{ object.nombre }}{% endblock %}
 
+{% block js-scripts %}
+      <script src="{% static 'js/shoppingcart/lib/angular/angular.js' %}"></script>
+    <script src="{% static 'js/shoppingcart/js/app.js' %}"></script>
+    <script src="{% static 'js/shoppingcart/js/services.js' %}"></script>
+    <script src="{% static 'js/shoppingcart/js/controllers.js' %}"></script>
+    <script src="{% static 'js/shoppingcart/js/filters.js' %}"></script>
+    <script src="{% static 'js/shoppingcart/js/directives.js' %}"></script>
+{% endblock %}
+
 {% block content %}
 <section id="estacionesContent" class="buscar">
     <div class="container">
@@ -21,6 +30,7 @@
                         </span>
                     </div>
                 {% endif %}
+                <div ng-view ng-app="shoppingCartApp"></div>
                 {% include "estaciones/_details.html" with object=object_list.0%}
                 <div>
                     {% get_comment_count for object_list.0 as comment_count %}.
