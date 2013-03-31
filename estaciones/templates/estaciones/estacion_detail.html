@@ -17,7 +17,7 @@
     <div class="container">
         <div class="row">
             <div class="eight columns">
-            	<div ng-view ng-app="shoppingCartApp"></div>
+            	<div id="angular-app" ng-view ng-app="shoppingCartApp" data-estacion-id="{{ object.pk }}"></div>
 				{% include "estaciones/_details.html" with object=object%}
 				<div>
 			        {% get_comment_count for object as comment_count %}.
