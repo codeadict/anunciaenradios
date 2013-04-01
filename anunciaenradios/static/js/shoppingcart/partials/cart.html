@@ -1,0 +1,72 @@
+<div ng-controller="PaquetePublicidadListController">
+	<h5>Paquetes de publicidad</h5>
+	<table class="">
+        <tr>            
+            <th>Emisión</th>
+            <th>Horario</th>
+            <th>Programa</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th>Subtotal</th>
+            <th></th>
+        </tr>
+        <tr ng:repeat="paquete in paquetes">
+            <td>{{ paquete.emision }}</td>           
+            <td>{{ paquete.horario }}</td>
+            <td>{{ paquete.programa }}</td>
+            <td>{{ paquete.precio | currency }}</td>
+            <td><input type="number" ng:model="paquete.cantidad" ng:required integer min="0"></td>
+            <td>{{paquete.cantidad * paquete.precio | currency}}</td>
+            <td>
+                <button ng:click="resetRequest($index)" ng-disabled="emptyRequest($index)">Cancelar pedido</button>
+            </td>
+        </tr>
+        <tr>
+        	<td></td>
+        	<td></td>
+            <td></td>
+            <td></td>
+            <td>Total:</td>
+            <td>{{total() | currency}}</td>
+            <td></td>
+        </tr>
+    </table>
+    <button ng:click="archiveOrder()">Ordenar</button>
+</div>
+
+<div ng-controller="HorarioRotativoListController">
+	<h5>Cuñas de horario rotativo</h5>
+	<table class="table">
+        <tr>            
+            <th>Precio regional</th>
+            <th>Precion nacional</th>
+            <th>Tiempo en segundos</th>
+            <th>Cantidad</th>
+            <th>Subtotal (regional)</th>
+            <th>Subtotal (nacional)</th>
+            <th></th>
+        </tr>
+        <tr ng:repeat="horario_rotativo in horarios_rotativos">
+            <td>{{ horario_rotativo.precio_regional | currency }}</td>           
+            <td>{{ horario_rotativo.precio_nacional | currency }}</td>
+            <td>{{ horario_rotativo.tiempo }}</td>
+            <td><input type="number" ng:model="horario_rotativo.cantidad" ng:required integer min="0"></td>
+            <td>Regional: {{horario_rotativo.cantidad * horario_rotativo.precio_regional | currency}}</td>
+            <td>Nacional: {{horario_rotativo.cantidad * horario_rotativo.precio_nacional | currency}}</td>
+            <td>
+                <button ng:click="resetRequest($index)" ng-disabled="emptyRequest($index)">Cancelar pedido</button>
+            </td>
+        </tr>
+        <tr>
+        	<td></td>
+        	<td></td>
+            <td></td>
+            <td></td>
+            <td>Total regional: {{total()[0] | currency}}</td>
+            <td>Total nacional: {{total()[1] | currency}}</td>
+            <td></td>
+        </tr>
+    </table>
+    <button ng:click="archiveOrder()">Ordenar</button>
+</div>
+

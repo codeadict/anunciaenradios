@@ -144,6 +144,7 @@ INSTALLED_APPS = (
     'elasticstack',
     'djcelery',
     'tastypie',
+    'cart',
 
     'estaciones',
     'orders',
