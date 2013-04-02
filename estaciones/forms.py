@@ -44,7 +44,7 @@ class BuscarEstacionForm(FacetedSearchForm):
 			filter_regiones = [SQ(regiones__exact=str(region)) for region in self.cleaned_data['regiones']]
 		if self.is_valid() and self.cleaned_data['edades_target']:
 			filter_edad_target = [SQ(edad_target__exact=str(edad_target)) for edad_target in self.cleaned_data['edades_target']]
-		if self.is_valid() and self.cleaned_data['edades_target']:
+		if self.is_valid() and self.cleaned_data['niveles_socioeconomicos']:
 			filter_nivel_socioeconomico = [SQ(nivel_socioeconomico__exact=str(nivel_socioeconomico)) for nivel_socioeconomico in self.cleaned_data['niveles_socioeconomicos']]
 		
 		if filter_regiones:

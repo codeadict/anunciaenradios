@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static from staticfiles %}
+{% load url from future %}
+{% load i18n %}
+
+{% block title %}Autenticación{% endblock %}
+
+{% block content %}
+{{ block.super }}
+<section id="estacionesContent" class="buscar">
+    <div class="container">
+        <div class="row">
+            <div class="eight columns">
+            	{{ block.super }}
+				<h5>Intruduzca sus datos de autenticación</h5>
+				<form action="" method="post">{% csrf_token %}
+				    {{ form.as_p }}
+				    <p><input type="submit" value="Autenticarse"></p>
+				</form>
+			</div>
+		</div>
+	</div>
+</section>
+{% endblock %}

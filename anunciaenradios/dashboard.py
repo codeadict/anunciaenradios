@@ -32,13 +32,13 @@ class CustomDashboard(Dashboard):
                     'Administración',
                     column=1,
                     models=('django.contrib.*',),
-                    exclude=('django.contrib.sites.*',),
+                    exclude=('django.contrib.sites.*', 'django.contrib.comments.*', 'django.contrib.flatpages.*'),
                 ),
                 modules.AppList(
                     'Applicaciones',
                     column=1,
                     css_classes=('collapse closed',),
-                    exclude=('django.contrib.*', 'djcelery.*'),
+                    exclude=('django.contrib.*', 'djcelery.*', 'tastypie.*', 'taggit.*'),
                 )
             ]
         ))

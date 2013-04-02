@@ -6,6 +6,7 @@ from django.db import models
 from taggit.managers import TaggableManager
 from django.contrib.auth.models import User
 from django_localflavor_ec.ec_provinces import PROVINCE_CHOICES
+from registration.supplements import RegistrationSupplementBase
 
 log = logging.getLogger('ar.estaciones')
 
@@ -190,3 +191,15 @@ class Cliente(models.Model):
 
     def __unicode__(self):
         return u'%s' % (self.usuario.username)
+
+
+
+class ClientRegistrationSupplement(RegistrationSupplementBase):
+
+    ruc = models.CharField(max_length=10, null=False, unique=True, blank=False, verbose_name='RUC o Cédula de identidad')
+    nombre_compannia = models.CharField("Nombre de la compañía", max_length=100, help_text="Por favor intruduzca el nombre de su compañia")
+    
+
+    def __unicode__(self):
+        # a summary of this supplement
+        return "RUC: %s / Comp: %s" % (self.ruc, self.nombre_compannia)

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static from staticfiles %}
+{% load url from future %}
+{% load i18n %}
+
+{% block title %}Registro completado satisfactoriamente{% endblock %}
+
+{% block content %}
+{{ block.super }}
+<section id="estacionesContent" class="buscar">
+    <div class="container">
+        <div class="row">
+            <div class="eight columns">
+            	{{ block.super }}
+				<p>Su registro se ha archivado, por favor espere que los administradores aprueben su registro</p>
+				<p>Será notificado por e-mail</p>				
+			</div>
+		</div>
+	</div>
+</section>
+{% endblock %}

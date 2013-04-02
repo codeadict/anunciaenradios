@@ -35,20 +35,30 @@
 		<div class="container">
 			{% block header %}
 				<div class="row">
-					<div class="six columns">
+					<div class="five columns">
 						<h1>Anuncia en Radios</h1>
 					</div>
-					<div class="six columns">
+					<div class="five columns">
 						<h5>Llámenos</h5>
 						<h3>(+593) 02 2482858 <span>(Opción 2)</span></h3>
 						<p>Estaremos gustosos de ayudarle con su promoción radial!</p>
 					</div>
+					{% if request.user.is_authenticated %}
+        				<div class="two columns">
+							<p>Bienvenido {% filter force_escape %}{% firstof user.first_name user.username user.get_short_name user.get_username %} {% firstof user.last_name %}{% endfilter %}<a href="/registro/logout">Cerrar sessión</a></p>						
+						</div>
+					{% else %}
+						<div class="two columns">
+							<p><a href="/registro/login">Iniciar sesión</a></p>
+							<p><a href="/registro/register">Registrarse aquí</a></p>						
+						</div>
+    				{% endif %}
 					</div>
 					<div class="row">
 				    <ul class="nav-bar">
 				    	{% url 'website_index' as url %}{% with text="Inicio" %}{% include "_nav.html" %}{% endwith %}
-
-				    	{% with url='/radios/' text="Todas las estaciones" %}{% include "_nav.html" %}{% endwith %}
+				    	
+				    	{% with url="/radios/" text="Todas las estaciones" %}{% include "_nav.html" %}{% endwith %}
 
 				    	{% with url="/radios/buscar" text="Busque su Radio" %}{% include "_nav.html" %}{% endwith %}
 				        <li class="item">

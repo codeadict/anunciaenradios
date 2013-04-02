@@ -145,6 +145,8 @@ INSTALLED_APPS = (
     'djcelery',
     'tastypie',
     'cart',
+    'registration',
+    #'registration.supplements.default',
 
     'estaciones',
     'orders',
@@ -188,10 +190,20 @@ LOGGING = {
     }
 }
 
-#Session related:
+#Session/User related:
+
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 1800
+ACCOUNT_ACTIVATION_DAYS=7
+EMAIL_HOST='smtp.googlemail.com'
+EMAIL_PORT=465
+EMAIL_HOST_USER=''
+EMAIL_HOST_PASSWORD=''
+EMAIL_USE_TLS=True
+
+
+REGISTRATION_SUPPLEMENT_CLASS = "estaciones.models.ClientRegistrationSupplement"
 
 # Elasticsearch configs
 HAYSTACK_CONNECTIONS = {

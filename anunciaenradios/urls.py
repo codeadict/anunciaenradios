@@ -9,6 +9,11 @@ from estaciones.views import ContactView
 
 urlpatterns = patterns('',
     url(r'^$', TemplateView.as_view(template_name='index.html'), name='website_index'),
+    (r'^registro/', include('registration.urls')),
+
+    url(r'^accounts/profile/$',
+        ContactView.as_view(template_name='index.html'),
+        name='index'),
     # Examples:
     # url(r'^$', 'anunciaenradios.views.home', name='home'),
     url(r'^radios/', include('estaciones.urls')),
