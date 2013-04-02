@@ -36,7 +36,7 @@ class Estacion(models.Model):
     categorias = TaggableManager(verbose_name="Categorías", help_text='Categorías de la Radio. Ej. Juvenil, Informativa.')
     en_promocion_desde = models.DateTimeField(null=True, blank=True, verbose_name='en promoción desde')
     nivel_socioeconomico = models.CharField(max_length=10, choices=NSE, blank=False, null=False, verbose_name='nivel socioeconómico')
-    niveles_edad_target = models.CharField(max_length=10, choices=NET, blank=False, null=False, verbose_name='rangos de edades')
+    nivel_edad_target = models.CharField(max_length=10, choices=NET, blank=False, null=False, verbose_name='rango de edad')
     cobertura_frecuencias = models.ManyToManyField('FrecuenciaCobertura', blank=False, null=False, verbose_name='cobertura y frecuencias')
     
     class Meta:

@@ -29,23 +29,30 @@ class BuscarEstacionForm(FacetedSearchForm):
 	edades_target = forms.MultipleChoiceField(required=False, 
                                     widget=CheckboxSelectMultiple(), 
                                     choices=Estacion.NET)
+	niveles_socioeconomicos = forms.MultipleChoiceField(required=False, 
+                                    widget=CheckboxSelectMultiple(), 
+                                    choices=Estacion.NSE)
 
 	def __init__(self, *args, **kwargs):
 		super(BuscarEstacionForm, self).__init__(*args, **kwargs)
 
 	def search(self):
 		# First, store the SearchQuerySet received from other processing.
-		filter_regiones, filter_edad_target  = None, None
+		filter_regiones, filter_edad_target, filter_nivel_socioeconomico  = None, None, None
 		sqs = super(BuscarEstacionForm, self).search()
 		if self.is_valid() and self.cleaned_data['regiones']:
 			filter_regiones = [SQ(regiones__exact=str(region)) for region in self.cleaned_data['regiones']]
 		if self.is_valid() and self.cleaned_data['edades_target']:
 			filter_edad_target = [SQ(edad_target__exact=str(edad_target)) for edad_target in self.cleaned_data['edades_target']]
+		if self.is_valid() and self.cleaned_data['edades_target']:
+			filter_nivel_socioeconomico = [SQ(nivel_socioeconomico__exact=str(nivel_socioeconomico)) for nivel_socioeconomico in self.cleaned_data['niveles_socioeconomicos']]
 		
 		if filter_regiones:
 			sqs = sqs.filter_and(reduce(operator.or_, filter_regiones))
 		if filter_edad_target:
 			sqs = sqs.filter_and((reduce(operator.or_, filter_edad_target)))
+		if filter_nivel_socioeconomico:
+			sqs = sqs.filter_and((reduce(operator.or_, filter_nivel_socioeconomico)))
 		return sqs.highlight()
 
 class ClienteForm(forms.ModelForm):
@@ -53,6 +60,5 @@ class ClienteForm(forms.ModelForm):
 		model = Cliente
 
 	def clean_ruc(self):
-		ruc = self.cleaned_data['ruc']
-        #if len(ruc) != 10:
-        #	raise forms.ValidationError("Debe introducir un número de RUC válido")
+		if self.cleaned_data['ruc'] != 10:
+			raise forms.ValidationError("Debe introducir un número de RUC válido")

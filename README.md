@@ -19,5 +19,6 @@ Recomendado usar virtualenvwrapper
  - RabbitMQ o REDIS para actualización en tiempo real de índice de búsqueda (Opcional)
    - RabbitMQ: $ apt-get install rabbitmq-server (Recomendado)
    - REDIS: $ apt-get install redis-server
-   ** En caso de que no se use un mecanismo para actualización en tiempo real del índice de forma periódica debe ejecutarse una tarea para con el comando $ python manage.py update_index
+   ** Para inciar el worker que se encarga de actualizar el índice en tiempo real ejecutar: $ ./start_worker
+   ** En caso de que no se use un mecanismo para actualización en tiempo real del índice de forma periódica debe ejecutarse una tarea para con el comando $ python manage.py update_index para indexer todas las estaciones agregadas al sistema hasta ese momento.
   - Configurar en anunciaenradios/settings.py los datasources necesarios

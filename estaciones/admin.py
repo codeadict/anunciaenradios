@@ -9,7 +9,7 @@ from django.contrib.flatpages.admin import FlatPageAdmin as FlatPageAdminOld
 
 from django.db import models
 from estaciones.models import Estacion, FrecuenciaCobertura, Provincia, Cliente, PaquetePublicidad, HorarioRotativo
-
+from estaciones.forms import ClienteForm
 
 class FlatPageAdmin(FlatPageAdminOld):
     class Media:
@@ -27,10 +27,10 @@ class HorarioRotativoInline(admin.TabularInline):
     
 class EstacionAdmin(admin.ModelAdmin):
 	fieldsets = (("Datos de la Estación de Radio", {
-		'fields' : ('nombre', 'descripcion', ('categorias','logo'), 'en_promocion_desde', 'nivel_socioeconomico', 'niveles_edad_target', 'cobertura_frecuencias')
+		'fields' : ('nombre', 'descripcion', ('categorias','logo'), 'en_promocion_desde', 'nivel_socioeconomico', 'nivel_edad_target', 'cobertura_frecuencias')
 		}), 
 	)
-	list_filter = ('nivel_socioeconomico','categorias__name', 'en_promocion_desde', 'niveles_edad_target', 'cobertura_frecuencias__provincia__provincia', 'cobertura_frecuencias__provincia__region')
+	list_filter = ('nivel_socioeconomico','categorias__name', 'en_promocion_desde', 'nivel_edad_target', 'cobertura_frecuencias__provincia__provincia', 'cobertura_frecuencias__provincia__region')
 	search_fields = ('nombre',
 					'slug',
 					'descripcion',
@@ -75,9 +75,10 @@ class ProvinciaAdmin(admin.ModelAdmin):
 	list_per_page = 10
 
 class ClienteEmbebido(admin.StackedInline):
-    model = Cliente
-    can_delete = False
-    verbose_name_plural = 'clientes'
+	form = ClienteForm
+	model = Cliente
+	can_delete = False
+	verbose_name_plural = 'clientes'
 
 # Define a new User admin
 class UserAdmin(UserAdmin):

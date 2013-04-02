@@ -7,7 +7,8 @@ class EstacionIndex (indexes.SearchIndex, indexes.Indexable):
 	#facet search fields
 	categorias = indexes.MultiValueField(faceted=True)
 	regiones = indexes.MultiValueField()
-	edad_target = indexes.CharField(model_attr='niveles_edad_target')
+	edad_target = indexes.CharField(model_attr='nivel_edad_target')
+	nivel_socioeconomico = indexes.CharField(model_attr='nivel_socioeconomico')
 
 	def get_model(self):
 		return Estacion
