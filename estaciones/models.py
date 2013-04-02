@@ -160,7 +160,7 @@ class PaquetePublicidad(models.Model):
         verbose_name_plural = 'Parrillas de Programación'
         
     def __unicode__(self):
-        return u'%s - %s' % (self.programa, self.horario)
+        return u'Paquete de publicidad[programa:%s - horario:%s]' % (self.programa, self.horario)
     
 class HorarioRotativo(models.Model):
     '''
@@ -176,7 +176,7 @@ class HorarioRotativo(models.Model):
         verbose_name_plural = 'Cuñas en horario rotativo'
         
     def __unicode__(self):
-        return u'%s' % (self.estacion.nombre)
+        return u'Cuña de horario rotativo[estacion: %s - tiempo en segs: %s' % (self.estacion.nombre, self.tiempo)
     
 # TODO: Esto es version 1, mejorar usando la nueva manera que define django 1.5
 class Cliente(models.Model):

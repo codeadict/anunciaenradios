@@ -17,6 +17,7 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'anunciaenradios.views.home', name='home'),
     url(r'^radios/', include('estaciones.urls')),
+    url(r'^ordenes/', include('orders.urls')),
     #url(r'^radios/$',
     #    TemplateView.as_view(template_name='buscar.html'),
     #    name='estaciones'),

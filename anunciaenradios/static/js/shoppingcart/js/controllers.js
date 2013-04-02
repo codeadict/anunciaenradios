@@ -1,6 +1,16 @@
 'use strict';
 
 /* Controllers */
+function s4() {
+  return Math.floor((1 + Math.random()) * 0x10000)
+             .toString(16)
+             .substring(1);
+};
+
+function guid() {
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+         s4() + '-' + s4() + s4() + s4();
+}
 
 function PaquetePublicidadListController($scope, $http) {
 	var estacion_id = $('#angular-app').attr('data-estacion-id');
@@ -29,8 +39,32 @@ function PaquetePublicidadListController($scope, $http) {
             paquete.cantidad = 0;
         })    	
     }
-    $scope.archiveOrder = function(){
-    	//TODO
+    $scope.archiveOrder = function(){        
+        angular.forEach($scope.paquetes, function(paquete) {
+            if(paquete.cantidad > 0){
+                $http({
+                    method: 'POST',
+                    url: "/ordenes/api/v1/orden/",
+                    data: {"cantidad": paquete.cantidad,
+                         "content_type": "/ordenes/api/v1/contenttype/"+$('#angular-app').attr('data-product-paquetes')+"/",
+                         "estado": "Pendiente",
+                         "numero": guid(),
+                         "object_id": paquete.id.toString(),
+                         "total_incl_iva": (paquete.cantidad * paquete.precio).toString(),
+                         "user": "/ordenes/api/v1/user/"+$('#angular-app').attr('current-user')+"/"},
+                    headers: {'Content-Type': 'application/json'}
+                }).success(function(data, status, headers, config) {
+                        angular.forEach($scope.paquetes, function(paquete) {
+                            paquete.cantidad = 0;
+                        });  
+                        alert('Se ha registrado su orden satisfactoriamente');
+                    }).
+                    error(function(data, status, headers, config) {
+                        alert('Ocurrió un error procesando su orden, por favor intente de nuevo');
+                    });
+            }
+        }) 
+    	
     }
 }
 PaquetePublicidadListController.$inject = ['$scope', '$http'];
@@ -66,7 +100,30 @@ function HorarioRotativoListController($scope, $http) {
     }
 
     $scope.archiveOrder = function(){
-    	//TODO
+    	angular.forEach($scope.horarios_rotativos, function(horario_rotativo) {
+            if(horario_rotativo.cantidad > 0){
+                $http({
+                    method: 'POST',
+                    url: "/ordenes/api/v1/orden/",
+                    data: {"cantidad": horario_rotativo.cantidad,
+                         "content_type": "/ordenes/api/v1/contenttype/"+$('#angular-app').attr('data-product-horarios')+"/",
+                         "estado": "Pendiente",
+                         "numero": guid(),
+                         "object_id": horario_rotativo.id.toString(),
+                         "total_incl_iva": (horario_rotativo.cantidad * horario_rotativo.precio_nacional).toString(),
+                         "user": "/ordenes/api/v1/user/"+$('#angular-app').attr('current-user')+"/"},
+                    headers: {'Content-Type': 'application/json'}
+                }).success(function(data, status, headers, config) {
+                        angular.forEach($scope.horarios_rotativos, function(horario_rotativo) {
+                            horario_rotativo.cantidad = 0;
+                        }); 
+                        alert('Se ha registrado su orden satisfactoriamente');
+                    }).
+                    error(function(data, status, headers, config) {
+                        alert('Ocurrió un error procesando su orden, por favor intente de nuevo');
+                    });
+            }
+        })
     }
 }
 HorarioRotativoListController.$inject = ['$scope', '$http'];

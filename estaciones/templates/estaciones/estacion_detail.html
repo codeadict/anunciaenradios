@@ -17,7 +17,7 @@
     <div class="container">
         <div class="row">
             <div class="eight columns">
-            	<div id="angular-app" ng-view ng-app="shoppingCartApp" data-estacion-id="{{ object.pk }}"></div>
+            	<div id="angular-app" ng-view ng-app="shoppingCartApp" data-estacion-id="{{ object.pk }}" data-product-paquetes="{% content_type_for_paquete_publicidad %}" data-product-horarios="{% content_type_for_horario_rotativo %}" current-user="{{ request.user.pk }}"></div>
 				{% include "estaciones/_details.html" with object=object%}
 				<div>
 			        {% get_comment_count for object as comment_count %}.
@@ -38,7 +38,7 @@
 			                <input type="submit" value="Add comment" id="id_submit" />
 			            </form>
 			        {% else %}
-			            <p>Por favor <a href="{% url 'auth_login' %}">autetíquese</a> para dejar un comentario.</p>
+			            <p>Por favor <a href="/registro/login/">autentíquese</a> para dejar un comentario.</p>
 			        {% endif %}
 			    </div>
 			</div>

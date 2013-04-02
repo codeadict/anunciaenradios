@@ -28,13 +28,10 @@ Orden = get_model('orders', 'Orden')
 class OrdenAdmin(admin.ModelAdmin):
     """
     Interfaz para administrar órdenes registradas en el sistema
-    """
-    formfield_overrides = {
-        models.TextField: {'widget': ElrteWidget()},
-    }
-    raw_id_fields = ['cliente', ]
-    list_display = ('numero', 'total_incl_iva', 'cliente', 'fecha_creada')
-    readonly_fields = ('numero', 'total_incl_iva')
+    """    
+    raw_id_fields = ['cliente']
+    list_display = ('numero', 'total_incl_iva', 'cliente', 'fecha_creada', 'cantidad', 'producto')
+    #readonly_fields = ('numero', 'total_incl_iva')
     
 
 admin.site.register(Orden, OrdenAdmin)

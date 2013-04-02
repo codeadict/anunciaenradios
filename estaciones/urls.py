@@ -22,7 +22,7 @@ urlpatterns = patterns("",
 	url(r'^por_pagina/$', DetallesCarruselEstacionList.as_view(template_name='estaciones/estacion_details_carousel.html'),
 									name='por_pagina'),
     url(r'^detalles/(?P<slug>[-_\w]+)/$', login_required(EstacionDetailView.as_view(template_name='estaciones/estacion_details.html'),
-    													login_url='/administrar'), name="detalles"),        											
+    													login_url='/registro/login'), name="detalles"),        											
     (r'^comentarios/', include('django.contrib.comments.urls')),
     (r'^api/', include(v1_api.urls)),
 )

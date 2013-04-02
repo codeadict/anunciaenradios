@@ -19,10 +19,12 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 from decimal import Decimal as D
 import hashlib
-
+import datetime
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
 
 
 class Orden(models.Model):
@@ -36,7 +38,11 @@ class Orden(models.Model):
     estado = models.CharField("Estado", max_length=100, null=True, blank=True)
     #fecha de creada la orden
     fecha_creada = models.DateTimeField(auto_now_add=True, db_index=True)
-    
+    cantidad = models.PositiveIntegerField()
+    content_type = models.ForeignKey(ContentType, verbose_name="Tipo de producto")
+    object_id = models.PositiveIntegerField(verbose_name="Id")
+    producto = generic.GenericForeignKey('content_type', 'object_id')    
+
     class Meta:
         ordering = ['-fecha_creada',]
         permissions = (
