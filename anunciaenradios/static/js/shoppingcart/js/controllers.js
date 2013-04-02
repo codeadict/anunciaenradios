@@ -39,7 +39,8 @@ function PaquetePublicidadListController($scope, $http) {
             paquete.cantidad = 0;
         })    	
     }
-    $scope.archiveOrder = function(){        
+    $scope.archiveOrder = function(){ 
+        var error = false;
         angular.forEach($scope.paquetes, function(paquete) {
             if(paquete.cantidad > 0){
                 $http({
@@ -54,17 +55,19 @@ function PaquetePublicidadListController($scope, $http) {
                          "user": "/ordenes/api/v1/user/"+$('#angular-app').attr('current-user')+"/"},
                     headers: {'Content-Type': 'application/json'}
                 }).success(function(data, status, headers, config) {
-                        angular.forEach($scope.paquetes, function(paquete) {
-                            paquete.cantidad = 0;
-                        });  
-                        alert('Se ha registrado su orden satisfactoriamente');
+                        //
                     }).
                     error(function(data, status, headers, config) {
-                        alert('Ocurrió un error procesando su orden, por favor intente de nuevo');
+                        error = true;
                     });
             }
-        }) 
-    	
+        })
+        if(error){
+            alert('Ocurrió un error procesando su orden, por favor intente de nuevo');
+        }else{
+            $scope.reset();
+            alert('Se ha registrado su orden satisfactoriamente');  
+        }
     }
 }
 PaquetePublicidadListController.$inject = ['$scope', '$http'];
@@ -100,6 +103,7 @@ function HorarioRotativoListController($scope, $http) {
     }
 
     $scope.archiveOrder = function(){
+        var error = false;
     	angular.forEach($scope.horarios_rotativos, function(horario_rotativo) {
             if(horario_rotativo.cantidad > 0){
                 $http({
@@ -114,16 +118,19 @@ function HorarioRotativoListController($scope, $http) {
                          "user": "/ordenes/api/v1/user/"+$('#angular-app').attr('current-user')+"/"},
                     headers: {'Content-Type': 'application/json'}
                 }).success(function(data, status, headers, config) {
-                        angular.forEach($scope.horarios_rotativos, function(horario_rotativo) {
-                            horario_rotativo.cantidad = 0;
-                        }); 
-                        alert('Se ha registrado su orden satisfactoriamente');
+                        //
                     }).
                     error(function(data, status, headers, config) {
-                        alert('Ocurrió un error procesando su orden, por favor intente de nuevo');
+                        error = true;
                     });
             }
         })
+        if(error){
+            alert('Ocurrió un error procesando su orden, por favor intente de nuevo');
+        }else{
+            $scope.reset();
+            alert('Se ha registrado su orden satisfactoriamente');  
+        }
     }
 }
 HorarioRotativoListController.$inject = ['$scope', '$http'];
