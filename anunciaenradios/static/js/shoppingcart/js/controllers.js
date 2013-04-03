@@ -41,8 +41,10 @@ function PaquetePublicidadListController($scope, $http) {
     }
     $scope.archiveOrder = function(){ 
         var error = false;
+        var requestDone = false;
         angular.forEach($scope.paquetes, function(paquete) {
             if(paquete.cantidad > 0){
+                requestDone = true;
                 $http({
                     method: 'POST',
                     url: "/ordenes/api/v1/orden/",
@@ -65,8 +67,10 @@ function PaquetePublicidadListController($scope, $http) {
         if(error){
             alert('Ocurrió un error procesando su orden, por favor intente de nuevo');
         }else{
-            $scope.reset();
-            alert('Se ha registrado su orden satisfactoriamente');  
+            if(requestDone){
+                $scope.reset();
+                alert('Se ha registrado su orden satisfactoriamente');  
+            }
         }
     }
 }
@@ -104,8 +108,10 @@ function HorarioRotativoListController($scope, $http) {
 
     $scope.archiveOrder = function(){
         var error = false;
+        var requestDone = false;
     	angular.forEach($scope.horarios_rotativos, function(horario_rotativo) {
             if(horario_rotativo.cantidad > 0){
+                requestDone = true;
                 $http({
                     method: 'POST',
                     url: "/ordenes/api/v1/orden/",
@@ -128,8 +134,10 @@ function HorarioRotativoListController($scope, $http) {
         if(error){
             alert('Ocurrió un error procesando su orden, por favor intente de nuevo');
         }else{
-            $scope.reset();
-            alert('Se ha registrado su orden satisfactoriamente');  
+            if(requestDone){
+                $scope.reset();
+                alert('Se ha registrado su orden satisfactoriamente');  
+            }
         }
     }
 }

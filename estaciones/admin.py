@@ -81,8 +81,8 @@ class ClienteEmbebido(admin.StackedInline):
 	verbose_name_plural = 'clientes'
 
 # Define a new User admin
-class UserAdmin(UserAdmin):
-    inlines = (ClienteEmbebido, )
+#class UserAdmin(UserAdmin):
+#    inlines = (ClienteEmbebido, )
 
 admin.site.register(Estacion, EstacionAdmin)
 admin.site.register(PaquetePublicidad, ParrillaAdmin)
@@ -92,5 +92,5 @@ admin.site.register(Provincia, ProvinciaAdmin)
 admin.site.unregister(FlatPage)
 admin.site.register(FlatPage, FlatPageAdmin)
 
-admin.site.unregister(User)
-admin.site.register(User, UserAdmin)
+#admin.site.unregister(User)
+#admin.site.register(User, UserAdmin)
