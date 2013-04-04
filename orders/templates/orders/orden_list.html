@@ -14,10 +14,12 @@
 					{% for orden in object_list %}
 							<li>
 								{% if orden.cliente.pk == request.user.pk %}
-								<p>Total (incluido IVA): {{ orden.total_inlc_iva }}</p>
+								<p>Total (incluido IVA): {{ orden.total_incl_iva }}</p>
 								<p>Estado: {{ orden.estado }}</p>
-								<p>Producto {{ orden.producto }}</p>
+								<p>Producto: {{ orden.producto }}</p>
 								<p>Cantidad: {{ orden.cantidad }}</p>					
+								<p>Fecha: {{ orden.fecha_creada }}</p>					
+								<p>Paquete de publicidad: {{ orden.paquete_publicidad }}</p>													
 								{% endif %}
 							</li>
 					{% endfor %}

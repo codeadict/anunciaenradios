@@ -19,7 +19,7 @@
             <td><input type="number" ng:model="paquete.cantidad" ng:required integer min="0"></td>
             <td>{{paquete.cantidad * paquete.precio | currency}}</td>
             <td>
-                    <select id="pkg_{{ paquete.id }}" ng-show="paquete.cantidad" style="width: 200px;">
+                    <select id="pkg_{{ paquete.id }}" style="width: 200px;">
                         <option ng:repeat="pkg in paquete.paquetes_usuario" value="{{ pkg.id }}">{{ pkg.nombre }} {{ pkg.selecc}}</option> 
                     </select>
 
@@ -62,7 +62,7 @@
             <td>Regional: {{horario_rotativo.cantidad * horario_rotativo.precio_regional | currency}}</td>
             <td>Nacional: {{horario_rotativo.cantidad * horario_rotativo.precio_nacional | currency}}</td>
             <td>
-                    <select id="pkg2_{{ horario_rotativo.id }}" ng-show="horario_rotativo.cantidad" style="width: 200px;">
+                    <select id="pkg2_{{ horario_rotativo.id }}" style="width: 200px;">
                         <option ng:repeat="pkg in horario_rotativo.paquetes_usuario" value="{{ pkg.id }}">{{ pkg.nombre }} {{ pkg.selecc}}</option> 
                     </select>
 
