@@ -149,7 +149,7 @@ class PaquetePublicidad(models.Model):
     estacion = models.ForeignKey(Estacion, verbose_name=u'Estación')
     programa = models.CharField(u"Programa", max_length=255, blank=False,
         help_text=u"Programa donde Promocionar, Ej. Barrio Latino")
-    horario = models.CharField(u'Horario', max_length=255, blank=False)
+    horario = models.TimeField(u'Horario', blank=False)
     emision = models.CharField(u'Emisión', max_length=255, blank=False, 
                                help_text="Período de Emisión. Ej. Sábados y Domingos")
     precio = models.DecimalField(u'Precio', max_digits=14, decimal_places=6)
@@ -166,10 +166,10 @@ class HorarioRotativo(models.Model):
     '''
     Modelos para cunas en horario rotativo
     '''
-    estacion = models.ForeignKey(Estacion, verbose_name=u'Estación')
-    tiempo = models.IntegerField(u'Tiempo de cuña o mención', help_text=u'Tiempo de cuña o mención en segundos')
-    precio_nacional = models.DecimalField(u'Precio Nacional', max_digits=14, decimal_places=6)
-    precio_regional = models.DecimalField(u'Precio Regional', max_digits=14, decimal_places=6)
+    estacion = models.ForeignKey(Estacion, verbose_name=u'Estación', blank=False, null=False)
+    tiempo = models.PositiveIntegerField(u'Tiempo de cuña o mención', help_text=u'Tiempo de cuña o mención en segundos')
+    precio_nacional = models.DecimalField(u'Precio Nacional', max_digits=14, decimal_places=6, blank=False)
+    precio_regional = models.DecimalField(u'Precio Regional', max_digits=14, decimal_places=6, blank=False)
     
     class Meta:
         verbose_name = 'Cuña en horario rotativo'

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static from staticfiles %}
+
+{% block title %}Listado de órdenes{% endblock %}
+
+{% block content %}
+<section id="estacionesContent" class="buscar">
+    <div class="container">
+        <div class="row">
+            <div class="eight columns">
+            	{% if object_list %}
+				<h2>Listado de órdenes</h2>
+				<ul>
+					{% for orden in object_list %}
+							<li>
+								{% if orden.cliente.pk == request.user.pk %}
+								<p>Total (incluido IVA): {{ orden.total_inlc_iva }}</p>
+								<p>Estado: {{ orden.estado }}</p>
+								<p>Producto {{ orden.producto }}</p>
+								<p>Cantidad: {{ orden.cantidad }}</p>					
+								{% endif %}
+							</li>
+					{% endfor %}
+				</ul>
+				
+				{% if is_paginated %}
+			        <div class="pagination">
+			            <span class="page-links">
+			                {% if page_obj.has_previous %}
+			                    <a href="/ordenes?page={{ page_obj.previous_page_number }}">Anterior</a>
+			                {% endif %}
+			                <span class="page-current">
+			                    Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+			                </span>
+			                {% if page_obj.has_next %}
+			                    <a href="/ordenes?page={{ page_obj.next_page_number }}">Siguiente</a>
+			                {% endif %}
+			            </span>
+			        </div>
+			    {% endif %}
+				{% else %}
+					<p> No se han registrado órdenes. </p>
+				{% endif %}
+		</div>
+	</div>
+</section>
+{% endblock %}

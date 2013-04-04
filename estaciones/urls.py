@@ -18,7 +18,7 @@ v1_api.register(PaquetePublicidadResource())
 v1_api.register(HorarioRotativoResource())
 
 urlpatterns = patterns("",
-	url(r'^$', EstacionList.as_view(), name='estaciones/lista_estaciones'),
+	url(r'^$', EstacionList.as_view(), name='lista_estaciones'),
 	url(r'^por_pagina/$', login_required(DetallesCarruselEstacionList.as_view(template_name='estaciones/estacion_details_carousel.html'),
 									login_url='/registro/login'), name='por_pagina'),
     url(r'^detalles/(?P<slug>[-_\w]+)/$', login_required(EstacionDetailView.as_view(template_name='estaciones/estacion_details.html'),

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static from staticfiles %}
+{% block title %}Agregar paquete publicitario{% endblock %}
+
+{% block content %}
+<section id="estacionesContent" class="buscar">
+    <div class="container">
+        <div class="row">
+            <div class="twelve columns">
+                    <form method="post" action="/ordenes/paquetes/agregar/" {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}>
+
+                        {{ form.non_field_errors }}
+                        <div class="fieldWrapper">
+                        {{ form.nombre.errors }}
+                        <label for="id_subject">Nombre:</label>
+                        {{ form.nombre }}
+                        </div>
+                        <div class="fieldWrapper">
+                        {{ form.observaciones.errors }}
+                        <label for="id_message">Observaciones:</label>
+                        {{ form.observaciones }}
+                        </div>
+                        <div class="fieldWrapper">
+                        {{ form.audio.errors }}
+                        <label for="id_sender">Archivo de audio</label>
+                        {{ form.audio }}
+
+                                               
+                        <input type="hidden" name="duenno" value="{{ request.user.pk }}">                        
+                        
+                        {% csrf_token %}
+                        <input type="submit" value="Agregar">
+                    </form>
+                </div>
+            </div>
+        </div>
+</section>
+  
+{% endblock %}

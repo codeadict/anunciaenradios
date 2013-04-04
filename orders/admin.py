@@ -19,10 +19,11 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 from django.contrib import admin
 from django.db.models import get_model
-from estaciones.wysiwyg import ElrteWidget
 from django.db import models
 
 Orden = get_model('orders', 'Orden')
+IVA = get_model('orders', 'IVA')
+PaquetePublicidad = get_model('orders', 'PaquetePublicidad')
 
 
 class OrdenAdmin(admin.ModelAdmin):
@@ -30,8 +31,28 @@ class OrdenAdmin(admin.ModelAdmin):
     Interfaz para administrar órdenes registradas en el sistema
     """    
     raw_id_fields = ['cliente']
-    list_display = ('numero', 'total_incl_iva', 'cliente', 'fecha_creada', 'cantidad', 'producto')
+    list_display = ('numero', 'total_incl_iva', 'cliente', 'fecha_creada', 'cantidad', 'producto', 'paquete_publicidad')
+    list_filter = ('fecha_creada',)
+    #readonly_fields = ('numero', 'total_incl_iva')
+
+
+class PaquetePublicidadAdmin(admin.ModelAdmin):
+	list_display = ('nombre', 'observaciones', 'audio', 'duenno')
+	list_filter = ('duenno',)
+	class Media:
+	    js = [
+	        '/static/grappelli/tinymce/jscripts/tiny_mce/tiny_mce.js',
+	        '/static/js/tinymce_setup.js',
+	    ]
+	
+class IVAAdmin(admin.ModelAdmin):
+    """
+    Interfaz para administrar órdenes registradas en el sistema
+    """    
+    list_display = ('iva',)
     #readonly_fields = ('numero', 'total_incl_iva')
     
 
 admin.site.register(Orden, OrdenAdmin)
+admin.site.register(IVA, IVAAdmin)
+admin.site.register(PaquetePublicidad, PaquetePublicidadAdmin)

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static from staticfiles %}
+
+{% block title %}Listado de paquetes{% endblock %}
+
+{% block content %}
+<section id="estacionesContent" class="buscar">
+    <div class="container">
+        <div class="row">
+            <div class="eight columns">
+            	{% if object_list %}
+				<h2>Mis paquetes</h2>
+				<ul>
+					{% for paquete in object_list %}
+							<li>
+								{% if paquete.duenno.pk == request.user.pk %}
+								<p>Nombre: {{ paquete.nombre }}</p>
+								<p>Observaciones: {{ paquete.observaciones|safe }}</p>
+								<p>Archivo de audio en el servidor</p>
+								{% endif %}
+							</li>
+					{% endfor %}
+				</ul>
+				<a href="/ordenes/paquetes/agregar/">Agregar paquete</a>
+				{% if is_paginated %}
+			        <div class="pagination">
+			            <span class="page-links">
+			                {% if page_obj.has_previous %}
+			                    <a href="/ordenes/mis_paquetes?page={{ page_obj.previous_page_number }}">Anterior</a>
+			                {% endif %}
+			                <span class="page-current">
+			                    Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+			                </span>
+			                {% if page_obj.has_next %}
+			                    <a href="/ordenes/mis_paquetes?page={{ page_obj.next_page_number }}">Siguiente</a>
+			                {% endif %}
+			            </span>
+			        </div>
+			    {% endif %}
+				{% else %}
+					<p> No se han registrado paquetes. <a href="/ordenes/paquetes/agregar/">Agregar paquete</a></p>
+				{% endif %}
+		</div>
+	</div>
+</section>
+{% endblock %}

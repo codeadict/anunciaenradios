@@ -12,11 +12,38 @@ function guid() {
          s4() + '-' + s4() + s4() + s4();
 }
 
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 function PaquetePublicidadListController($scope, $http) {
 	var estacion_id = $('#angular-app').attr('data-estacion-id');
 	$http.get('/radios/api/v1/paquetepublicidad/?estacion='+estacion_id+'&format=json').success(function(data) {
 		$scope.paquetes = data.objects;
 		$scope.reset();
+        angular.forEach($scope.paquetes, function(paquete) {            
+            var any = false;
+            $http.get("/ordenes/api/v1/paquetepublicidad/?duenno="+$('#angular-app').attr('current-user')+"&format=json").success(function(data){
+                paquete.paquetes_usuario = data.objects                
+                any = true;
+            }); 
+            if(any){
+                paquete.paquetes_usuario[0].selecc = "selected='selected'";
+            }
+        });
+
 	});
 	$scope.resetRequest = function(index) {
 		$scope.paquetes[index].cantidad = 0;
@@ -54,12 +81,11 @@ function PaquetePublicidadListController($scope, $http) {
                          "numero": guid(),
                          "object_id": paquete.id.toString(),
                          "total_incl_iva": (paquete.cantidad * paquete.precio).toString(),
-                         "user": "/ordenes/api/v1/user/"+$('#angular-app').attr('current-user')+"/"},
+                         "user": "/ordenes/api/v1/user/"+$('#angular-app').attr('current-user')+"/",
+                         "paquete_publicidad": "/ordenes/api/v1/paquetepublicidad/"+$('#pkg_'+paquete.id).val()+"/",
+                     },
                     headers: {'Content-Type': 'application/json'}
-                }).success(function(data, status, headers, config) {
-                        //
-                    }).
-                    error(function(data, status, headers, config) {
+                }).error(function(data, status, headers, config) {
                         error = true;
                     });
             }
@@ -81,6 +107,16 @@ function HorarioRotativoListController($scope, $http) {
 	$http.get('/radios/api/v1/horariorotativo/?estacion='+estacion_id+'&format=json').success(function(data) {
 		$scope.horarios_rotativos = data.objects;
 		$scope.reset();
+        angular.forEach($scope.horarios_rotativos, function(horario_rotativo) {            
+            var any = false;
+            $http.get("/ordenes/api/v1/paquetepublicidad/?duenno="+$('#angular-app').attr('current-user')+"&format=json").success(function(data){
+                horario_rotativo.paquetes_usuario = data.objects                
+                any = true;
+            }); 
+            if(any){
+                horario_rotativo.paquetes_usuario[0].selecc = "selected='selected'";
+            }
+        });
 	});
 	$scope.resetRequest = function(index) {
 		$scope.horarios_rotativos[index].cantidad = 0;
@@ -121,12 +157,11 @@ function HorarioRotativoListController($scope, $http) {
                          "numero": guid(),
                          "object_id": horario_rotativo.id.toString(),
                          "total_incl_iva": (horario_rotativo.cantidad * horario_rotativo.precio_nacional).toString(),
-                         "user": "/ordenes/api/v1/user/"+$('#angular-app').attr('current-user')+"/"},
+                         "user": "/ordenes/api/v1/user/"+$('#angular-app').attr('current-user')+"/",
+                         "paquete_publicidad": "/ordenes/api/v1/paquetepublicidad/"+$('#pkg2_'+horario_rotativo.id).val()+"/",
+                     },
                     headers: {'Content-Type': 'application/json'}
-                }).success(function(data, status, headers, config) {
-                        //
-                    }).
-                    error(function(data, status, headers, config) {
+                }).error(function(data, status, headers, config) {
                         error = true;
                     });
             }

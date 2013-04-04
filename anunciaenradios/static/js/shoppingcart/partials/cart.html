@@ -8,6 +8,7 @@
             <th>Precio</th>
             <th>Cantidad</th>
             <th>Subtotal</th>
+            <th>Paquete de publicidad del usuario</th>
             <th></th>
         </tr>
         <tr ng:repeat="paquete in paquetes">
@@ -17,6 +18,12 @@
             <td>{{ paquete.precio | currency }}</td>
             <td><input type="number" ng:model="paquete.cantidad" ng:required integer min="0"></td>
             <td>{{paquete.cantidad * paquete.precio | currency}}</td>
+            <td>
+                    <select id="pkg_{{ paquete.id }}" ng-show="paquete.cantidad" style="width: 200px;">
+                        <option ng:repeat="pkg in paquete.paquetes_usuario" value="{{ pkg.id }}">{{ pkg.nombre }} {{ pkg.selecc}}</option> 
+                    </select>
+
+            </td>
             <td>
                 <button ng:click="resetRequest($index)" ng-disabled="emptyRequest($index)">Cancelar pedido</button>
             </td>
@@ -44,6 +51,7 @@
             <th>Cantidad</th>
             <th>Subtotal (regional)</th>
             <th>Subtotal (nacional)</th>
+            <th>Paquete de publicidad del usuario</th>
             <th></th>
         </tr>
         <tr ng:repeat="horario_rotativo in horarios_rotativos">
@@ -53,6 +61,12 @@
             <td><input type="number" ng:model="horario_rotativo.cantidad" ng:required integer min="0"></td>
             <td>Regional: {{horario_rotativo.cantidad * horario_rotativo.precio_regional | currency}}</td>
             <td>Nacional: {{horario_rotativo.cantidad * horario_rotativo.precio_nacional | currency}}</td>
+            <td>
+                    <select id="pkg2_{{ horario_rotativo.id }}" ng-show="horario_rotativo.cantidad" style="width: 200px;">
+                        <option ng:repeat="pkg in horario_rotativo.paquetes_usuario" value="{{ pkg.id }}">{{ pkg.nombre }} {{ pkg.selecc}}</option> 
+                    </select>
+
+            </td>
             <td>
                 <button ng:click="resetRequest($index)" ng-disabled="emptyRequest($index)">Cancelar pedido</button>
             </td>
