@@ -53,6 +53,17 @@ function PaquetePublicidadListController($scope, $http) {
 		return $scope.paquetes[index].cantidad == 0;
     },
 
+    $scope.shouldDisplay = function() {
+        if($scope.paquetes){
+            if($scope.paquetes[0].paquetes_usuario){
+                if($scope.paquetes[0].paquetes_usuario.length > 0){
+                    return true;    
+                }                
+            }
+        }
+        return false;
+    },
+
     $scope.total = function() {
         var total = 0;
         angular.forEach($scope.paquetes, function(paquete) {
@@ -125,7 +136,18 @@ function HorarioRotativoListController($scope, $http) {
 	$scope.emptyRequest = function(index) {
 		return $scope.horarios_rotativos[index].cantidad == 0;
     },
-
+    
+    $scope.shouldDisplay = function() {
+        if($scope.horarios_rotativos){
+            if($scope.horarios_rotativos[0].paquetes_usuario){
+                if($scope.horarios_rotativos[0].paquetes_usuario.length > 0){
+                    return true;    
+                }                
+            }
+        }
+        return false;
+    },
+        
     $scope.total = function() {
         var total_regional = 0;
         var total_nacional = 0;

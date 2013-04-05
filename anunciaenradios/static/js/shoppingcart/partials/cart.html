@@ -1,6 +1,6 @@
 <div ng-controller="PaquetePublicidadListController">
-	<h5 ng-show="paquetes">Paquetes de publicidad</h5>
-	<table class="" ng-show="paquetes">
+	<h5 ng-show="shouldDisplay()">Paquetes de publicidad</h5>
+	<table class="" ng-show="shouldDisplay()">
         <tr>            
             <th>Emisión</th>
             <th>Horario</th>
@@ -38,12 +38,12 @@
             <td></td>
         </tr>
     </table>
-    <button ng:click="archiveOrder()" ng-show="paquetes">Ordenar</button>
+    <button ng:click="archiveOrder()" ng-show="shouldDisplay()">Ordenar</button>
 </div>
 
 <div ng-controller="HorarioRotativoListController">
-	<h5 ng-show="horarios_rotativos">Cuñas de horario rotativo</h5>
-	<table class="table" ng-show="horarios_rotativos">
+	<h5 ng-show="shouldDisplay()">Cuñas de horario rotativo</h5>
+	<table class="table" ng-show="shouldDisplay()">
         <tr>            
             <th>Precio regional</th>
             <th>Precion nacional</th>
@@ -81,6 +81,6 @@
             <td></td>
         </tr>
     </table>
-    <button ng:click="archiveOrder()" ng-show="horarios_rotativos">Ordenar</button>
+    <button ng:click="archiveOrder()" ng-show="shouldDisplay()">Ordenar</button>
 </div>
 
