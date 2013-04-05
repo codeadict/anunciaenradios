@@ -27,7 +27,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
 class PaquetePublicidad(models.Model):
-    nombre = models.CharField(max_length=255,verbose_name="nombre del paquete de publicidad", blank=False)
+    nombre = models.CharField(max_length=255,verbose_name="nombre del paquete de publicidad", blank=False, unique=True)
     observaciones = models.TextField(verbose_name = "observaciones")
     audio = models.FileField(upload_to=settings.UPLOAD_DIRECTORY, max_length=1024 * 200, blank=False, null=False, verbose_name="archivo de audio")
     duenno = models.ForeignKey(User, null=False, blank=False, verbose_name="Dueño")    
