@@ -1,0 +1,178 @@
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    {% load static from staticfiles %}
+    {% load url from future %}
+    {% block meta %}
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Plataforma de anuncios en radios del Ecuador">
+        <meta name="viewport" content="width=device-width">
+    {% endblock meta %}
+
+  
+    {% block styles %}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/foundation.css' %}" media="screen" />
+    {% endblock %}
+
+    {% block head-scripts %}
+        <script src="{% static 'website/js/modernizr-2.5.3.min.js' %}"></script>
+        <script src="{% static 'js/jquery-1.6.1.min.js' %}"></script>
+    {% endblock %}
+
+    {% block head %}
+    {% endblock %}  
+</head>
+<body 
+<section id="estacionesContent" class="buscar">
+    <div class="container">
+        <div class="row">
+            <div id="error" style="display: none;">
+                No hay paquetes que comprar registrados 
+            </div>
+            <div id="error2" style="display: none;">
+                Ha ocurrido un error construyendo el la aplicación de compras, por favor intente de nuevo recargando la página
+            </div>
+            <div id="orden_form" class="seven columns">
+                    <form method="post" action="/ordenes/ordenar/" {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}>
+
+                        {{ form.non_field_errors }}
+                        <div class="fieldWrapper">
+                        {{ form.product_object.errors }}
+                        <label for="object_id">Producto:</label>
+                        {{ form.product_object }}
+                        </div>
+
+                        {{ form.non_field_errors }}
+                        <div class="fieldWrapper">
+                        {{ form.cantidad.errors }}
+                        <label for="id_cantidad">Cantidad:</label>
+                        {{ form.cantidad }}
+                        </div>
+
+                        <div class="fieldWrapper">
+                        {{ form.observaciones.errors }}
+                        <label for="id_observaciones">Observaciones:</label>
+                        {{ form.observaciones }}
+                        </div>
+                        <div class="fieldWrapper">
+                        {{ form.audio.errors }}
+                        <label for="id_sender">Archivo de audio</label>
+                        {{ form.audio }}        
+                        <input type="hidden" name="estacion" value=" {{ request.GET.estacion }}">
+                        <input type="hidden" name="content_type_paquetes" value=" {{ request.GET.content_type_paquetes }}">
+                        <input type="hidden" name="content_type_horarios" value=" {{ request.GET.content_type_horarios }}">
+                        {% csrf_token %}
+                        <input type="submit" value="Ordenar">
+                    </form>
+                </div>
+            </div>
+            <div class="five columns">
+                <iframe width="100%" height="300" src="/ordenes/ordenes-partial/">
+                </iframe>
+            </div>            
+        </div>
+</section>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $.urlParam = function(name){
+            //var results = new RegExp('[\\?&amp;]' + name + '=([^&amp;#]*)').exec(window.location.href);
+            //return results[1] || 0;
+            return decodeURI(
+                (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
+            );
+        }
+        function containsId(arr, id){            
+            for(i = 0; i < arr.length; i++){
+                if (arr[i].id == id){
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function validateSelectWithPaquetes(paquetes){
+            $("#id_product_object > option").each(function() {
+                meta = this.value.split(":");
+                if(meta[0] != contentTypePaquetes && meta[0] != contentTypeHorarios){
+                    $(this).remove();
+                }
+                if(meta[0] == contentTypePaquetes){
+                    if(!containsId(paquetes, meta[1])){
+                        $(this).remove();    
+                    }                
+                }
+            });
+            if($("#id_product_object > option").length == 0){
+                $("#error").show();
+                $("#orden_form").hide();
+            }else{
+                $("option:selected, select").removeAttr('selected').next('option').attr('selected', 'selected');
+            }
+        }
+
+        function validateSelectWithHorarios(horarios){
+            $("#id_product_object > option").each(function() {
+                meta = this.value.split(":");
+                if(meta[0] != contentTypePaquetes && meta[0] != contentTypeHorarios){
+                    $(this).remove();
+                }
+                if(meta[0] == contentTypeHorarios){
+                    if(!containsId(horarios, meta[1])){
+                        $(this).remove();    
+                    }                
+                }
+            });
+            if($("#id_product_object > option").length == 0){
+                $("#error").show();
+                $("#orden_form").hide();
+            }else{
+                $("option:selected, select").removeAttr('selected').next('option').attr('selected', 'selected');
+            }
+        }
+
+        var success = $.urlParam('success').trim();
+        if(success == 1){
+            alert("Orden realizada satisfactoriamente");
+        }
+        var estacion = $.urlParam('estacion').trim();
+        var contentTypePaquetes = $.urlParam('content_type_paquetes').trim();
+        var contentTypeHorarios = $.urlParam('content_type_horarios').trim();
+        if(estacion && contentTypeHorarios && contentTypePaquetes){        
+            var paquetes = false;
+            var horarios = false;
+            var reqPaquetes = $.ajax({
+                type: 'GET',
+                url: '/radios/api/v1/paquetepublicidad/?estacion='+estacion+'&format=json',
+            });  
+            var reqHorarios = $.ajax({
+                type: 'GET',
+                url: '/radios/api/v1/horariorotativo/?estacion='+estacion+'&format=json',
+            });  
+            reqPaquetes.success(function(data){
+                paquetes = eval(data).objects;
+                validateSelectWithPaquetes(paquetes);
+            });
+            reqPaquetes.fail(function(jqXHR, textStatus) {
+                $("#error2").show();
+                $("#orden_form").hide();
+            });            
+            reqHorarios.success(function(data){
+                horarios = eval(data).objects;
+                validateSelectWithHorarios(horarios);
+            });
+            reqHorarios.fail(function(jqXHR, textStatus) {
+                $("#error2").show();
+                $("#orden_form").hide();
+            });
+        }else{            
+            $("#error").show();
+            $("#orden_form").hide();
+        }
+    });
+
+</script>
+</body>

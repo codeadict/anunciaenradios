@@ -62,9 +62,6 @@
 
 				    	{% with url="/radios/buscar" text="Busque su Radio" %}{% include "_nav.html" %}{% endwith %}
 				    	{% if request.user.is_authenticated %}
-				    		{% with url="/ordenes/mis_paquetes/" text="Mis paquetes" %}{% include "_nav.html" %}{% endwith %}
-				    	{% endif %}
-				    	{% if request.user.is_authenticated %}
 				    		{% with url="/ordenes/" text="Mis órdenes" %}{% include "_nav.html" %}{% endwith %}
 				    	{% endif %}
 				        <li class="item">

@@ -269,6 +269,8 @@ BROKER_URL = 'amqp://guest:guest@localhost:5672/'
 #Extra configs:
 UPLOAD_DIRECTORY = path('media')
 
+#IVA 
+IVA = 0.30
 
 if not os.environ.get('DJANGO_ENV', None):
     from development_settings import *

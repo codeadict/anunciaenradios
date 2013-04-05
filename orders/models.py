@@ -26,20 +26,6 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
-class PaquetePublicidad(models.Model):
-    nombre = models.CharField(max_length=255,verbose_name="nombre del paquete de publicidad", blank=False, unique=True)
-    observaciones = models.TextField(verbose_name = "observaciones")
-    audio = models.FileField(upload_to=settings.UPLOAD_DIRECTORY, max_length=1024 * 200, blank=False, null=False, verbose_name="archivo de audio")
-    duenno = models.ForeignKey(User, null=False, blank=False, verbose_name="Dueño")    
-
-    class Meta:        
-        verbose_name = "Paquete de publicidad"
-        verbose_name_plural = "Paquetes de publicidad"
-        
-    def __unicode__(self):
-        return u"%s" % (self.nombre)
-
-
 class Orden(models.Model):
     """
     Modelo de una Orden de compra en el sistema
@@ -62,7 +48,8 @@ class Orden(models.Model):
     content_type = models.ForeignKey(ContentType, verbose_name="Tipo de producto")
     object_id = models.PositiveIntegerField(verbose_name="Id")
     producto = generic.GenericForeignKey('content_type', 'object_id')
-    paquete_publicidad = models.ForeignKey(PaquetePublicidad, blank=False, null=False)
+    observaciones = models.TextField(verbose_name = "observaciones")
+    audio = models.FileField(upload_to=settings.UPLOAD_DIRECTORY, max_length=1024 * 200, blank=False, null=False, verbose_name="archivo de audio")
 
     class Meta:
         ordering = ['-fecha_creada',]
@@ -76,7 +63,5 @@ class Orden(models.Model):
         return u"#%s" % (self.numero,)
     
     def v_hash(self):
-        return hashlib.md5('%s%s' % (self.number, settings.SECRET_KEY)).hexdigest()
-    
-class IVA(models.Model):
-    iva = models.DecimalField(verbose_name="valor actual del iva", decimal_places=2, max_digits=12)
+        return hashlib.md5('%s%s' % (self.number, settings.SECRET_KEY)).hexdigest()    
+

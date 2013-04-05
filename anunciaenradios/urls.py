@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.views.generic import TemplateView
-from orders.views import PaquetePublicidadList
 from django.contrib.auth.decorators import login_required
+from orders.views import OrdenList
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -14,7 +14,7 @@ urlpatterns = patterns('',
     (r'^registro/', include('registration.urls')),
 
     url(r'^accounts/profile/$',
-        login_required(PaquetePublicidadList.as_view()),
+        login_required(OrdenList.as_view(), login_url='/registro/login'),
         name='index'),
     # Examples:
     # url(r'^$', 'anunciaenradios.views.home', name='home'),

@@ -1,14 +1,34 @@
-{% extends 'base.html' %}
-{% load static from staticfiles %}
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    {% load static from staticfiles %}
+    {% load url from future %}
+    {% block meta %}
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Plataforma de anuncios en radios del Ecuador">
+        <meta name="viewport" content="width=device-width">
+    {% endblock meta %}
 
-{% block title %}Listado de órdenes{% endblock %}
+  
+    {% block styles %}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/foundation.css' %}" media="screen" />
+        
+    {% endblock %}
 
-{% block content %}
-<section id="estacionesContent" class="buscar">
-    <div class="container">
-        <div class="row">
-            <div class="eight columns">
-            	{% if object_list %}
+    {% block head-scripts %}
+        <script src="{% static 'website/js/modernizr-2.5.3.min.js' %}"></script>
+        <script src="{% static 'js/jquery-1.6.1.min.js' %}"></script>
+    {% endblock %}
+
+    {% block head %}
+    {% endblock %}  
+</head>
+<body 
+                {% if object_list %}
                 <h2>Listado de órdenes</h2>
                 <ul>
                     {% for orden in object_list %}
@@ -21,6 +41,7 @@
                                     <p>Fecha: {{ orden.fecha_creada }}</p>                  
                                 {% endif %}
                             </li>
+                            <p>-----</p>
                     {% endfor %}
                 </ul>
                 
@@ -42,8 +63,4 @@
                 {% else %}
                     <p> No se han registrado órdenes. </p>
                 {% endif %}
-            </div>	
-		</div>
-	</div>
-</section>
-{% endblock %}
+</body>
