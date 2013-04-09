@@ -7,14 +7,7 @@
     <div class="container">
         <div class="row">
             <div class="twelve columns">
-                    <form method="post" action="/ordenes/paquetes/agregar/" {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}>
-
-                        {{ form.non_field_errors }}
-                        <div class="fieldWrapper">
-                        {{ form.nombre.errors }}
-                        <label for="id_subject">Nombre:</label>
-                        {{ form.nombre }}
-                        </div>
+                    <form method="post" action="/ordenes/paquetes/agregar/" {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}>                        
                         <div class="fieldWrapper">
                         {{ form.observaciones.errors }}
                         <label for="id_message">Observaciones:</label>
@@ -26,7 +19,9 @@
                         {{ form.audio }}
 
                                                
-                        <input type="hidden" name="duenno" value="{{ request.user.pk }}">                        
+                        <input type="hidden" name="duenno" value="{{ request.user.pk }}">
+                        <input type="hidden" name="product_object_cantidad" value="{{ request.GET.pdc }}">
+                        <input type="hidden" name="success_url" value="{{ request.GET.success_url }}">
                         
                         {% csrf_token %}
                         <input type="submit" value="Agregar">

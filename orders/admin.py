@@ -22,8 +22,7 @@ from django.db.models import get_model
 from django.db import models
 
 Orden = get_model('orders', 'Orden')
-IVA = get_model('orders', 'IVA')
-PaquetePublicidad = get_model('orders', 'PaquetePublicidad')
+#PaquetePublicidad = get_model('orders', 'PaquetePublicidad')
 
 
 class OrdenAdmin(admin.ModelAdmin):
@@ -36,23 +35,15 @@ class OrdenAdmin(admin.ModelAdmin):
     #readonly_fields = ('numero', 'total_incl_iva')
 
 
-class PaquetePublicidadAdmin(admin.ModelAdmin):
-	list_display = ('nombre', 'observaciones', 'audio', 'duenno')
-	list_filter = ('duenno',)
-	class Media:
-	    js = [
-	        '/static/grappelli/tinymce/jscripts/tiny_mce/tiny_mce.js',
-	        '/static/js/tinymce_setup.js',
-	    ]
-	
-class IVAAdmin(admin.ModelAdmin):
-    """
-    Interfaz para administrar órdenes registradas en el sistema
-    """    
-    list_display = ('iva',)
-    #readonly_fields = ('numero', 'total_incl_iva')
-    
+#class PaquetePublicidadAdmin(admin.ModelAdmin):
+#	list_display = ('nombre', 'observaciones', 'audio', 'duenno')
+#	list_filter = ('duenno',)
+#	class Media:
+#	    js = [
+#	        '/static/grappelli/tinymce/jscripts/tiny_mce/tiny_mce.js',
+#	        '/static/js/tinymce_setup.js',
+#	    ]
+
 
 admin.site.register(Orden, OrdenAdmin)
-admin.site.register(IVA, IVAAdmin)
-admin.site.register(PaquetePublicidad, PaquetePublicidadAdmin)
+#admin.site.register(PaquetePublicidad, PaquetePublicidadAdmin)

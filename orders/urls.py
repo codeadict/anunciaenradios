@@ -16,6 +16,5 @@ v1_api.register(PaquetePublicidadResource())
 urlpatterns = patterns("",
     (r'^api/', include(v1_api.urls)),
     url(r'^$', login_required(OrdenList.as_view()), name='lista_ordenes'),
-    url(r'^mis_paquetes/$', login_required(PaquetePublicidadList.as_view()), name='lista_ordenes'),
     url(r'^paquetes/agregar/$', login_required(PaquetePublicidadFormView.as_view(template_name="orders/paquetepublicidad_form.html")), name='agregar_paquete_publicitario')
 )

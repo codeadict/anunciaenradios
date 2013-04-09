@@ -27,7 +27,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
 class PaquetePublicidad(models.Model):
-    nombre = models.CharField(max_length=255,verbose_name="nombre del paquete de publicidad", blank=False, unique=True)
     observaciones = models.TextField(verbose_name = "observaciones")
     audio = models.FileField(upload_to=settings.UPLOAD_DIRECTORY, max_length=1024 * 200, blank=False, null=False, verbose_name="archivo de audio")
     duenno = models.ForeignKey(User, null=False, blank=False, verbose_name="Dueño")    
@@ -37,7 +36,7 @@ class PaquetePublicidad(models.Model):
         verbose_name_plural = "Paquetes de publicidad"
         
     def __unicode__(self):
-        return u"%s" % (self.nombre)
+        return u"#%s: %s" % (self.pk, self.observaciones[:80])
 
 
 class Orden(models.Model):
@@ -77,6 +76,3 @@ class Orden(models.Model):
     
     def v_hash(self):
         return hashlib.md5('%s%s' % (self.number, settings.SECRET_KEY)).hexdigest()
-    
-class IVA(models.Model):
-    iva = models.DecimalField(verbose_name="valor actual del iva", decimal_places=2, max_digits=12)
