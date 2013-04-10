@@ -8,7 +8,7 @@ import datetime
 from django.utils.datetime_safe import date
 from haystack.forms import FacetedSearchForm
 from django.forms.widgets import CheckboxSelectMultiple
-from haystack.query import SQ
+from haystack.query import SQ, SearchQuerySet
 import operator
 
 
@@ -37,6 +37,7 @@ class BuscarEstacionForm(FacetedSearchForm):
 		super(BuscarEstacionForm, self).__init__(*args, **kwargs)
 
 	def search(self):
+		print self.is_valid()
 		# First, store the SearchQuerySet received from other processing.
 		filter_regiones, filter_edad_target, filter_nivel_socioeconomico  = None, None, None
 		sqs = super(BuscarEstacionForm, self).search()
@@ -47,6 +48,12 @@ class BuscarEstacionForm(FacetedSearchForm):
 		if self.is_valid() and self.cleaned_data['niveles_socioeconomicos']:
 			filter_nivel_socioeconomico = [SQ(nivel_socioeconomico__exact=str(nivel_socioeconomico)) for nivel_socioeconomico in self.cleaned_data['niveles_socioeconomicos']]
 		
+		try:
+			if not self.cleaned_data['q']:
+				sqs = SearchQuerySet()
+		except:
+			pass
+
 		if filter_regiones:
 			sqs = sqs.filter_and(reduce(operator.or_, filter_regiones))
 		if filter_edad_target:

@@ -2,6 +2,7 @@
 {% load static from staticfiles %}
 {% load highlight %}
 {% block title %}Buscar Radios{% endblock %}
+{% load estaciones_tags %}
 
 {% block content %}
 <section id="estacionesContent" class="buscar">
@@ -61,11 +62,11 @@
                         </div>
 
                         <div class="eight columns">           
-                            {% if query %}
+                            {% if page.object_list %}
                                 <h3>Listado de estaciones encontradas</h3>
                                 {% for result in page.object_list %}
                                     <div>
-                                        <a href="/radios/detalles/{{ result.object.slug }}/">{{ result.object.nombre }}</a>
+                                        <a href="/radios/por_pagina?page={% get_page_in_details_paginator forloop.counter request.GET.page %}">{{ result.object.nombre }}</a>
                                         <p>Nivel socioeconómico: {{ result.object.nivel_socioeconomico }}</p>
 
                                         {% for text in result.highlighted %}

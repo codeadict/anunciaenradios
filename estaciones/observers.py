@@ -4,12 +4,13 @@ from haystack.exceptions import NotHandled
 from django.db import models
 from django.db.models.loading import get_model
 from estaciones.tasks import update_estaciones_es_index
+from estaciones.models import Estacion
 
 class QueuedSignalProcessor(signals.BaseSignalProcessor):
     # Override the built-in.
     def setup(self):
         models.signals.post_save.connect(self.enqueue_save)
-        models.signals.post_delete.connect(self.enqueue_delete)
+        models.signals.post_delete.connect(self.enqueue_delete, sender=Estacion)
 
     # Override the built-in.
     def teardown(self):
@@ -17,12 +18,10 @@ class QueuedSignalProcessor(signals.BaseSignalProcessor):
         models.signals.post_delete.disconnect(self.enqueue_delete)
 
     def enqueue_save(self, sender, instance, **kwargs):
-        if str(instance._meta) == "estaciones.estacion":
-            return update_estaciones_es_index.delay('update', instance._meta.app_label, instance._meta.module_name, instance._get_pk_val())
+        return update_estaciones_es_index.delay('update', instance.pk)
 
     def enqueue_delete(self, sender, instance, **kwargs):
-        if str(instance._meta) == "estaciones.estacion":
-            return update_estaciones_es_index.delay('delete', instance._meta.app_label, instance._meta.module_name, instance._get_pk_val())
+        return update_estaciones_es_index.delay('delete', instance.pk)
 
     def enqueue(self, action, instance, sender, **kwargs):
         """
