@@ -3,11 +3,7 @@ from django.views.generic import TemplateView
 from estaciones.views import EstacionList
 from django.contrib.auth.decorators import login_required
 
-from haystack.forms import FacetedSearchForm
-from haystack.query import SearchQuerySet
-from haystack.views import FacetedSearchView
-from haystack.views import search_view_factory
-from estaciones.forms import BuscarEstacionForm
+from django.views.generic import RedirectView
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -19,11 +15,7 @@ urlpatterns = patterns('',
     url(r'^$', TemplateView.as_view(template_name='index.html'), name='website_index'),
     (r'^registro/', include('registration.urls')),
 
-    url(r'^accounts/profile/$', search_view_factory(
-        view_class=FacetedSearchView,
-        searchqueryset=SearchQuerySet().facet('categorias'),
-        form_class=BuscarEstacionForm
-    ), name='haystack_search'),
+    url(r'^accounts/profile/$', RedirectView.as_view(url='/radios/buscar/?q=')),
 
     # Examples:
     # url(r'^$', 'anunciaenradios.views.home', name='home'),
