@@ -37,7 +37,7 @@ class BuscarEstacionForm(FacetedSearchForm):
 		super(BuscarEstacionForm, self).__init__(*args, **kwargs)
 
 	def search(self):
-		print self.is_valid()
+		match_all_documents = True
 		# First, store the SearchQuerySet received from other processing.
 		filter_regiones, filter_edad_target, filter_nivel_socioeconomico  = None, None, None
 		sqs = super(BuscarEstacionForm, self).search()
@@ -51,15 +51,24 @@ class BuscarEstacionForm(FacetedSearchForm):
 		try:
 			if not self.cleaned_data['q']:
 				sqs = SearchQuerySet()
+			else:
+				match_all_documents = False
 		except:
-			pass
-
+			pass		
+				
 		if filter_regiones:
 			sqs = sqs.filter_and(reduce(operator.or_, filter_regiones))
+			match_all_documents = False
 		if filter_edad_target:
 			sqs = sqs.filter_and((reduce(operator.or_, filter_edad_target)))
+			match_all_documents = False
 		if filter_nivel_socioeconomico:
 			sqs = sqs.filter_and((reduce(operator.or_, filter_nivel_socioeconomico)))
+			match_all_documents = False
+
+		if match_all_documents:
+			sqs.query.matching_all_fragment()
+
 		return sqs.highlight()
 
 class ClienteForm(forms.ModelForm):

@@ -58,12 +58,7 @@
 				    <ul class="nav-bar">
 				    	{% url 'website_index' as url %}{% with text="Inicio" %}{% include "_nav.html" %}{% endwith %}
 				    	
-				    	{% with url="/radios/" text="Todas las estaciones" %}{% include "_nav.html" %}{% endwith %}
-
-				    	{% with url="/radios/buscar" text="Busque su Radio" %}{% include "_nav.html" %}{% endwith %}
-				    	{% if request.user.is_authenticated %}
-				    		{% with url="/ordenes/mis_paquetes/" text="Mis paquetes" %}{% include "_nav.html" %}{% endwith %}
-				    	{% endif %}
+				    	{% with url="/radios/buscar/?q=" text="Estaciones de radio" %}{% include "_nav.html" %}{% endwith %}
 				    	{% if request.user.is_authenticated %}
 				    		{% with url="/ordenes/" text="Mis órdenes" %}{% include "_nav.html" %}{% endwith %}
 				    	{% endif %}
