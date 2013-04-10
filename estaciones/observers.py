@@ -9,7 +9,7 @@ from estaciones.models import Estacion
 class QueuedSignalProcessor(signals.BaseSignalProcessor):
     # Override the built-in.
     def setup(self):
-        models.signals.post_save.connect(self.enqueue_save)
+        models.signals.post_save.connect(self.enqueue_save, sender=Estacion)
         models.signals.post_delete.connect(self.enqueue_delete, sender=Estacion)
 
     # Override the built-in.
