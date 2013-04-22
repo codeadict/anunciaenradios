@@ -8,7 +8,7 @@ from django.contrib.flatpages.models import FlatPage
 from django.contrib.flatpages.admin import FlatPageAdmin as FlatPageAdminOld
 
 from django.db import models
-from estaciones.models import Estacion, FrecuenciaCobertura, Provincia, Cliente, PaquetePublicidad, HorarioRotativo
+from estaciones.models import Estacion, FrecuenciaCobertura, Provincia, Cliente, PaquetePublicidad, HorarioRotativo, Publicidad
 from estaciones.forms import ClienteForm
 
 class FlatPageAdmin(FlatPageAdminOld):
@@ -84,6 +84,15 @@ class ClienteEmbebido(admin.StackedInline):
 #class UserAdmin(UserAdmin):
 #    inlines = (ClienteEmbebido, )
 
+class PublicidadAdmin(admin.ModelAdmin):
+    """
+    Administración de banners y publicidad en el sitio
+    """
+    list_display = ('show_date', 'hide_date', 'promo_price')
+    fields = (('show_date', 'hide_date'), 'promo_price', 'descripcion')
+    
+    
+
 admin.site.register(Estacion, EstacionAdmin)
 admin.site.register(PaquetePublicidad, ParrillaAdmin)
 admin.site.register(FrecuenciaCobertura, FrecuenciaCoberturaAdmin)
@@ -91,6 +100,7 @@ admin.site.register(Provincia, ProvinciaAdmin)
 
 admin.site.unregister(FlatPage)
 admin.site.register(FlatPage, FlatPageAdmin)
+admin.site.register(Publicidad, PublicidadAdmin)
 
 #admin.site.unregister(User)
 #admin.site.register(User, UserAdmin)

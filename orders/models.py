@@ -25,11 +25,15 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+#added apps
+from json_field import JSONField
 
 class PaquetePublicidad(models.Model):
     observaciones = models.TextField(verbose_name = "observaciones")
     audio = models.FileField(upload_to=settings.UPLOAD_DIRECTORY, max_length=1024 * 200, blank=False, null=False, verbose_name="archivo de audio")
-    duenno = models.ForeignKey(User, null=False, blank=False, verbose_name="Dueño")    
+    duenno = models.ForeignKey(User, null=False, blank=False, verbose_name="Dueño")
+    detalles_transmision = JSONField()
+        
 
     class Meta:        
         verbose_name = "Paquete de publicidad"

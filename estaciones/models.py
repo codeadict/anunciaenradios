@@ -203,3 +203,19 @@ class ClientRegistrationSupplement(RegistrationSupplementBase):
     def __unicode__(self):
         # a summary of this supplement
         return "RUC: %s / Comp: %s" % (self.ruc, self.nombre_compannia)
+    
+class Publicidad(models.Model):
+    """
+    Objeto de Publicidd en el sitio
+    """
+    descripcion = models.TextField("Descripción", help_text="Texto del Anuncio", blank=False)
+    promo_price = models.DecimalField("Precio Promocional", max_digits=14, decimal_places=6, blank=False)
+    show_date = models.DateTimeField("Mostrar Desde")
+    hide_date = models.DateTimeField("Mostrar Hasta", blank=False)
+    
+    class Meta:
+        verbose_name = 'Oferta'
+        verbose_name_plural = 'Ofertas'
+    
+    
+    
