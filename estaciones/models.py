@@ -4,7 +4,7 @@ from django.template.defaultfilters import slugify
 from settings import *
 from django.db import models
 from taggit.managers import TaggableManager
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django_localflavor_ec.ec_provinces import PROVINCE_CHOICES
 from registration.supplements import RegistrationSupplementBase
 
@@ -166,6 +166,7 @@ class HorarioRotativo(models.Model):
     '''
     Modelos para cunas en horario rotativo
     '''
+    nombre = models.CharField(u"Nombre", max_length=255, blank=False, null=False, help_text=u'Ejemplo: 20 minutos en horario nocturno')
     estacion = models.ForeignKey(Estacion, verbose_name=u'Estación', blank=False, null=False)
     tiempo = models.PositiveIntegerField(u'Tiempo de cuña o mención', help_text=u'Tiempo de cuña o mención en segundos')
     precio_nacional = models.DecimalField(u'Precio Nacional', max_digits=14, decimal_places=6, blank=False)
@@ -177,6 +178,21 @@ class HorarioRotativo(models.Model):
         
     def __unicode__(self):
         return u'Cuña de horario rotativo [Estación: %s / Tiempo en segs: %s] Precio nacional: $%s - Precio regional: $%s' % (self.estacion.nombre, self.tiempo, self.precio_nacional, self.precio_regional)
+    
+
+class PreciosCunas(models.Model):
+    """
+    Precios de las cunas de programación
+    """
+    precio_nacional = models.DecimalField(u'Precio Nacional', max_digits=14, decimal_places=6, blank=False)
+    precio_regional = models.DecimalField(u'Precio Regional', max_digits=14, decimal_places=6, blank=False)
+    group = models.ForeignKey(Group, null = False, blank = False, related_name="precios", verbose_name=u'Grupo', help_text='Grupo de clientes de esteos precios')
+    cuna = models.ForeignKey(HorarioRotativo, verbose_name=u'Estación', blank=False, null=False)
+    
+    
+    class Meta:
+        verbose_name = 'Precios Cuña de Programación'    
+    
     
 # TODO: Esto es version 1, mejorar usando la nueva manera que define django 1.5
 class Cliente(models.Model):

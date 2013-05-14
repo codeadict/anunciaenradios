@@ -8,7 +8,7 @@ from django.contrib.flatpages.models import FlatPage
 from django.contrib.flatpages.admin import FlatPageAdmin as FlatPageAdminOld
 
 from django.db import models
-from estaciones.models import Estacion, FrecuenciaCobertura, Provincia, Cliente, PaquetePublicidad, HorarioRotativo, Publicidad
+from estaciones.models import Estacion, FrecuenciaCobertura, Provincia, Cliente, PaquetePublicidad, HorarioRotativo, Publicidad, PreciosCunas
 from estaciones.forms import ClienteForm
 
 class FlatPageAdmin(FlatPageAdminOld):
@@ -22,8 +22,15 @@ class ParrillaInline(admin.TabularInline):
     model = PaquetePublicidad
     verbose_name_plural = 'Parrilla de Programación'
     
+
+class PreciosInline(admin.TabularInline):
+    model = PreciosCunas
+    extra = 1
+    
 class HorarioRotativoInline(admin.TabularInline):
-	model = HorarioRotativo
+    model = HorarioRotativo
+    inlines = [PreciosInline]
+    extra = 2
     
 class EstacionAdmin(admin.ModelAdmin):
 	fieldsets = (("Datos de la Estación de Radio", {
@@ -80,9 +87,8 @@ class ClienteEmbebido(admin.StackedInline):
 	can_delete = False
 	verbose_name_plural = 'clientes'
 
-# Define a new User admin
-#class UserAdmin(UserAdmin):
-#    inlines = (ClienteEmbebido, )
+class UserAdmin(UserAdmin):
+    inlines = (ClienteEmbebido, )
 
 class PublicidadAdmin(admin.ModelAdmin):
     """
@@ -102,5 +108,5 @@ admin.site.unregister(FlatPage)
 admin.site.register(FlatPage, FlatPageAdmin)
 admin.site.register(Publicidad, PublicidadAdmin)
 
-#admin.site.unregister(User)
-#admin.site.register(User, UserAdmin)
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)

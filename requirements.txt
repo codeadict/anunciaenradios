@@ -1,4 +1,5 @@
-Django==1.5
+  Django==1.5
+PIL==1.1.7
 South==0.7.6
 amqp==1.0.10
 anyjson==0.3.3
@@ -10,17 +11,21 @@ django-cart==1.0.1
 django-celery==3.0.17
 django-grappelli==2.4.4
 -e git://github.com/toastdriven/django-haystack.git@8e8690993718a1f5f4e99ea9a75a7ee3b00ca75f#egg=django_haystack-dev
+django-json-field==0.5.1
 -e git://github.com/django/django-localflavor-ec.git@978bb5a1943c05b2e67f45d69515d0e0bfc74892#egg=django_localflavor_ec-dev
--e git+https://github.com/lambdalisue/django-inspectional-registration.git@develop#egg=django-inspectional-registration
 django-object-tools==0.0.7
+django-phonenumber-field==0.2a3
 django-south-admin==0.0.3
 django-taggit==0.10a1
 django-tastypie==0.9.14
 elasticstack==0.0.4
+jsonfield==0.9.13
 kombu==2.5.8
 mimeparse==0.1.3
+phonenumbers==5.4b1
 pyelasticsearch==0.4
 python-dateutil==1.5
+pytz==2013b
 requests==1.1.0
 simplejson==3.1.2
 six==1.3.0
