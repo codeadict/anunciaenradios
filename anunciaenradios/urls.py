@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, include, url
+from django.conf import settings
 from django.views.generic import TemplateView
 from estaciones.views import EstacionList
 from django.contrib.auth.decorators import login_required
@@ -12,10 +13,12 @@ admin.autodiscover()
 from estaciones.views import ContactView
 
 urlpatterns = patterns('',
+    url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'^$', TemplateView.as_view(template_name='index.html'), name='website_index'),
     (r'^registro/', include('registration.urls')),
 
     url(r'^accounts/profile/$', RedirectView.as_view(url='/radios/buscar/?q=')),
+    
 
     # Examples:
     # url(r'^$', 'anunciaenradios.views.home', name='home'),
@@ -36,6 +39,6 @@ urlpatterns = patterns('',
     url(r'^grappelli/', include('grappelli.urls')),
 )
 
-#urlpatterns += patterns('django.contrib.flatpages.views',
-#    (r'^(?P<url>.*)$', 'flatpage'),
-#)
+urlpatterns += patterns('django.contrib.flatpages.views',
+    (r'^(?P<url>.*)$', 'flatpage'),
+)

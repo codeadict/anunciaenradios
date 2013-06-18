@@ -7,23 +7,35 @@
 <section id="estacionesContent" class="buscar">
     <div class="container">
         <div class="row">
-            <div class="eight columns">
+            <div class="twelve columns">
             	{% if object_list %}
-				<h2>Listado de órdenes</h2>
-				<ul>
-					{% for orden in object_list %}
-							<li>
-								{% if orden.cliente.pk == request.user.pk %}
-								<p>Total (incluido IVA): {{ orden.total_incl_iva }}</p>
-								<p>Estado: {{ orden.estado }}</p>
-								<p>Producto: {{ orden.producto }}</p>
-								<p>Cantidad: {{ orden.cantidad }}</p>					
-								<p>Fecha: {{ orden.fecha_creada }}</p>					
-								<p>Paquete de publicidad: {{ orden.paquete_publicidad }}</p>													
-								{% endif %}
-							</li>
-					{% endfor %}
-				</ul>
+				<h3>Mis órdenes</h3>
+				<table>
+					<thead>
+						<tr>
+							<td>Fecha</td>
+							<td>Producto Comprado</td>
+							<td>Cantidad</td>
+							<td>Total (incluido IVA)</td>
+							<td>Estado</td>
+							<td>Paquete de publicidad</td>
+						</tr>
+					</thead>
+					<tbody>
+						{% for orden in object_list %}
+								<tr>
+									{% if orden.cliente.pk == request.user.pk %}
+									<td>{{ orden.fecha_creada }}</td>
+									<td>{{ orden.producto }}</td>
+									<td>{{ orden.cantidad }}</td>
+									<td>: {{ orden.total_incl_iva }}</td>
+									<td>{{ orden.estado }}</td>									
+									<td>{{ orden.paquete_publicidad }}</td>													
+									{% endif %}
+								</tr>
+						{% endfor %}
+					</tbody>
+				</table>
 				
 				{% if is_paginated %}
 			        <div class="pagination">
@@ -44,6 +56,7 @@
 					<p> No se han registrado órdenes. </p>
 				{% endif %}
 		</div>
+	</div>
 	</div>
 </section>
 {% endblock %}

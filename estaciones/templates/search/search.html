@@ -4,18 +4,30 @@
 {% block title %}Buscar Radios{% endblock %}
 {% load estaciones_tags %}
 
+{% block js-scripts %}
+	<script src="//unslider.com/unslider.min.js"></script>
+{% endblock %}
+
 {% block content %}
-<section id="estacionesContent" class="buscar">
+<section id="estacionesContent" class="row">
     <div class="container">
-        <div class="row">
-            <div class="initial-steps twelve columns">
+        <div class="twelve columns">
+            <div class="initial-steps row">
                 <ul class="icons">
-                    <li class="testing">Escoja sus Paquetes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      </li>
-                    <li class="target">Seleccione su Público&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
-                    <li class="early">Anuncie ya!</li>
+                    <li class="four columns testing">Escoja sus Paquetes</li>
+                    <li class="four columns target">Seleccione su Público</li>
+                    <li class="four columns early">Anuncie ya!</li>
                 </ul>
             </div>
         </div>
+    </div>
+    
+    <div class="container">
+    	<div class="row">
+    		<div class="twelve columns">
+    		{% banner_slider %}
+    		</div>
+    	</div>
     </div>
 
     <div class="container">
@@ -23,7 +35,7 @@
             <div class="twelve columns">
                     <h3 class="twelve columns">Buscar estaciones de Radio</h3>
                     <form method="get" action=".">
-                        <div class="four columns">
+                        <div class="four columns side">
                             Filtros para búsqueda
                             <div class="filtro_regiones">
                                 <label for="id_text">Regiones:</label>
@@ -50,31 +62,33 @@
                                 </dl>
                             </div>
                         </div>
-
+						
+						
                         <div class="eight columns">
+                        <div class="row">
                             <div class="texto_busqueda">
                                 {{ form.non_field_errors }}
                                 {{ form.q.errors }}
                                 <label for="id_text">Filtre las estaciones de radio:</label>
                                 {{ form.q }}
-                                <input type="submit" value="Buscar">
+                                <button class="search-button" title="Buscar" type="submit"></button>
                             </div>
                         </div>
-
-                        <div class="eight columns">
+						<h3>Estaciones:</h3>
+                        <div class="twelve columns listing">
                             {% if page.object_list %}
-                                <h3>Estaciones:</h3>
+                           
+ 
                                 {% for result in page.object_list %}
-                                    <div>
-                                        <a href="/radios/por_pagina?page={% get_page_in_details_paginator forloop.counter request.GET.page %}">{{ result.object.nombre }}</a>
-                                        <p>Nivel socioeconómico: {{ result.object.nivel_socioeconomico }}</p>
-
+                                   <div class="item">
+                                    	<div class="info">
+										<h3><a href="/radios/detalles/{{ result.object.slug }}/"><img src="{{ result.object.logotipo }}" alt="LOGO"/>{{ result.object.nombre }}</a></h3>
                                         {% for text in result.highlighted %}
                                             <blockquote>{% highlight text with query %}</blockquote>
                                         {% endfor %}
-                                        <ul>
+                                        <ul class="tags">
                                         {% for categoria in result.object.categorias.all %}
-                                            <li>{{ categoria }}</li>
+                                            <li><span>{{ categoria }}</span></li>
                                         {% endfor %}
                                         </ul>
                                         <ul>
@@ -82,6 +96,8 @@
                                             <li>{{ cob_frec.provincia.region }}</li>
                                         {% endfor %}
                                         </ul>
+                                        <p>Nivel socioeconómico: {{ result.object.nivel_socioeconomico }}</p>
+                                        </div>
                                     </div>                                    
 
                                 {% empty %}
@@ -96,8 +112,10 @@
                                     </div>
                                 {% endif %}
                             {% else %}
+                            	<p>No se encotraron resultados para la búsqueda realizada.</p>
                                 {# Show some example queries to run, maybe query syntax, something else? #}
                             {% endif %}
+                        </div>
                         </div>
                     </form>
                 </div>

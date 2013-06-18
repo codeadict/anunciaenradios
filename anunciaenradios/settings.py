@@ -137,6 +137,7 @@ INSTALLED_APPS = (
     'grappelli',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
+    'nested_inlines',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'json_field',
@@ -153,13 +154,16 @@ INSTALLED_APPS = (
     'orders',
 )
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.core.context_processors.media",
-    "django.core.context_processors.request",
-    "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.request",
-    "django.core.context_processors.i18n",
-    "django.contrib.messages.context_processors.messages",
+TEMPLATE_CONTEXT_PROCESSORS =(
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.core.context_processors.tz',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.request',
+    'django.contrib.messages.context_processors.messages',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -268,7 +272,7 @@ GRAPPELLI_INDEX_DASHBOARD = 'anunciaenradios.dashboard.CustomDashboard'
 BROKER_URL = 'amqp://guest:guest@localhost:5672/'
 
 #Extra configs:
-UPLOAD_DIRECTORY = path('media')
+UPLOAD_DIRECTORY = 'uploads'
 
 
 if not os.environ.get('DJANGO_ENV', None):

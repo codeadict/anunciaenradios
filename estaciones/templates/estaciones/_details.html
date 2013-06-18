@@ -1,22 +1,89 @@
-<div>
-	{{ object.logotipo|safe }}
-	<p>Nombre: {{ object.nombre }}</p>
-	<p>Descripción: {{ object.descripcion|safe }}</p>
-	<p>Nivel socioeconómico: {{ object.nivel_socioeconomico }}</p>
-	<p>En promoción desde: {{ object.en_promocion_desde }}</p>					
-	<p>Rango de edades: {{ object.nivel_edad_target }}</p>
-	<p>Categorías:</p>
-	<ul>
-        {% for categoria in object.categorias.all %}
-            <li>{{ categoria }}</li>
-        {% endfor %}
-    </ul>
-    <p>Regiones:</p>
-    <ul>
-       {% for cob_frec in object.cobertura_frecuencias.all %}
-            <li>{{ cob_frec.provincia.region }}</li>
-	       {% endfor %}
-    </ul>
+{% load estaciones_tags %}
+<div class="twelve columns">
+	<div class="row">
+		<div class="three columns">
+			<img src="{{ object.logotipo }}" alt="{{ object.nombre }}"/>
+		</div>
+		<div class="eight columns offset-by-one">
+			<h3>{{ object.nombre }}</h3>
+		</div>
+	</div>
+	
+	<div class="row">
+	<div class="twelve columns">
+	<dl class="tabs">
+	  <dd class="active"><a href="#simple1">{{ object.nombre }}</a></dd>
+	  <dd><a href="#simple2">Programación y Precios</a></dd>
+	  <dd><a href="#simple3">Cobertura y Frecuencias</a></dd>
+	  <dd><a href="#simple4">Pautar en esta Estación</a></dd>
+	</dl>
+	<ul class="tabs-content">
+	  <li class="active" id="simple1Tab">
+	  	<h5>Descripción de la Estación</h5>
+	  	{{ object.descripcion|safe }}
+	  	
+	  	<p><h6>Nivel socioeconómico:</h6> {{ object.nivel_socioeconomico }}</p>
+	  	<p><h6>Rango de edades:</h6> {{ object.nivel_edad_target }}</p>
+	  	
+	  	<h6>Categorías:</h6>
+			<ul class="tags">
+				{% for categoria in object.categorias.all %}
+				<li><span>{{ categoria }}</span></li>
+				{% endfor %}
+			</ul>
+
+		</li>
+	  <li id="simple2Tab">
+	  	<h5>Parrilla de programación y precios</h5>
+	      <table class="twelve">
+		  <thead>
+		    <tr class="support tag close">
+		      <th>Programa</th>
+		      <th>Horario</th>
+		      <th>Periodo</th>
+		      <th>Precio</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    {% for paq in object.paquete_publicidad.all %}
+		    <tr>
+		      <td>hi</td>
+		    </tr>
+		    {% endfor %}
+		  </tbody>
+		  </table>
+	  
+	  </li>
+	  
+	  <!-- Cobertura y Frecuencias -->
+	  <li id="simple3Tab">
+	      <h5>Frecuencias y cobertura por provincias</h5>
+	      <table class="twelve">
+		  <thead>
+		    <tr class="support tag close">
+		      <th>Provincia</th>
+		      <th>Frecuencia/Modulación</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    {% for cob_frec in object.cobertura_frecuencias.all %}
+		    <tr>
+		      <td>{{ cob_frec.provincia }}</td>
+		      <td>{{ cob_frec.frecuencia }}  {{ cob_frec.modulacion }}</td>
+		    </tr>
+		    {% endfor %}
+		  </tbody>
+		  </table>
+		  <img src="//chart.googleapis.com/chart?chs=440x220&cht=map:auto&chco=FFFFFF00|3366CC|DC3912&chld=EC|EC-P&chtt=Mapa+de+Cobertura&chts=000000,11.5" width="440" height="220" alt="Mapa de Cobertura" />
+	  
+	  </li>
+	  
+	  <li id="simple4Tab">
+	  	<div id="angular-app" ng-view ng-app="shoppingCartApp" data-estacion-id="{{ object.pk }}" data-product-paquetes="{% content_type_for_paquete_publicidad %}" data-product-horarios="{% content_type_for_horario_rotativo %}" current-user="{{ request.user.pk }}"></div>
+	  </li>
+	</ul>
+	</div>
+	</div>
 </div>                
 
 

@@ -7,18 +7,17 @@
 
 {% block content %}
 {{ block.super }}
-<section id="estacionesContent" class="buscar">
-    <div class="container">
-        <div class="row">
+<section id="estacionesContent" class="container">
             <div class="eight columns">
             	{{ block.super }}
-				<h5>Intruduzca sus datos de autenticación</h5>
+            	<h3>Iniciar Sesión</h3>
+				<p>Intruduzca sus datos de autenticación</p>
+				<div class="panel">
 				<form action="" method="post">{% csrf_token %}
 				    {{ form.as_p }}
-				    <p><input type="submit" value="Autenticarse"></p>
+				    <p><input class="nice radius button" type="submit" value="Entrar"></p>
 				</form>
-			</div>
-		</div>
-	</div>
+				</div>
+			</div>			
 </section>
 {% endblock %}

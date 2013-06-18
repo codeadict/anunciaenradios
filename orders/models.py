@@ -25,14 +25,22 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+from django.core.urlresolvers import reverse
 #added apps
 from json_field import JSONField
 
+POSICIONES_TANDA = (('1', 'Normal',), ('2', 'Cabeza de Tanda',), ('2', 'Pie de Tanda',))
+
+CHOICES = (('1', 'Rotativo en Sector',), ('2', 'Rotativo en Hora Abierta',), ('2', 'Hora Fija',), ('2', 'Programa',))
+
 class PaquetePublicidad(models.Model):
     observaciones = models.TextField(verbose_name = "observaciones")
-    audio = models.FileField(upload_to=settings.UPLOAD_DIRECTORY, max_length=1024 * 200, blank=False, null=False, verbose_name="archivo de audio")
     duenno = models.ForeignKey(User, null=False, blank=False, verbose_name="Dueño")
-    detalles_transmision = JSONField()
+    
+    pautar_en = models.CharField(max_length=1, null=False, default='1', choices=CHOICES, verbose_name="Pautar en")
+    hora_inicial = models.TimeField(verbose_name="Hora Inicio", auto_now_add=True, blank=True, null=True)
+    hora_fin = models.TimeField(verbose_name="Hora Fin", auto_now_add=True, blank=True, null=True)
+    posicion_tanda = models.CharField(max_length=1, null=False, default='1', choices=POSICIONES_TANDA, verbose_name="Posicion en Tanda")
         
 
     class Meta:        
@@ -41,6 +49,40 @@ class PaquetePublicidad(models.Model):
         
     def __unicode__(self):
         return u"#%s: %s" % (self.pk, self.observaciones[:80])
+    
+    
+class Audios(models.Model):
+    file = models.FileField(upload_to="audios", max_length=1024 * 200, blank=False, null=False, verbose_name="Audio")
+    slug = models.SlugField(max_length=50, blank=True)
+    paquete = models.ForeignKey(PaquetePublicidad, related_name='audios', null=False, blank=False, verbose_name="Paquete de publicidad") 
+
+    def __unicode__(self):
+        return self.file.name
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('upload-new', )
+
+    def save(self, *args, **kwargs):
+        self.slug = self.file.name
+        super(Audios, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        self.file.delete(False)
+        super(Audios, self).delete(*args, **kwargs)
+        
+class HorariosPautas(models.Model):
+    """
+    Tabla de programacion
+    """
+    fecha = models.DateField(null=False, blank=False, db_index=True, verbose_name="Fecha")
+    cantidad = models.PositiveIntegerField(verbose_name="Cantidad de Cuñas")
+    paquete = models.ForeignKey(PaquetePublicidad, related_name='fechas_aire', null=False, blank=False, verbose_name="Paquete de publicidad")
+    
+    class Meta:
+        ordering = ['-fecha',]
+        verbose_name = "Fecha Al Aire"
+        verbose_name_plural = "Fechas Al Aire" 
 
 
 class Orden(models.Model):
@@ -80,3 +122,13 @@ class Orden(models.Model):
     
     def v_hash(self):
         return hashlib.md5('%s%s' % (self.number, settings.SECRET_KEY)).hexdigest()
+    
+    def changeform_link(self):
+        if self.paquete_publicidad:
+            changeform_url = reverse(
+                'admin:orders_paquetepublicidad_change', args=(self.paquete_publicidad.id,)
+            )
+            return u'<a href="%s" target="_blank">Ver Datos Cuña</a>' % changeform_url
+        return u''
+    changeform_link.allow_tags = True
+    changeform_link.short_description = ''

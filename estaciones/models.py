@@ -7,6 +7,10 @@ from taggit.managers import TaggableManager
 from django.contrib.auth.models import User, Group
 from django_localflavor_ec.ec_provinces import PROVINCE_CHOICES
 from registration.supplements import RegistrationSupplementBase
+from django.core.urlresolvers import reverse
+
+from django.utils.safestring import mark_safe
+
 
 log = logging.getLogger('ar.estaciones')
 
@@ -50,9 +54,11 @@ class Estacion(models.Model):
     
     def logotipo(self):
         if self.logo:
-            return u'<img src="/media/%s" width="80" heigth="80" />' % self.logo
+            logot = '%s%s' % (settings.MEDIA_URL, self.logo)
         else:
-            return u'(Sin imagen)'
+            logot = '%s%s' % (settings.STATIC_URL, '/img/radio-default.png')
+        
+        return mark_safe(logot)
     
     def sumario_descripcion(self):
         if self.descripcion:
@@ -65,9 +71,6 @@ class Estacion(models.Model):
     logotipo.allow_tags = True
     
     def save(self, *args, **kwargs):
-        #poner el logo por defecto
-        if not self.logo:
-            self.logo.name = '%s/default_logo.jpg' % settings.UPLOAD_DIRECTORY
         # auto slugify
         self.slug = slugify(self.nombre)
         super(Estacion, self).save(*args, **kwargs)
@@ -168,18 +171,38 @@ class HorarioRotativo(models.Model):
     '''
     nombre = models.CharField(u"Nombre", max_length=255, blank=False, null=False, help_text=u'Ejemplo: 20 minutos en horario nocturno')
     estacion = models.ForeignKey(Estacion, verbose_name=u'Estación', blank=False, null=False)
-    tiempo = models.PositiveIntegerField(u'Tiempo de cuña o mención', help_text=u'Tiempo de cuña o mención en segundos')
-    precio_nacional = models.DecimalField(u'Precio Nacional', max_digits=14, decimal_places=6, blank=False)
-    precio_regional = models.DecimalField(u'Precio Regional', max_digits=14, decimal_places=6, blank=False)
+    
+    def _precio_nacional(self):
+        pc = PreciosCunas.objects.filter(cuna=self.pk)
+        return pc[0].precio_nacional
+    precio_nacional = property(_precio_nacional)
+    
+    def _precio_regional(self):
+        pc = PreciosCunas.objects.filter(cuna=self.pk)
+        return pc[0].precio_regional
+    precio_regional = property(_precio_regional)
+
+    
+    def precio_regional(self):
+        return '10.0'
     
     class Meta:
-        verbose_name = 'Cuña en horario rotativo'
-        verbose_name_plural = 'Cuñas en horario rotativo'
+        verbose_name = 'Cuña de programación'
+        verbose_name_plural = 'Cuñas de programación'
         
     def __unicode__(self):
-        return u'Cuña de horario rotativo [Estación: %s / Tiempo en segs: %s] Precio nacional: $%s - Precio regional: $%s' % (self.estacion.nombre, self.tiempo, self.precio_nacional, self.precio_regional)
+        return u'%s (%s)' % (self.nombre, self.estacion.nombre)
     
-
+    def changeform_link(self):
+        if self.id:
+            changeform_url = reverse(
+                'admin:estaciones_horariorotativo_change', args=(self.id,)
+            )
+            return u'<a href="%s" target="_blank">Ver/Modificar</a>' % changeform_url
+        return u''
+    changeform_link.allow_tags = True
+    changeform_link.short_description = ''   # omit column header
+    
 class PreciosCunas(models.Model):
     """
     Precios de las cunas de programación
@@ -187,11 +210,13 @@ class PreciosCunas(models.Model):
     precio_nacional = models.DecimalField(u'Precio Nacional', max_digits=14, decimal_places=6, blank=False)
     precio_regional = models.DecimalField(u'Precio Regional', max_digits=14, decimal_places=6, blank=False)
     group = models.ForeignKey(Group, null = False, blank = False, related_name="precios", verbose_name=u'Grupo', help_text='Grupo de clientes de esteos precios')
-    cuna = models.ForeignKey(HorarioRotativo, verbose_name=u'Estación', blank=False, null=False)
-    
-    
+    cuna = models.ForeignKey(HorarioRotativo, verbose_name=u'Cuña', blank=False, null=False)
+   
     class Meta:
-        verbose_name = 'Precios Cuña de Programación'    
+        verbose_name = 'Precios Cuña de Programación'
+        
+    def __unicode__(self):
+        return u'Precio Grupo: $%s' % (self.group.name) 
     
     
 # TODO: Esto es version 1, mejorar usando la nueva manera que define django 1.5
@@ -226,8 +251,8 @@ class Publicidad(models.Model):
     """
     descripcion = models.TextField("Descripción", help_text="Texto del Anuncio", blank=False)
     promo_price = models.DecimalField("Precio Promocional", max_digits=14, decimal_places=6, blank=False)
-    show_date = models.DateTimeField("Mostrar Desde")
-    hide_date = models.DateTimeField("Mostrar Hasta", blank=False)
+    show_date = models.DateTimeField("Mostrar Desde", blank=False, null=False)
+    hide_date = models.DateTimeField("Mostrar Hasta", blank=False, null=False)
     
     class Meta:
         verbose_name = 'Oferta'

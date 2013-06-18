@@ -2,33 +2,104 @@
 {% load static from staticfiles %}
 {% block title %}Agregar paquete publicitario{% endblock %}
 
+	{% block head-scripts %}
+		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+		<script src="{% static 'js/cal-heatmap.js' %}"></script>
+		<script src="{% static 'js/jquery.timepicker.min.js' %}"></script>
+		<link media="screen" href="{% static 'css/jquery.timepicker.css' %}" type="text/css" rel="stylesheet">
+		<script src="{% static 'js/jquery.formset.js' %}"></script>
+		<script type="text/javascript">
+		$(function() {
+		    $('.form-row.inline.{{ audios_formset.prefix }}').formset({
+		        prefix: '{{ audios_formset.prefix }}',
+		    })
+		})
+		</script>
+		
+	{% endblock %}
+	
 {% block content %}
-<section id="estacionesContent" class="buscar">
-    <div class="container">
-        <div class="row">
-            <div class="twelve columns">
-                    <form method="post" action="/ordenes/paquetes/agregar/" {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}>                        
-                        <div class="fieldWrapper">
-                        {{ form.observaciones.errors }}
-                        <label for="id_message">Observaciones:</label>
-                        {{ form.observaciones }}
+            <div id="estacionesContent" class="twelve columns">
+            		<h3>Agregar Orden</h3>
+            		<p>Llene los datos con sus archivos de audio y parrilla de Programación</p>
+            		<p>No olvide dejar comentarios con las instrucciones para publicitar su Orden.</p>
+            		
+            		<h6>Escoger fechas al Aire:</h6>
+            		<div id="cal-heatmap"></div>
+            		
+                    <form method="post" action="/ordenes/paquetes/agregar/" enctype="multipart/form-data">
+                    	<div class="row">
+	                        {{ form.errors }}
+	                        
+	                        <div class="four columns custom">
+	                        	<h6>Pautar En</h6>
+	                        	{{ form.pautar_en }}
+	                        </div>
+	                        
+	                        <div class="four columns">
+	                        	<h6>Horario</h6>
+	                        	{{ form.hora_inicial.label }}
+	                        	{{ form.hora_inicial }}
+	                        	
+	                        	{{ form.hora_fin.label }}
+	                        	{{ form.hora_fin }}
+	                        </div>
+	                        
+	                        <div class="four columns">
+	                        	<h6>Tanda</h6>
+	                        	{{ form.posicion_tanda.label }}
+	                        	{{ form.posicion_tanda }}
+	                        </div>
+	                        
+	                        <div class="twelve columns">
+	                        	<h6>Subir Audios</h6>
+	                        	<fieldset class="formset">
+							        {{ audios_formset.management_form }}
+							        {% for form in audios_formset %}
+							        {{ form.id }}
+							        <div class="form-row inline {{ audios_formset.prefix }}">
+							            {{ form.file.label_tag }}
+							            {{ form.file }}
+							            {{ form.file.errors }}
+							        </div>
+							        {% endfor %}
+							    </fieldset>
+	                        </div>
+	                        
+	                        
+	                        <div class="twelve columns">
+		                        {{ form.observaciones.errors }}
+		                        <label for="id_observaciones">Observaciones:</label>
+		                        {{ form.observaciones }}
+	                        </div>
+	                                                                   
+	                        <input type="hidden" name="duenno" value="{{ request.user.pk }}"/>
+	                        <input type="hidden" name="product_object_cantidad" value="{{ request.GET.pdc }}"/>
+	                        <input type="hidden" name="success_url" value="{{ request.GET.success_url }}"/>
+	                        {% csrf_token %}   
+	                  		
+	                  		<div class="twelve columns">
+	                        	<input class="radius alert button right" type="submit" value="Pautar Ahora!">
+	                        </div>
                         </div>
-                        <div class="fieldWrapper">
-                        {{ form.audio.errors }}
-                        <label for="id_sender">Archivo de audio</label>
-                        {{ form.audio }}
-
-                                               
-                        <input type="hidden" name="duenno" value="{{ request.user.pk }}">
-                        <input type="hidden" name="product_object_cantidad" value="{{ request.GET.pdc }}">
-                        <input type="hidden" name="success_url" value="{{ request.GET.success_url }}">
-                        
-                        {% csrf_token %}
-                        <input type="submit" value="Agregar">
                     </form>
-                </div>
-            </div>
-        </div>
-</section>
+        	</div>
   
 {% endblock %}
+
+	{% block js-scripts %}	
+	<script type="text/javascript">
+	var cal = new CalHeatMap();
+	cal.init({
+		data: "datas.json",
+		domain: "month",
+		subDomain : "day",	
+		range: 9,
+		browsing: true,
+	});
+	
+	$('.vTimeField').timepicker({ 'timeFormat': 'H:i' });
+	
+	</script>
+
+	{% endblock %}

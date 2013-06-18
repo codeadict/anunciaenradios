@@ -1,18 +1,24 @@
 ﻿{% extends 'base.html' %}
 {% load static from staticfiles %}
+{% load url from future %}
 
 {% block title %}Inicio{% endblock %}
 
 {% block content %}
-<section>
+<section class="row">
 	<div class="twelve columns">
 		<article id="anuncia">
-			<h2>Ahorre dinero con AnunciaEnRadio</h2>
+			<h2>Ahorre dinero con AnunciaEnRadios</h2>
 			<p>Le ofrecemos los mejores precios para pautar en radio
 				y toda la información de las principales radios del país.</p>
 			<p>Regístrese y disfrute de grandes ofertas, promociones, cupones de descuento y más.</p>
-			<button id="formOpen" type="button">Comience a Anunciar Ahora!</button>
+			<a class="botton" id="formOpen" href="{% url "haystack_search" %}">Comience a Anunciar Ahora!</a>
 		</article>
 	</div>
-<section>
+</section>
+<section class="row radios">
+	<div class="twelve columns">
+		<img height="100" alt="" src="{% static 'img/radios.png' %}">
+	</div>
+</section>
 {% endblock %}

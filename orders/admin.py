@@ -20,9 +20,17 @@
 from django.contrib import admin
 from django.db.models import get_model
 from django.db import models
+from orders.models import PaquetePublicidad, Audios, HorariosPautas
 
 Orden = get_model('orders', 'Orden')
 #PaquetePublicidad = get_model('orders', 'PaquetePublicidad')
+
+
+class HorariosInline(admin.TabularInline):
+    model = HorariosPautas
+    
+class AudiosInline(admin.TabularInline):
+    model = Audios
 
 
 class OrdenAdmin(admin.ModelAdmin):
@@ -30,20 +38,18 @@ class OrdenAdmin(admin.ModelAdmin):
     Interfaz para administrar órdenes registradas en el sistema
     """    
     raw_id_fields = ['cliente']
+    fields = (('numero','fecha_creada'), 'total_incl_iva', 'cliente', 'cantidad', 'producto', ('paquete_publicidad', 'changeform_link',))
     list_display = ('numero', 'total_incl_iva', 'cliente', 'fecha_creada', 'cantidad', 'producto', 'paquete_publicidad')
-    list_filter = ('fecha_creada',)
+    list_filter = ('fecha_creada', 'cliente__username',)
+    readonly_fields = ('paquete_publicidad', 'changeform_link', 'producto', 'fecha_creada')
     #readonly_fields = ('numero', 'total_incl_iva')
 
 
-#class PaquetePublicidadAdmin(admin.ModelAdmin):
-#	list_display = ('nombre', 'observaciones', 'audio', 'duenno')
-#	list_filter = ('duenno',)
-#	class Media:
-#	    js = [
-#	        '/static/grappelli/tinymce/jscripts/tiny_mce/tiny_mce.js',
-#	        '/static/js/tinymce_setup.js',
-#	    ]
+class PaquetePublicidadAdmin(admin.ModelAdmin):
+    list_display = ('observaciones', 'duenno')
+    list_filter = ('duenno',)
+    inlines = [HorariosInline, AudiosInline,]
 
 
 admin.site.register(Orden, OrdenAdmin)
-#admin.site.register(PaquetePublicidad, PaquetePublicidadAdmin)
+admin.site.register(PaquetePublicidad, PaquetePublicidadAdmin)

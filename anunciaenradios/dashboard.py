@@ -32,7 +32,7 @@ class CustomDashboard(Dashboard):
                     'Administración',
                     column=1,
                     models=('django.contrib.*',),
-                    exclude=('django.contrib.sites.*', 'django.contrib.comments.*', 'django.contrib.flatpages.*'),
+                    exclude=('django.contrib.sites.*', 'django.contrib.comments.*'),
                 ),
                 modules.AppList(
                     'Applicaciones',
@@ -84,14 +84,9 @@ class CustomDashboard(Dashboard):
                     'external': False,
                 },
                 {
-                    'title': _('Grappelli Documentation'),
-                    'url': 'http://packages.python.org/django-grappelli/',
-                    'external': True,
-                },
-                {
-                    'title': _('Grappelli Google-Code'),
-                    'url': 'http://code.google.com/p/django-grappelli/',
-                    'external': True,
+                    'title': _('Contactar con Daganet'),
+                    'url': 'mailto:dairon@daganet.net?subject=Soporte Servidinamica',
+                    'external': False,
                 },
             ]
         ))

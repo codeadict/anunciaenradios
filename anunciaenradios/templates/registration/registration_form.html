@@ -7,18 +7,17 @@
 
 {% block content %}
 {{ block.super }}
-<section id="estacionesContent" class="buscar">
-    <div class="container">
-        <div class="row">
-            <div class="eight columns">
-				<h5>Por favor introduzca los datos siguientes para completar su registro</h5>
+<section id="estacionesContent" class="container">
+            <div class="seven columns">
+            	<h3>Registrarse</h3>
+				<p>Por favor introduzca los datos siguientes para completar su registro</p>
+				<div class="panel">
 				<form action="" method="post">{% csrf_token %}
 				    {{ form.as_p }}
 				    {{ supplement_form.as_p }}
-				    <p><input type="submit" value="{% trans 'Register' %}"></p>
+				    <p><input type="submit" class="nice radius button" value="Registrarme"></p>
 				</form>
+				</div>
 			</div>
-		</div>
-	</div>
 </section>
 {% endblock %}

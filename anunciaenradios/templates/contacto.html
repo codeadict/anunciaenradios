@@ -4,16 +4,6 @@
 {% block title %}Contáctenos{% endblock %}
 
 
-{% block head-scripts %}
-<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.css" />
-<!--[if lte IE 8]>
-    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.ie.css" />
-<![endif]-->
-
-<script src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script>
-{% endblock %}
-
-
 {% block content %}
 <section id="estacionesContent" class="buscar">
 <div class="content">
@@ -55,14 +45,13 @@
     {% endwith %}
     
     
-    <button type="submit" class="right">Enviar</button>
+    <button type="submit" class="right alert button">Enviar</button>
 </form>
 {% endwith %}
 
 </div>
 <div class="four columns offse-by-one">
-	<div id="mapa" class="mapa">
-		
+	
 	</div>
 	<div id="direccion">
 		<h5>Servidinámica S.A.</h5>
@@ -78,18 +67,6 @@
 {% endblock %}
 
 {% block foot-scripts %}
-<script>
-var map = L.map('mapa').setView([-0.115659,-78.473207], 13);
 
-//add an OpenStreetMap tile layer
-L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-}).addTo(map);
-
-//add a marker in the given location, attach some popup content to it and open the popup
-L.marker([-0.115659,-78.473207]).addTo(map)
- .bindPopup('<h5>Servidinámica S.A</h5>')
- .openPopup();
-
-</script>
 
 {% endblock %}

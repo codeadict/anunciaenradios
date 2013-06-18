@@ -8,6 +8,7 @@ from django.contrib.flatpages.models import FlatPage
 from django.contrib.flatpages.admin import FlatPageAdmin as FlatPageAdminOld
 
 from django.db import models
+from nested_inlines.admin import NestedModelAdmin, NestedStackedInline, NestedTabularInline
 from estaciones.models import Estacion, FrecuenciaCobertura, Provincia, Cliente, PaquetePublicidad, HorarioRotativo, Publicidad, PreciosCunas
 from estaciones.forms import ClienteForm
 
@@ -18,26 +19,29 @@ class FlatPageAdmin(FlatPageAdminOld):
 	        '/static/js/tinymce_setup.js',
 	    ]
 
-class ParrillaInline(admin.TabularInline):
+class ParrillaInline(NestedTabularInline):
     model = PaquetePublicidad
     verbose_name_plural = 'Parrilla de Programación'
     
 
-class PreciosInline(admin.TabularInline):
+class PreciosInline(NestedStackedInline):
     model = PreciosCunas
-    extra = 1
     
-class HorarioRotativoInline(admin.TabularInline):
+class HorarioRotativoInline(NestedStackedInline):
     model = HorarioRotativo
-    inlines = [PreciosInline]
-    extra = 2
+    fields = ('nombre', 'changeform_link')
+    readonly_fields = ('changeform_link', )
     
-class EstacionAdmin(admin.ModelAdmin):
+class HorarioAdmin(NestedModelAdmin):
+        inlines = [PreciosInline,]
+
+    
+class EstacionAdmin(NestedModelAdmin):
 	fieldsets = (("Datos de la Estación de Radio", {
-		'fields' : ('nombre', 'descripcion', ('categorias','logo'), 'en_promocion_desde', 'nivel_socioeconomico', 'nivel_edad_target', 'cobertura_frecuencias')
+		'fields' : ('nombre', 'descripcion', ('categorias','logo'), 'nivel_socioeconomico', 'nivel_edad_target', 'cobertura_frecuencias')
 		}), 
 	)
-	list_filter = ('nivel_socioeconomico','categorias__name', 'en_promocion_desde', 'nivel_edad_target', 'cobertura_frecuencias__provincia__provincia', 'cobertura_frecuencias__provincia__region')
+	list_filter = ('nivel_socioeconomico','categorias__name', 'nivel_edad_target', 'cobertura_frecuencias__provincia__provincia', 'cobertura_frecuencias__provincia__region')
 	search_fields = ('nombre',
 					'slug',
 					'descripcion',
@@ -100,6 +104,7 @@ class PublicidadAdmin(admin.ModelAdmin):
     
 
 admin.site.register(Estacion, EstacionAdmin)
+admin.site.register(HorarioRotativo, HorarioAdmin)
 admin.site.register(PaquetePublicidad, ParrillaAdmin)
 admin.site.register(FrecuenciaCobertura, FrecuenciaCoberturaAdmin)
 admin.site.register(Provincia, ProvinciaAdmin)

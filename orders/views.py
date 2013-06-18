@@ -1,14 +1,26 @@
 # -*- coding: utf-8 -*-#
 from django.views.generic import FormView, TemplateView, DetailView, ListView 
-from django.views.generic.edit import CreateView
+from django.views.generic import CreateView, DeleteView
+from django.contrib.formtools.wizard.views import SessionWizardView
 
 
-from orders.forms import PaquetePublicidadForm
-from orders.models import Orden, PaquetePublicidad
+from orders.forms import PaquetePublicidadForm, AudiosFormSet
+from orders.models import Orden, PaquetePublicidad, Audios
 from django.contrib.contenttypes.models import ContentType
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 import uuid
 
+from django.utils import simplejson
+from django.core.urlresolvers import reverse
+
+from django.contrib import messages
+
+
+class PautarWizard(SessionWizardView):
+    def done(self, form_list, **kwargs):
+        return render_to_response('done.html', {
+            'form_data': [form.cleaned_data for form in form_list],
+        })
 
 class PaquetePublicidadFormView(CreateView):
     form_class = PaquetePublicidadForm
@@ -45,31 +57,99 @@ class PaquetePublicidadFormView(CreateView):
         return super(PaquetePublicidadFormView, self).post(request, *args, **kwargs)
 
     def form_valid(self, form):
-    	self.object = form.save(commit=False)
-    	self.object.duenno = self.duenno
-        #Campos del model Orden
-        self.object.save()
+        context = self.get_context_data()
+        self.object = form.save(commit=False)
+        audios_form = AudiosFormSet(self.request.POST, self.request.FILES, instance=self.object)     
+        if audios_form.is_valid():
+            self.object.duenno = self.duenno
+        
+            #Campos del model Orden
+            self.object.save()
+            
+            audios_form.save()
+    
+            # Salvar las ordenes multiples:
+            for i in range(len(self.cantidades)):
+                object_id = self.object_ids[i]
+                content_type = self.content_types[i]
+                cantidad = self.cantidades[i]
+                total = self.totales[i]
+                orden = Orden(numero=self.numero,
+                                cliente=self.duenno,
+                                total_incl_iva= float(total) * float(cantidad),
+                                estado=self.estado,
+                                object_id=object_id,
+                                content_type=content_type,
+                                cantidad=cantidad,
+                                paquete_publicidad=self.object)
+                orden.save()
+                messages.success(self.request, "Ha pautado exitosamente en esta estación. Muchas gracias por su compra.")
+        return HttpResponseRedirect(self.success_url)
 
-        # Salvar las ordenes multimples:
-        for i in range(len(self.cantidades)):
-            object_id = self.object_ids[i]
-            content_type = self.content_types[i]
-            cantidad = self.cantidades[i]
-            total = self.totales[i]
-            orden = Orden(numero=self.numero,
-                        cliente=self.duenno,
-                        total_incl_iva=float(total) * float(cantidad),
-                        estado=self.estado,
-                        object_id=object_id,
-                        content_type=content_type,
-                        cantidad=cantidad,
-                        paquete_publicidad=self.object)
-            orden.save()
-        return HttpResponseRedirect(self.success_url+'&success=1')
+        
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(form=form))
+    
+    def get_context_data(self, **kwargs):
+        context = super(PaquetePublicidadFormView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            context['audios_formset'] = AudiosFormSet(self.request.POST, self.request.FILES, instance=self.object)
+        else:
+            context['audios_formset'] = AudiosFormSet(instance=self.object)
+        return context
 
 class PaquetePublicidadList(ListView):
 	model = PaquetePublicidad
 	paginate_by = 10
+    
+
+#Vistas para agregar los audios
+def response_mimetype(request):
+    if "application/json" in request.META['HTTP_ACCEPT']:
+        return "application/json"
+    else:
+        return "text/plain"
+
+class AudioCreateView(CreateView):
+    model = Audios
+
+    def form_valid(self, form):
+        self.object = form.save()
+        f = self.request.FILES.get('file')
+        data = [{'name': f.name, 'url': settings.MEDIA_URL + "audios/" + f.name.replace(" ", "_"), 'delete_url': reverse('upload-delete', args=[self.object.id]), 'delete_type': "DELETE"}]
+        response = JSONResponse(data, {}, response_mimetype(self.request))
+        response['Content-Disposition'] = 'inline; filename=audios.json'
+        return response
+
+    def get_context_data(self, **kwargs):
+        context = super(AudioCreateView, self).get_context_data(**kwargs)
+        context['audios'] = Audios.objects.all()
+        return context
+
+
+class PictureDeleteView(DeleteView):
+    model = Audios
+
+    def delete(self, request, *args, **kwargs):
+        """
+        This does not actually delete the file, only the database record. But
+        that is easy to implement.
+        """
+        self.object = self.get_object()
+        self.object.delete()
+        if request.is_ajax():
+            response = JSONResponse(True, {}, response_mimetype(self.request))
+            response['Content-Disposition'] = 'inline; filename=audios.json'
+            return response
+        else:
+            return HttpResponseRedirect('/upload/new')
+
+class JSONResponse(HttpResponse):
+    """JSON response class."""
+    def __init__(self,obj='',json_opts={},mimetype="application/json",*args,**kwargs):
+        content = simplejson.dumps(obj,**json_opts)
+        super(JSONResponse,self).__init__(content,mimetype,*args,**kwargs)
+
 
 class OrdenList(ListView):
 	model = Orden
