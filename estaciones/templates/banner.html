@@ -1,0 +1,37 @@
+{% if banners %}
+	<div class="banner">
+	<ul>
+	{% for banner in banners %}
+		        <li>
+		        	<h2>Tan solo USD {{ banner.promo_price }}</h2>
+			        <p>{{ banner.descripcion }}</p>
+			        <a class="btn" href="#">Ver Promoción</a>
+		        </li>
+	{% endfor %}
+	</ul>
+	</div>
+
+<script>
+$(function() {
+	if(window.chrome) {
+		$('.banner li').css('background-size', '100% 100%');
+	}
+	$('.banner').unslider({
+		fluid: true,
+		speed: 900,
+		dots: true, 
+	}); 
+});
+</script>
+
+{% comment %}
+
+<style type="text/css">
+.banner { position: relative; overflow: auto; }
+    .banner li { list-style: none; }
+        .banner ul li { float: left; }
+</style>
+  
+{% endcomment %}
+
+{% endif %}
