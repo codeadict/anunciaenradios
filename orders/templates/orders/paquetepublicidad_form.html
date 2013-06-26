@@ -3,16 +3,51 @@
 {% block title %}Agregar paquete publicitario{% endblock %}
 
 	{% block head-scripts %}
-		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-		<script src="{% static 'js/cal-heatmap.js' %}"></script>
 		<script src="{% static 'js/jquery.timepicker.min.js' %}"></script>
+		<script src="{% static 'js/ui.js' %}"></script>
 		<link media="screen" href="{% static 'css/jquery.timepicker.css' %}" type="text/css" rel="stylesheet">
+		<link media="screen" href="{% static 'css/ui.css' %}" type="text/css" rel="stylesheet">
 		<script src="{% static 'js/jquery.formset.js' %}"></script>
 		<script type="text/javascript">
 		$(function() {
+			
+		    $('.form-row.inline2.{{ horarios_formset.prefix }}').formset({
+		        prefix: '{{ horarios_formset.prefix }}',
+		        dynamicFormClass: 'dynamic-formset2-form',
+		        addText: 'Agregar Fecha de Pauta', 
+		        'added': function(row){
+		            //find the fields with the calendar widget
+		            $(row).find('.dtField')
+		                .attr("id", "")
+		                .removeClass('hasDatepicker')
+		                .removeData('datepicker')
+		                .unbind()
+		                .datepicker(
+		           			 {
+		     		            closeText: 'Cerrar',
+		     		            prevText: '<Ant',
+		     		            nextText: 'Sig>',
+		     		            currentText: 'Hoy',
+		     		            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+		     		            monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+		     		            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+		     		            dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+		     		            dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+		     		            weekHeader: 'Sm',
+		     		            dateFormat: 'dd/mm/yy',
+		     		            firstDay: 1,
+		     		            isRTL: false,
+		     		            showMonthAfterYear: false,
+		     		            yearSuffix: ''
+		     		        });
+		         }
+		    });
+		    
 		    $('.form-row.inline.{{ audios_formset.prefix }}').formset({
 		        prefix: '{{ audios_formset.prefix }}',
-		    })
+		        dynamicFormClass: 'dynamic-formset1-form'
+		    });
+
 		})
 		</script>
 		
@@ -22,10 +57,7 @@
             <div id="estacionesContent" class="twelve columns">
             		<h3>Agregar Orden</h3>
             		<p>Llene los datos con sus archivos de audio y parrilla de Programación</p>
-            		<p>No olvide dejar comentarios con las instrucciones para publicitar su Orden.</p>
-            		
-            		<h6>Escoger fechas al Aire:</h6>
-            		<div id="cal-heatmap"></div>
+            		<p>No olvide dejar comentarios con las instrucciones para publicitar su Orden.</p>            		
             		
                     <form method="post" action="/ordenes/paquetes/agregar/" enctype="multipart/form-data">
                     	<div class="row">
@@ -52,7 +84,37 @@
 	                        </div>
 	                        
 	                        <div class="twelve columns">
-	                        	<h6>Subir Audios</h6>
+	                        	<h6>Escoger fechas al Aire:</h6>
+	                        	<fieldset class="formset">
+							        {{ horarios_formset.management_form }}
+							        {% for form in horarios_formset %}
+							        {{ form.id }}
+							        <ul class="form-row inline2 {{ horarios_formset.prefix }}">
+									    <li class="five columns">
+									      <div class="row collapse">
+									        <div class="twelve columns">
+										        {{ form.fecha.label_tag }}
+									            {{ form.fecha }}
+									            {{ form.fecha.errors }}
+									        </div>
+									      </div>
+									    </li>
+									    <li class="five columns">
+									      <div class="row collapse">
+									        <div class="twelve columns">
+											    {{ form.cantidad.label_tag }}
+									            {{ form.cantidad }}
+									            {{ form.cantidad.errors }}
+									        </div>
+									      </div>
+									    </li>
+									</ul>							            
+							        {% endfor %}
+							    </fieldset>
+	                        </div>
+	                        
+	                        <div class="twelve columns">
+	                        	<h6>Subir Audios:</h6>
 	                        	<fieldset class="formset">
 							        {{ audios_formset.management_form }}
 							        {% for form in audios_formset %}
@@ -89,16 +151,38 @@
 
 	{% block js-scripts %}	
 	<script type="text/javascript">
-	var cal = new CalHeatMap();
-	cal.init({
-		data: "datas.json",
-		domain: "month",
-		subDomain : "day",	
-		range: 9,
-		browsing: true,
-	});
+// 	var cal = new CalHeatMap();
+// 	cal.init({
+// 		data: "datas.json",
+// 		domain: "month",
+// 		subDomain : "day",	
+// 		range: 9,
+// 		browsing: true,
+// 	});
 	
 	$('.vTimeField').timepicker({ 'timeFormat': 'H:i' });
+	
+
+	$('.dtField').datepicker(
+			 {
+		            closeText: 'Cerrar',
+		            prevText: '<Ant',
+		            nextText: 'Sig>',
+		            currentText: 'Hoy',
+		            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+		            monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+		            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+		            dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+		            dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+		            weekHeader: 'Sm',
+		            dateFormat: 'dd/mm/yy',
+		            firstDay: 1,
+		            isRTL: false,
+		            showMonthAfterYear: false,
+		            yearSuffix: ''
+		        }
+	);
+	
 	
 	</script>
 

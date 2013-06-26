@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% load static from staticfiles %}
+
+{% block head-scripts %}\
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="{% static 'js/cal-heatmap.js' %}"></script>
+<script src="{% static 'js/mediaelement-and-player.min.js' %}"></script>
+
+<link media="screen" href="{% static 'css/orden.css' %}" type="text/css" rel="stylesheet">
+<link media="screen" href="{% static 'css/mediaelementplayer.min.css' %}" type="text/css" rel="stylesheet">
+
+{% endblock %}
+
+{% block title %}Detalles Orden: {{ orden.producto }}{% endblock %}
+
+{% block content %}
+<section id="estacionesContent" class="buscar">
+    <div class="container">
+        <div class="row">
+            <div class="twelve columns">       
+            <div id="invoice" class="new">
+            <div class="twelve columns">
+            <a class="button right" href="{% url "lista_ordenes" %}">Editar</a> 
+            <a class="button alert right" href="{% url "lista_ordenes" %}">Eliminar</a> 
+            <a class="button success right" href="{% url "lista_ordenes" %}">Regresar</a> 
+            </div>  
+
+
+			<div class="this-is">
+			<strong>Detalles Orden: {{ orden.producto }}</strong>
+			</div><!-- invoice headline -->
+			
+			
+			<header id="header">
+			<div class="invoice-intro">
+				<img src="{{ orden.producto.estacion.logotipo }}" width="100px" height="83px"/>
+			</div>
+			
+			<dl class="invoice-meta">
+			<dt class="invoice-number">Orden #</dt>
+			<dd>{{ orden.pk }}</dd>
+			<dt class="invoice-date">Fecha de la Orden</dt>
+			<dd>{{ orden.fecha_creada|date:"m/d/Y" }}</dd>
+			</dl>
+			</header>
+			<!-- e: invoice header -->			
+			
+			<section class="invoice-financials">
+			
+			<div class="invoice-items">
+			<table>
+				<caption>Producto Pautado</caption>
+				<thead>
+				<tr>
+					<th>Producto Comprado</th>
+					<th>Cantidad</th>
+					<th>Precio</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+					<th>{{ orden.producto }}</th>
+					<td>{{ orden.cantidad }}</td>
+					<td>{{ orden.total_incl_iva }}</td>
+				</tr>
+				</tbody>
+				<tfoot>
+				<tr>
+				<td colspan="3">* Valores en Dólares Americanos</td>
+				</tr>
+				</tfoot>
+			</table>
+			</div><!-- e: invoice items -->
+						<div class="six columns"></div>
+						<div class="invoice-totals six columns">
+							<table>
+								<caption>Totales:</caption>
+								<tbody>
+									<tr>
+										<th>Subtotal:</th>
+										<td></td>
+										<td>{{ orden.total_incl_iva }}</td>
+									</tr>
+									<tr>
+										<th>IVA:</th>
+										<td>12%</td>
+										<td>{{ orden.iva }}</td>
+									</tr>
+									<tr>
+										<th>Total:</th>
+										<td></td>
+										<td><strong>USD {{ orden.total_gral }}</strong></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<!-- e: invoice totals -->
+
+						<div class="invoice-items">
+				<h5>Parrilla de Programación:</h5>
+				<div id="cal-heatmap"></div>
+			</div>
+			
+			<!-- AUDIOS -->
+			<div class="invoice-items">
+			<table>
+				<caption>Audios</caption>
+				<thead>
+				<tr>
+					<th>Nombre de Archivo</th>
+					<th>Reproducir</th>
+				</tr>
+				</thead>
+				<tbody>
+				{% for audio in audios %}
+				<tr>
+					<th>{{ audio.file.name }}</th>
+					<td><audio class="right" id="player" src="{{ audio.file.url }}" type="audio/mp3" controls="controls"></td>
+				</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+			</div><!-- e: invoice items -->
+			
+			
+			<div class="invoice-notes">
+				<h6>Comentarios:</h6>
+				<p>{{ orden.paquete_publicidad.observaciones }}</p>
+			</div><!-- e: invoice-notes -->
+			
+			</section><!-- e: invoice financials -->
+		
+			</div><!-- e: invoice -->
+
+		</div>
+	</div>
+	</div>
+</section>
+{% endblock %}
+
+{% block js-scripts %}	
+	<script type="text/javascript">
+	var cal = new CalHeatMap();
+	cal.init({
+		data: "{% url "programacion" orden=orden.paquete_publicidad.pk %}",
+		domain: "month",
+		subDomain : "day",	
+		range: 8,
+		browsing: true,
+	});
+	
+	$('audio,video').mediaelementplayer();
+
+</script>
+	
+{% endblock %}

@@ -5,6 +5,7 @@ from settings import *
 from django.db import models
 from taggit.managers import TaggableManager
 from django.contrib.auth.models import User, Group
+from django.contrib.sessions.models import Session
 from django_localflavor_ec.ec_provinces import PROVINCE_CHOICES
 from registration.supplements import RegistrationSupplementBase
 from django.core.urlresolvers import reverse
@@ -172,19 +173,15 @@ class HorarioRotativo(models.Model):
     nombre = models.CharField(u"Nombre", max_length=255, blank=False, null=False, help_text=u'Ejemplo: 20 minutos en horario nocturno')
     estacion = models.ForeignKey(Estacion, verbose_name=u'Estación', blank=False, null=False)
     
-    def _precio_nacional(self):
+    @property
+    def precio_nacional(self):
         pc = PreciosCunas.objects.filter(cuna=self.pk)
         return pc[0].precio_nacional
-    precio_nacional = property(_precio_nacional)
     
-    def _precio_regional(self):
+    @property
+    def precio_regional(self):
         pc = PreciosCunas.objects.filter(cuna=self.pk)
         return pc[0].precio_regional
-    precio_regional = property(_precio_regional)
-
-    
-    def precio_regional(self):
-        return '10.0'
     
     class Meta:
         verbose_name = 'Cuña de programación'

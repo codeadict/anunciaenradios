@@ -1,0 +1,11 @@
+{% load url from future %}
+
+Estimado Administrador,
+
+Se ha registrado una nueva orden en AnunciaEnRadios a nombre del usuario: {{ usuario }}
+
+Por favor vaya a la siguiente dirección para verificar la misma:
+
+http://anunciaenradios.com/administrar/
+
+Correo enviado automáticamente por anunciaenradios.com. 

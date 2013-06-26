@@ -22,10 +22,15 @@ import hashlib
 import datetime
 from django.conf import settings
 from django.db import models
+from django.db.models.signals import post_save
 from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.core.urlresolvers import reverse
+
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
 #added apps
 from json_field import JSONField
 
@@ -98,7 +103,7 @@ class Orden(models.Model):
         )
     numero = models.CharField(u'Número de Orden', max_length=128, db_index=True)
     cliente = models.ForeignKey(User, related_name='ordenes', null=False, blank=False, verbose_name="Cliente")    
-    total_incl_iva = models.DecimalField("Total orden (inc. IVA)", decimal_places=2, max_digits=12)
+    total_incl_iva = models.DecimalField("Subtotal", decimal_places=2, max_digits=12)
     #indica el estado de la Orden
     estado = models.CharField("Estado", choices=ESTADO_ORDEN, max_length=100, null=False, blank=False)
     #fecha de creada la orden
@@ -120,6 +125,29 @@ class Orden(models.Model):
     def __unicode__(self):
         return u"#%s" % (self.numero,)
     
+    @models.permalink
+    def get_absolute_url(self):
+        return ('detalle_orden', (), {'numero':self.numero})
+    
+    def iva(self):
+        return self.total_incl_iva * 12/100
+    iva.allow_tags = True
+    iva.short_description = 'Valor IVA'
+    
+    def total_gral(self):
+        return self.total_incl_iva + self.total_incl_iva * 12/100
+    total_gral.short_description = 'Total'
+    
+    def archivo_link(self):
+        return u'<a href="/administrar/archivoplano/%s/" target="_blank">Archivo de la Orden</a>' % self.numero
+    archivo_link.allow_tags = True
+    archivo_link.short_description = ''
+    
+    def audios_link(self):
+        return u'<a href="/administrar/descargaaudios/%d/" target="_blank">Descargar Audios</a>' % self.pk
+    audios_link.allow_tags = True
+    audios_link.short_description = ''
+    
     def v_hash(self):
         return hashlib.md5('%s%s' % (self.number, settings.SECRET_KEY)).hexdigest()
     
@@ -132,3 +160,25 @@ class Orden(models.Model):
         return u''
     changeform_link.allow_tags = True
     changeform_link.short_description = ''
+    
+
+def send_notification(sender, **kwargs):
+    """
+    Enviar correo con la orden registrada
+    """
+    if kwargs['created']:
+        obj = kwargs['instance']
+        
+        subject = 'Orden Registrada en Anunciaenradios'
+        
+        context = {
+               'usuario': obj.cliente,
+               'order': obj.pk, 
+        }
+        message = render_to_string('orders/mail.txt', context)
+        try:
+            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [settings.DEFAULT_FROM_EMAIL])
+        except:
+            pass
+
+post_save.connect(send_notification, sender=Orden)

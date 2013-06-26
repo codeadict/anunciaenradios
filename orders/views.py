@@ -4,10 +4,11 @@ from django.views.generic import CreateView, DeleteView
 from django.contrib.formtools.wizard.views import SessionWizardView
 
 
-from orders.forms import PaquetePublicidadForm, AudiosFormSet
-from orders.models import Orden, PaquetePublicidad, Audios
+from orders.forms import PaquetePublicidadForm, AudiosFormSet, HorariosFormSet
+from orders.models import Orden, PaquetePublicidad, Audios, HorariosPautas
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse, HttpResponseRedirect
+from django.utils.dateformat import format
 import uuid
 
 from django.utils import simplejson
@@ -59,14 +60,17 @@ class PaquetePublicidadFormView(CreateView):
     def form_valid(self, form):
         context = self.get_context_data()
         self.object = form.save(commit=False)
-        audios_form = AudiosFormSet(self.request.POST, self.request.FILES, instance=self.object)     
-        if audios_form.is_valid():
+        audios_form = AudiosFormSet(self.request.POST, self.request.FILES, instance=self.object, prefix='audios')
+        horarios_form = HorariosFormSet(self.request.POST, self.request.FILES, instance=self.object, prefix='horarios')    
+        if audios_form.is_valid() and horarios_form.is_valid():
             self.object.duenno = self.duenno
         
             #Campos del model Orden
             self.object.save()
             
+            horarios_form.save()
             audios_form.save()
+            
     
             # Salvar las ordenes multiples:
             for i in range(len(self.cantidades)):
@@ -93,9 +97,12 @@ class PaquetePublicidadFormView(CreateView):
     def get_context_data(self, **kwargs):
         context = super(PaquetePublicidadFormView, self).get_context_data(**kwargs)
         if self.request.POST:
-            context['audios_formset'] = AudiosFormSet(self.request.POST, self.request.FILES, instance=self.object)
+            context['audios_formset'] = AudiosFormSet(self.request.POST, self.request.FILES, instance=self.object, prefix='audios')
+            context['horarios_formset'] = HorariosFormSet(self.request.POST, self.request.FILES, instance=self.object, prefix='horarios')
+            
         else:
-            context['audios_formset'] = AudiosFormSet(instance=self.object)
+            context['audios_formset'] = AudiosFormSet(instance=self.object, prefix='audios')
+            context['horarios_formset'] = HorariosFormSet(instance=self.object, prefix='horarios')
         return context
 
 class PaquetePublicidadList(ListView):
@@ -154,3 +161,30 @@ class JSONResponse(HttpResponse):
 class OrdenList(ListView):
 	model = Orden
 	paginate_by = 10
+    
+    
+class OrdenDetail(DetailView):
+    model = Orden
+    slug_field = "numero"
+    context_object_name='orden'
+    template_name="orden_detail.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super(OrdenDetail, self).get_context_data(**kwargs)
+        context['audios'] = Audios.objects.filter(paquete=self.object.paquete_publicidad)
+        return context
+    
+def programacion_map(request, orden):
+    #: PK de la orden
+    orden = int(orden)
+    data = {}
+    
+    horarios =  HorariosPautas.objects.filter(paquete=orden)
+    
+    for hr in horarios:
+        #convertir a unix timestamp
+        f = format(hr.fecha, 'U')
+        data.update({str(f): int(hr.cantidad)})
+    
+    return HttpResponse(simplejson.dumps(data), mimetype='application/json')
+    

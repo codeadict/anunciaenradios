@@ -51,7 +51,7 @@
                 } else if (row.is('UL') || row.is('OL')) {
                     // If they're laid out as an ordered/unordered list,
                     // insert an <li> after the last list item:
-                    row.append('<li><a class="' + options.deleteCssClass + '" href="javascript:void(0)">' + options.deleteText +'</a></li>');
+                    row.append('<li class="two columns"><a class="' + options.deleteCssClass + ' button alert" href="javascript:void(0)">' + options.deleteText +'</a></li>');
                 } else {
                     // Otherwise, just insert the remove button as the
                     // last child element of the form's container:

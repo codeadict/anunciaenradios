@@ -39,10 +39,10 @@
   	<nav class="top-bar">
   		<ul class="right">
   				{% if request.user.is_authenticated %}
-					<li><p>Bienvenido {% filter force_escape %}{% firstof user.first_name user.username user.get_short_name user.get_username %} {% firstof user.last_name %}{% endfilter %}<a class="alert button small" href="/registro/logout">Salir</a></p></li>
+					<li><p>Bienvenido {% filter force_escape %}{% firstof user.first_name user.username user.get_short_name user.get_username %} {% firstof user.last_name %}{% endfilter %}<a class="alert button small" href="/registro/logout/">Salir</a></p></li>
 				{% else %}
-		  			<li><a class="alert button" href="/registro/login">Iniciar sesión</a></li>
-					<li><a class="alert button" href="/registro/register">Registrarse aquí</a></li>	
+		  			<li><a class="alert button" href="/registro/login/">Iniciar sesión</a></li>
+					<li><a class="alert button" href="/registro/register/">Registrarse aquí</a></li>	
     			{% endif %}
   		</ul>
   	</nav>
@@ -69,7 +69,7 @@
 					        <li class="item">
 					            <a href="/info/">Información</a>
 					        </li>
-							{% with url="/contacto/" text="Contáctenos" %}{% include "_nav.html" %}{% endwith %}
+							{% with url="/contacto/" text="Contacto" %}{% include "_nav.html" %}{% endwith %}
 					    </ul>
 					</div>
 			{% endblock %}

@@ -16,21 +16,20 @@
 							<td>Fecha</td>
 							<td>Producto Comprado</td>
 							<td>Cantidad</td>
+							<td>SubTotal</td>
 							<td>Total (incluido IVA)</td>
-							<td>Estado</td>
-							<td>Paquete de publicidad</td>
+<!-- 							<td>Paquete de publicidad</td> -->
 						</tr>
 					</thead>
 					<tbody>
 						{% for orden in object_list %}
 								<tr>
 									{% if orden.cliente.pk == request.user.pk %}
-									<td>{{ orden.fecha_creada }}</td>
-									<td>{{ orden.producto }}</td>
+									<td>{{ orden.fecha_creada|date:"m/d/Y" }}</td>
+									<td><a href="{% url "detalle_orden" slug=orden.numero %}">{{ orden.producto }}</a></td>
 									<td>{{ orden.cantidad }}</td>
-									<td>: {{ orden.total_incl_iva }}</td>
-									<td>{{ orden.estado }}</td>									
-									<td>{{ orden.paquete_publicidad }}</td>													
+									<td>{{ orden.total_incl_iva }}</td>
+									<td><strong>USD {{ orden.total_gral }}</strong></td>									
 									{% endif %}
 								</tr>
 						{% endfor %}
@@ -41,13 +40,13 @@
 			        <div class="pagination">
 			            <span class="page-links">
 			                {% if page_obj.has_previous %}
-			                    <a href="/ordenes?page={{ page_obj.previous_page_number }}">Anterior</a>
+			                    <a href="/ordenes/?page={{ page_obj.previous_page_number }}">Anterior</a>
 			                {% endif %}
 			                <span class="page-current">
 			                    Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
 			                </span>
 			                {% if page_obj.has_next %}
-			                    <a href="/ordenes?page={{ page_obj.next_page_number }}">Siguiente</a>
+			                    <a href="/ordenes/?page={{ page_obj.next_page_number }}">Siguiente</a>
 			                {% endif %}
 			            </span>
 			        </div>
