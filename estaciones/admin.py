@@ -67,8 +67,8 @@ class EstacionAdmin(NestedModelAdmin):
 	    ]
 	
 class ParrillaAdmin(admin.ModelAdmin):
-	list_display = ('estacion', 'programa', 'horario', 'emision', 'precio' )
-	fields = (('estacion', 'programa'), ('emision', 'horario'), 'precio')
+	list_display = ('estacion', 'programa', 'horario_i', 'horario_f', 'emision', 'precio' )
+	fields = (('estacion', 'programa'), ('emision', 'horario_i', 'horario_f'), 'precio')
 	list_display_links = ('programa',)
 	list_filter = ('emision',)
 	list_per_page = 10
@@ -99,7 +99,7 @@ class PublicidadAdmin(admin.ModelAdmin):
     Administración de banners y publicidad en el sitio
     """
     list_display = ('show_date', 'hide_date', 'promo_price')
-    fields = (('show_date', 'hide_date'), 'promo_price', 'descripcion')
+    fields = (('show_date', 'hide_date'), 'promo_price', 'img', ('promo_idate', 'promo_edate'), 'product', 'descripcion')
     
     
 

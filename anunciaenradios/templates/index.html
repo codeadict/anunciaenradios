@@ -1,8 +1,15 @@
 ﻿{% extends 'base.html' %}
 {% load static from staticfiles %}
 {% load url from future %}
+{% load estaciones_tags %}
 
 {% block title %}Inicio{% endblock %}
+
+{% block head-scripts %}
+		<script src="{% static 'js/jquery.jcarousel.min.js' %}"></script>
+		<link media="screen" href="{% static 'css/carrusel.css' %}" type="text/css" rel="stylesheet">
+		
+{% endblock %}
 
 {% block content %}
 <section class="row">
@@ -17,8 +24,8 @@
 	</div>
 </section>
 <section class="row radios">
-	<div class="twelve columns">
-		<img height="100" alt="" src="{% static 'img/radios.png' %}">
+	<div class="twelve columns">	
+		{% home_carousel %}
 	</div>
 </section>
 {% endblock %}

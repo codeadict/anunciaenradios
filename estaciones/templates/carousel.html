@@ -1,0 +1,45 @@
+{% if logos %}
+	<div id="homepage-carousel">
+	<div class="jcarousel">
+	<ul id="radios-carousel">
+	{% for logo in logos %}
+		        <li>
+			        <a href="#"><img src="{{ logo.logotipo }}"/></a>
+		        </li>
+	{% endfor %}
+	</ul>
+	</div>
+	</div>
+
+<script>
+function mycarousel_initCallback(carousel)
+{
+	// Disable autoscrolling if the user clicks the prev or next button.
+	carousel.buttonNext.bind('click', function() {
+	carousel.startAuto(0);
+});
+	
+carousel.buttonPrev.bind('click', function() {
+	carousel.startAuto(0);
+});
+// Pause autoscrolling if the user moves with the cursor over the clip.
+carousel.clip.hover(function() {
+	carousel.stopAuto();
+}, function() {
+	carousel.startAuto();
+});
+};
+
+$(function() {
+	$('#radios-carousel').jcarousel({
+		auto: 2,
+		wrap: 'circular',
+		animation: 'slow',
+		initCallback: mycarousel_initCallback,
+		buttonNextHTML: '<a class="jcarousel-control" style="display: inline;"><img src="https://static-riptapparel-com.s3.amazonaws.com/img/carousel-right.4afabb8d0352.png"></a>',
+		buttonPrevHTML: '<a class="jcarousel-control" style="display: inline;"><img src="https://static-riptapparel-com.s3.amazonaws.com/img/carousel-left.4026862a3953.png"></a>',
+	});
+}); 
+</script>
+
+{% endif %}

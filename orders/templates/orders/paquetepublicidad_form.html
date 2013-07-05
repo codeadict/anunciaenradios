@@ -77,11 +77,14 @@
 	                        	{{ form.hora_fin }}
 	                        </div>
 	                        
+	                        {% with ff_template='_form_field.html' %}
 	                        <div class="four columns">
-	                        	<h6>Tanda</h6>
-	                        	{{ form.posicion_tanda.label }}
-	                        	{{ form.posicion_tanda }}
+	                        	<h6>Campaña</h6>
+	                        	{% with field=form.campana %}
+							          {% include ff_template %}
+							    {% endwith %}
 	                        </div>
+	                        {% endwith %}
 	                        
 	                        <div class="twelve columns">
 	                        	<h6>Escoger fechas al Aire:</h6>

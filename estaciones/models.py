@@ -153,7 +153,8 @@ class PaquetePublicidad(models.Model):
     estacion = models.ForeignKey(Estacion, verbose_name=u'Estación')
     programa = models.CharField(u"Programa", max_length=255, blank=False,
         help_text=u"Programa donde Promocionar, Ej. Barrio Latino")
-    horario = models.TimeField(u'Horario', blank=False)
+    horario_i = models.TimeField(u'Hora Inicio', blank=False)
+    horario_f = models.TimeField(u'Hora Fin', blank=False)
     emision = models.CharField(u'Emisión', max_length=255, blank=False, 
                                help_text="Período de Emisión. Ej. Sábados y Domingos")
     precio = models.DecimalField(u'Precio', max_digits=14, decimal_places=6)
@@ -219,7 +220,7 @@ class PreciosCunas(models.Model):
 # TODO: Esto es version 1, mejorar usando la nueva manera que define django 1.5
 class Cliente(models.Model):
     usuario = models.OneToOneField(User)
-    ruc = models.CharField(max_length=10, null=False, unique=True, blank=False, verbose_name='RUC o Cédula de identidad')
+    ruc = models.CharField(max_length=13, null=False, unique=True, blank=False, verbose_name='RUC o Cédula de identidad')
     nombre_compannia = models.CharField(max_length=255, null=False, blank=False, verbose_name='nombre de la compañia del cliente')
 
       
@@ -233,11 +234,9 @@ class Cliente(models.Model):
 
 
 class ClientRegistrationSupplement(RegistrationSupplementBase):
-
-    ruc = models.CharField(max_length=10, null=False, unique=True, blank=False, verbose_name='RUC o Cédula de identidad')
+    ruc = models.CharField(max_length=13, null=False, unique=True, blank=False, verbose_name='RUC o Cédula de identidad')
     nombre_compannia = models.CharField("Nombre de la compañía", max_length=100, help_text="Por favor intruduzca el nombre de su compañia")
     
-
     def __unicode__(self):
         # a summary of this supplement
         return "RUC: %s / Comp: %s" % (self.ruc, self.nombre_compannia)
@@ -250,10 +249,20 @@ class Publicidad(models.Model):
     promo_price = models.DecimalField("Precio Promocional", max_digits=14, decimal_places=6, blank=False)
     show_date = models.DateTimeField("Mostrar Desde", blank=False, null=False)
     hide_date = models.DateTimeField("Mostrar Hasta", blank=False, null=False)
+    img = models.FileField(verbose_name='Imagen', upload_to='banners', help_text="Imagen de 250px de alto x 683px de ancho")
+    promo_idate = models.DateTimeField("Promoción Desde", blank=False, null=False)
+    promo_edate = models.DateTimeField("Promoción Hasta", blank=False, null=False)
+    product = models.ForeignKey(HorarioRotativo, help_text=u'Producto en promoción')
     
     class Meta:
         verbose_name = 'Oferta'
         verbose_name_plural = 'Ofertas'
+        
+    def imagen(self):
+        if self.img:
+            logot = '%s%s' % (settings.MEDIA_URL, self.img)
+        
+        return mark_safe(logot)
     
     
     

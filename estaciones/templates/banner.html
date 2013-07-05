@@ -1,9 +1,11 @@
+{% load humanize %}
+
 {% if banners %}
 	<div class="banner">
 	<ul>
 	{% for banner in banners %}
-		        <li>
-		        	<h2>Tan solo USD {{ banner.promo_price }}</h2>
+		        <li style="background-image: url("{{ banner.imagen }}");">
+		        	<h2>{{ banner.promo_price|floatformat:2|intcomma }}</h2>
 			        <p>{{ banner.descripcion }}</p>
 			        <a class="btn" href="#">Ver Promoción</a>
 		        </li>

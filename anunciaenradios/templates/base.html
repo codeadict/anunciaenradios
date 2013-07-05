@@ -62,12 +62,13 @@
 						<ul class="tabs navBar">
 					    	{% url 'website_index' as url %}{% with text="Inicio" %}{% include "_nav.html" %}{% endwith %}
 					    	
-					    	{% with url="/radios/buscar/?q=" text="Estaciones de radio" %}{% include "_nav.html" %}{% endwith %}
+					    	{% url 'haystack_search' as url %}{% with text="Estaciones de radio" %}{% include "_nav.html" %}{% endwith %}
+					    	
 					    	{% if request.user.is_authenticated %}
 					    		{% with url="/ordenes/" text="Mis órdenes" %}{% include "_nav.html" %}{% endwith %}
 					    	{% endif %}
 					        <li class="item">
-					            <a href="/info/">Información</a>
+					            <a href="{% static 'pdfs/informacion.pdf' %}">Información</a>
 					        </li>
 							{% with url="/contacto/" text="Contacto" %}{% include "_nav.html" %}{% endwith %}
 					    </ul>
@@ -110,8 +111,8 @@
 	      </div>
 	      <div class="six columns">
 	        <ul class="inline-list right">
-	          <li><a href="/condiciones/">Condiciones y Términos de Uso</a></li>
-	          <li><a href="">Sobre Nosotros</a></li>
+	          <li><a href="{% static 'pdfs/condiciones.pdf' %}">Condiciones y Términos de Uso</a></li>
+	          <li><a href="{% static 'pdfs/nosotros.pdf' %}">Sobre Nosotros</a></li>
 	          <li><a href="{% url 'contacto' %}">Contáctenos</a></li>
 	        </ul>
       	  </div>

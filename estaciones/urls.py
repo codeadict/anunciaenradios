@@ -28,9 +28,9 @@ urlpatterns = patterns("",
 )
 
 urlpatterns += patterns('haystack.views',
-    url(r'^buscar/$', search_view_factory(
+    url(r'^buscar/$', login_required(search_view_factory(
         view_class=FacetedSearchView,
         searchqueryset=SearchQuerySet().facet('categorias'),
         form_class=BuscarEstacionForm
-    ), name='haystack_search'),
+    ), login_url='/registro/login/'), name='haystack_search'),
 )

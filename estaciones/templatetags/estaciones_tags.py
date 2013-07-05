@@ -2,7 +2,7 @@ from datetime import date
 from django import template
 from estaciones.views import EstacionList
 from django.contrib.contenttypes.models import ContentType
-from estaciones.models import PaquetePublicidad, HorarioRotativo, Publicidad
+from estaciones.models import PaquetePublicidad, HorarioRotativo, Publicidad, Estacion
 register = template.Library()
 
 @register.simple_tag(takes_context=True)
@@ -35,6 +35,19 @@ def banner_slider(context, tpl='banner.html'):
 		
 	t = template.loader.get_template(tpl)
 	return t.render(template.Context({'banners': banners}))
+
+@register.simple_tag(takes_context=True)
+def home_carousel(context, tpl='carousel.html'):
+	"""
+	Templatetag para mostrar carrusel con logos en el home
+	"""
+	try:
+		logos = Estacion.objects.all()
+	except:
+		logos = False
+		
+	t = template.loader.get_template(tpl)
+	return t.render(template.Context({'logos': logos}))
 
 def callMethod(obj, methodName):
 	method = getattr(obj, methodName)

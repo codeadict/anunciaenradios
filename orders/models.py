@@ -36,16 +36,16 @@ from json_field import JSONField
 
 POSICIONES_TANDA = (('1', 'Normal',), ('2', 'Cabeza de Tanda',), ('2', 'Pie de Tanda',))
 
-CHOICES = (('1', 'Rotativo en Sector',), ('2', 'Rotativo en Hora Abierta',), ('2', 'Hora Fija',), ('2', 'Programa',))
+CHOICES = (('1', 'Rotativo(Automático)',), ('2', 'Rotativo en Hora Abierta',), ('2', 'Hora Fija',))
 
 class PaquetePublicidad(models.Model):
-    observaciones = models.TextField(verbose_name = "observaciones")
+    observaciones = models.TextField(verbose_name = "observaciones", help_text="Si va a hacer menciones debe poner el texto en este campo.")
+    campana = models.CharField(max_length=200, null=True, verbose_name=u"Campaña")
     duenno = models.ForeignKey(User, null=False, blank=False, verbose_name="Dueño")
     
     pautar_en = models.CharField(max_length=1, null=False, default='1', choices=CHOICES, verbose_name="Pautar en")
     hora_inicial = models.TimeField(verbose_name="Hora Inicio", auto_now_add=True, blank=True, null=True)
     hora_fin = models.TimeField(verbose_name="Hora Fin", auto_now_add=True, blank=True, null=True)
-    posicion_tanda = models.CharField(max_length=1, null=False, default='1', choices=POSICIONES_TANDA, verbose_name="Posicion en Tanda")
         
 
     class Meta:        
@@ -54,6 +54,22 @@ class PaquetePublicidad(models.Model):
         
     def __unicode__(self):
         return u"#%s: %s" % (self.pk, self.observaciones[:80])
+    
+    @property
+    def es_semanal(self):
+        """
+        Retorna si es Semanaal o Mensual la Pauta completa
+        """
+        max_date = HorariosPautas.objects.filter(paquete.pk).aggregate(Max('fecha'))['fecha__max']
+        min_date = HorariosPautas.objects.filter(paquete.pk).aggregate(Min('fecha'))['fecha__min']
+        
+        diff = max_date - min_date
+        
+        if diff > 7:
+            return False
+        else:
+            return True
+            
     
     
 class Audios(models.Model):
@@ -87,7 +103,7 @@ class HorariosPautas(models.Model):
     class Meta:
         ordering = ['-fecha',]
         verbose_name = "Fecha Al Aire"
-        verbose_name_plural = "Fechas Al Aire" 
+        verbose_name_plural = "Fechas Al Aire"
 
 
 class Orden(models.Model):

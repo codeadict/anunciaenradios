@@ -68,6 +68,15 @@ class PaquetePublicidadFormView(CreateView):
             #Campos del model Orden
             self.object.save()
             
+#             cantidad = 0
+#             for form in horarios_form:
+#                 if not hasattr(form, 'cleaned_data'):
+#                     continue
+#                 data = form.cleaned_data
+#                 cantidad += data.get('cantidad', 0)
+#             if cantidad != 100:
+#                 raise ValidationError('La cantidad total de pautas debe ser %(total).2f%%. Actualmente : %(cantidad).2f%%' % {'cantidad': cantidad})
+                
             horarios_form.save()
             audios_form.save()
             

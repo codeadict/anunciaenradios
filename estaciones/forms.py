@@ -76,5 +76,5 @@ class ClienteForm(forms.ModelForm):
 		model = Cliente
 
 	def clean_ruc(self):
-		if self.cleaned_data['ruc'] != 10:
-			raise forms.ValidationError("Debe introducir un número de RUC válido")
+		if self.cleaned_data['ruc'] != 13:
+			raise forms.ValidationError("Debe introducir un número de RUC o Cédula válido")
